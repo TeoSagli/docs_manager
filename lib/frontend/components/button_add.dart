@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:docs_manager/others/constants.dart' as Constants;
 
 class ButtonAdd extends StatelessWidget {
   final String linkNav;
@@ -25,7 +26,7 @@ class ButtonAdd extends StatelessWidget {
               linkNav,
             );
           },
-          backgroundColor: Colors.deepPurpleAccent,
+          backgroundColor: Constants.mainBackColor,
           elevation: 8,
           child: const Icon(
             Icons.add,

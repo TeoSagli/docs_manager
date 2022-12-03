@@ -9,13 +9,13 @@ import 'frontend/pages/files/file_view.dart';
 import 'frontend/pages/unknown.dart';
 import 'frontend/pages/files/file_create.dart';
 
-/*import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-*/
+
 Future<void> main() async {
-  /*await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );*/
+  );
   runApp(const MyApp());
 }
 

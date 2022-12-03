@@ -22,19 +22,16 @@ class ImageFromNetwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: backgroundCol,
-          image: DecorationImage(
-            fit: BoxFit.scaleDown,
-            image: Image.network(
-              imgLink,
-            ).image,
-          ),
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: backgroundCol,
+        image: DecorationImage(
+          fit: BoxFit.scaleDown,
+          image: Image.network(
+            imgLink,
+          ).image,
         ),
       ),
     );

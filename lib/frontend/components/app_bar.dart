@@ -1,3 +1,4 @@
+import 'package:docs_manager/others/constants.dart' as Constants;
 import 'package:flutter/material.dart';
 //import 'package:project_navigation/components/icon_box.dart';
 
@@ -19,8 +20,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        backgroundColor: Colors.deepPurpleAccent,
-        title: Text(title),
+        backgroundColor: Constants.mainBackColor,
+        title: Text(title,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              color: Colors.white,
+              fontSize: 22,
+            )),
+        elevation: 2,
         leading: Visibility(
           maintainSemantics: isVisibleBackButton,
           maintainInteractivity: isVisibleBackButton,

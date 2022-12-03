@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "952808555359",
+    "firebase_url": "https://documanager-d37b5-default-rtdb.firebaseio.com",
+    "project_id": "documanager-d37b5",
+    "storage_bucket": "documanager-d37b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952808555359:android:fcec15ea765746f6beecea",
+        "android_client_info": {
+          "package_name": "com.example.docs_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952808555359-g3fdg8tfclave8mdq5mcoiiolh2p44tc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC_NUX0KyAKJYQB5gkHW3i30xgEMOc2dA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952808555359-g3fdg8tfclave8mdq5mcoiiolh2p44tc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "952808555359-ah9pk297aharknm8bv5f435tlltpa0v4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.docsManager"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

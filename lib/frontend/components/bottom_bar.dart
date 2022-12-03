@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:docs_manager/others/constants.dart' as Constants;
 
 class MyBottomBar extends StatefulWidget {
   final BuildContext barContext;
@@ -52,7 +53,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
       ],
       currentIndex: widget.activeIndex < 4 ? widget.activeIndex : 0,
       selectedItemColor:
-          widget.activeIndex < 4 ? Colors.deepPurpleAccent : Colors.grey,
+          widget.activeIndex < 4 ? Constants.mainBackColor : Colors.grey,
       unselectedItemColor: Colors.grey,
       showUnselectedLabels: true,
       onTap: _onItemTapped,
