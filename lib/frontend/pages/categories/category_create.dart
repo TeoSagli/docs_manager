@@ -116,19 +116,25 @@ class _CategoryCreateWidgetState extends State<CategoryCreatePage> {
             width: 200,
             fit: BoxFit.scaleDown,
           );
+          saveImage(imageGallery, imageGallery!.name);
         },
       );
     } catch (e) {
-      print("Error" + e.toString());
       setState(() {
-        widgetChanging = const Center(
+        widgetChanging = Center(
           child: Text(
-            "Error uploading!",
-            style: TextStyle(color: Colors.redAccent, fontSize: 50),
+            "Error uploading! $e",
+            style: const TextStyle(color: Colors.redAccent, fontSize: 50),
           ),
         );
       });
     }
+  }
+
+  saveImage(image, fileName) async {
+/*
+    const String path = 'assets/images/';
+    await image.saveTo('$path/$fileName');*/
   }
 
   onSubmit() {}
