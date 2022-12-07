@@ -101,6 +101,7 @@ class MyApp extends StatelessWidget {
             //=============UNKNOWN PATH===========================
             return MaterialPageRoute(builder: (context) => const UnknownPage());
         }
+        return null;
       },
     );
   }

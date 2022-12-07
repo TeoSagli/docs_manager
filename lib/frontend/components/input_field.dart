@@ -1,4 +1,3 @@
-import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
@@ -26,7 +25,7 @@ class InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+      padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
       child: TextFormField(
         controller: textController,
         autofocus: true,

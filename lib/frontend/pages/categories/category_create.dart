@@ -15,10 +15,10 @@ class CategoryCreatePage extends StatefulWidget {
   const CategoryCreatePage({Key? key}) : super(key: key);
 
   @override
-  _CategoryCreateWidgetState createState() => _CategoryCreateWidgetState();
+  CategoryCreateWidgetState createState() => CategoryCreateWidgetState();
 }
 
-class _CategoryCreateWidgetState extends State<CategoryCreatePage> {
+class CategoryCreateWidgetState extends State<CategoryCreatePage> {
   late final ImagePicker picker = ImagePicker();
   XFile? imageGallery;
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -54,11 +54,11 @@ class _CategoryCreateWidgetState extends State<CategoryCreatePage> {
                               10, 30, 10, 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
-                            children: [
+                            children: const [
                               //title 1
                               TitleText('Category name:', Colors.black),
                               //input 1
-                              const InputField(),
+                              InputField(),
                             ],
                           ),
                         ),
@@ -70,7 +70,7 @@ class _CategoryCreateWidgetState extends State<CategoryCreatePage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               //title 2
-                              TitleText(
+                              const TitleText(
                                   'Select a category image:', Colors.black),
                               //button upload 1
                               MyButton('Upload', setPhotoFromGallery),

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class MyButton extends StatefulWidget {
-  dynamic function;
-  String text;
-  MyButton(this.text, this.function, {super.key});
+  final dynamic function;
+  final String text;
+  const MyButton(this.text, this.function, {super.key});
 
   @override
   State<StatefulWidget> createState() => MyButtonState();

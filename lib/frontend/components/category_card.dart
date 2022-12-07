@@ -7,9 +7,9 @@ class CategoryCard extends StatelessWidget {
   final Image image;
   final Color color;
   final int id;
-  dynamic function;
+  final dynamic function;
 
-  CategoryCard(this.mainTitle, this.subTitle1, this.subTitle2, this.image,
+  const CategoryCard(this.mainTitle, this.subTitle1, this.subTitle2, this.image,
       this.color, this.id, this.function,
       {super.key});
 

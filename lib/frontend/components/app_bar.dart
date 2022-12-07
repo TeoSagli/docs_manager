@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isVisibleBackButton;
-  BuildContext backContext;
+  final BuildContext backContext;
 
   ///My custom AppBar:
   ///
@@ -15,7 +15,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   ///3-set context to recall with back button
   ///
-  MyAppBar(this.title, this.isVisibleBackButton, this.backContext, {super.key});
+  const MyAppBar(this.title, this.isVisibleBackButton, this.backContext,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             onPressed: () {
               Navigator.pop(backContext);
-              backContext = context;
             },
           ),
         ));
