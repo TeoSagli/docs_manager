@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'frontend/pages/categories/categories.dart';
 import 'frontend/pages/categories/category_create.dart';
-import 'frontend/pages/expirations.dart';
+import 'frontend/pages/wallet.dart';
 import 'frontend/pages/categories/category_view.dart';
 import 'frontend/pages/favourites.dart';
 import 'frontend/pages/home.dart';
@@ -40,9 +40,9 @@ class MyApp extends StatelessWidget {
               case 'categories':
                 return MaterialPageRoute(
                     builder: (context) => const CategoriesPage());
-              case 'expirations':
+              case 'wallet':
                 return MaterialPageRoute(
-                    builder: (context) => const ExpirationsPage());
+                    builder: (context) => const WalletPage());
               case 'favourites':
                 return MaterialPageRoute(
                     builder: (context) => const FavouritesPage());

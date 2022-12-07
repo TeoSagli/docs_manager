@@ -18,7 +18,7 @@ class MyBottomBar extends StatefulWidget {
 }
 
 class _MyBottomBarState extends State<MyBottomBar> {
-  final List<String> paths = ['', 'expirations', 'categories', 'favourites'];
+  final List<String> paths = ['', 'wallet', 'categories', 'favourites'];
   void _onItemTapped(int index) {
     Navigator.pushNamed(
       widget.barContext,
@@ -36,9 +36,9 @@ class _MyBottomBarState extends State<MyBottomBar> {
           //  activeIcon: Icon(Icons.home),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.timer_outlined),
-          label: 'Expirations',
-          //  activeIcon: Icon(Icons.timer),
+          icon: Icon(Icons.account_balance_wallet_outlined),
+          label: 'Wallet',
+          //  activeIcon: Icon(Icons.account_balance_wallet_rounded),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.category_outlined),
