@@ -1,9 +1,6 @@
-import 'package:docs_manager/frontend/components/image_network.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'package:image_picker/image_picker.dart';
-import 'package:cross_file_image/cross_file_image.dart';
 
 class MyButton extends StatefulWidget {
   dynamic function;

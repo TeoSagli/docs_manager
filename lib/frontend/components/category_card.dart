@@ -6,9 +6,11 @@ class CategoryCard extends StatelessWidget {
   final String subTitle2;
   final Image image;
   final Color color;
+  final int id;
+  dynamic function;
 
-  const CategoryCard(
-      this.mainTitle, this.subTitle1, this.subTitle2, this.image, this.color,
+  CategoryCard(this.mainTitle, this.subTitle1, this.subTitle2, this.image,
+      this.color, this.id, this.function,
       {super.key});
 
   @override
@@ -28,73 +30,78 @@ class CategoryCard extends StatelessWidget {
           ],
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 5, 5),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 4, 8),
-                child: Container(
-                  width: 4,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(4),
+        child: GestureDetector(
+          onTap: () => function(id, context),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 5, 5),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 4, 8),
+                  child: Container(
+                    width: 4,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(12, 12, 16, 12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      mainTitle,
-                      style: const TextStyle(
-                        fontFamily: 'Outfit',
-                        color: Color(0xFF101213),
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                      child: Text(
-                        subTitle1,
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(12, 12, 16, 12),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        mainTitle,
                         style: const TextStyle(
                           fontFamily: 'Outfit',
-                          color: Color(0xFF57636C),
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                      child: Text(
-                        subTitle2,
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          color: color,
-                          fontSize: 14,
+                          color: Color(0xFF101213),
+                          fontSize: 22,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                        child: Text(
+                          subTitle1,
+                          style: const TextStyle(
+                            fontFamily: 'Outfit',
+                            color: Color(0xFF57636C),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                        child: Text(
+                          subTitle2,
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: color,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Image.asset(
-                  'assets/images/test.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.scaleDown,
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/test.png',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.scaleDown,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
