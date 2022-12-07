@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
-  const InputField({super.key});
+  TextEditingController? tc;
+  InputField(this.tc, {super.key});
 
   @override
   State<StatefulWidget> createState() => InputFieldState();
@@ -76,6 +77,9 @@ class InputFieldState extends State<InputField> {
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
+        onChanged: (value) {
+          widget.tc!.text = textController!.text;
+        },
         textAlign: TextAlign.start,
       ),
     );
