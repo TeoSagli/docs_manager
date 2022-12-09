@@ -4,13 +4,18 @@ import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_rounded.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:docs_manager/others/constants.dart' as constants;
+import 'dart:core';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
-import '../../../backend/create_category.dart';
+import '../../../backend/category_create_db.dart';
 import '../../components/image_network.dart';
 
 class CategoryCreatePage extends StatefulWidget {
@@ -21,9 +26,9 @@ class CategoryCreatePage extends StatefulWidget {
 }
 
 class CategoryCreateWidgetState extends State<CategoryCreatePage> {
-  late final ImagePicker picker = ImagePicker();
+  final ImagePicker picker = ImagePicker();
   XFile? imageGallery;
-  TextEditingController? textController1;
+  late TextEditingController textController1;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   Widget widgetChanging = const ImageFromNetwork(
       Colors.white,
@@ -38,7 +43,7 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
 
   @override
   void dispose() {
-    textController1?.dispose();
+    textController1.dispose();
     super.dispose();
   }
 
@@ -130,7 +135,6 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
             width: 200,
             fit: BoxFit.scaleDown,
           );
-          saveImage(imageGallery, imageGallery!.name);
         },
       );
     } catch (e) {
@@ -145,34 +149,73 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     }
   }
 
-  saveImage(image, fileName) async {
-/*
-    const String path = 'assets/images/';
-    await image.saveTo('$path/$fileName');*/
+  saveImage(imageLoaded, imageName) async {
+    Directory docDir = await getApplicationDocumentsDirectory();
+    File f = File(path.join(docDir.path, imageName));
+    var bytes = await rootBundle.load(imageLoaded);
+    await f.writeAsBytes(imageLoaded.buffer
+        .asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Image saved!"),
+        content: Image.file(f),
+      ),
+    );
   }
 
   onSubmit() async {
-    if (textController1 != null &&
-        textController1?.text != "" &&
-        textController1?.text != " " &&
-        imageGallery != null) {
-      createCategory(textController1?.text, imageGallery!.path.toString());
+    // else if (!await isCategoryNew(textController1!.text)) {
+    // onErrorCategoryExisting();}
+    if (textController1.text == "" || textController1.text == " ") {
+      onErrorText();
+    } else if (imageGallery != null) {
+      createCategory(textController1.text, imageGallery!.path.toString());
+      loadFileToStorage(imageGallery, textController1.text);
     } else {
-      onError();
+      onErrorImage();
     }
   }
 
-  onError() {
+  onErrorImage() {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('AlertDialog Title'),
-        content: const Text('AlertDialog description'),
+        title: const Text('Something went wrong!'),
+        content: const Text('Upload an image for your category!'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
           ),
+        ],
+      ),
+    );
+  }
+
+  onErrorText() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Something went wrong!'),
+        content: const Text('Text cannot be empty!'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  onErrorCategoryExisting() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Something went wrong!'),
+        content: const Text('Category already existing!'),
+        actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
             child: const Text('OK'),

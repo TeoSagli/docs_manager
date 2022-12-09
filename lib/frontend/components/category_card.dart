@@ -1,19 +1,21 @@
+import 'package:docs_manager/backend/models/category.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'abstract/card.dart';
+import 'dart:math' as math;
 
 class CategoryCard extends StatefulWidget {
-  final String mainTitle;
-  final String subTitle1;
+  final String categoryName;
+  final Category category;
   final String subTitle2;
-  final Image image;
-  final Color color;
   final int id;
   final dynamic function;
+
   @override
   State<StatefulWidget> createState() => CategoryCardState();
-  const CategoryCard(this.mainTitle, this.subTitle1, this.subTitle2, this.image,
-      this.color, this.id, this.function,
+  const CategoryCard(
+      this.categoryName, this.category, this.subTitle2, this.id, this.function,
       {super.key});
 }
 
@@ -65,7 +67,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                       width: 4,
                       height: 90,
                       decoration: BoxDecoration(
-                        color: widget.color,
+                        color: Color(widget.category.colorValue),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -78,7 +80,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.mainTitle,
+                          widget.categoryName,
                           style: const TextStyle(
                             fontFamily: 'Outfit',
                             color: Color(0xFF101213),
@@ -90,7 +92,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                           padding:
                               const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                           child: Text(
-                            widget.subTitle1,
+                            "${widget.category.nfiles} Elements",
                             style: const TextStyle(
                               fontFamily: 'Outfit',
                               color: Color(0xFF57636C),
@@ -103,10 +105,11 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                           padding:
                               const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                           child: Text(
-                            widget.subTitle2,
+                            "${widget.category.nfiles} Elements",
                             style: TextStyle(
                               fontFamily: 'Outfit',
-                              color: widget.color,
+                              color: Color(widget.category.colorValue),
+                              backgroundColor: Color(0xFFFF5252),
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),

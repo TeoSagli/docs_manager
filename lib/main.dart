@@ -13,6 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         // Handle '/'
         if (settings.name == '/') {
-          return MaterialPageRoute(builder: (context) => const HomePage());
+          return MaterialPageRoute(builder: (context) => HomePage());
         }
         var uri = Uri.parse(settings.name.toString());
 

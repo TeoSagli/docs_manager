@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
-  TextEditingController? tc;
+  TextEditingController tc;
   InputField(this.tc, {super.key});
 
   @override
@@ -9,7 +9,7 @@ class InputField extends StatefulWidget {
 }
 
 class InputFieldState extends State<InputField> {
-  TextEditingController? textController;
+  late TextEditingController textController;
 
   @override
   void initState() {
@@ -19,7 +19,7 @@ class InputFieldState extends State<InputField> {
 
   @override
   void dispose() {
-    textController?.dispose();
+    textController.dispose();
     super.dispose();
   }
 
@@ -78,7 +78,7 @@ class InputFieldState extends State<InputField> {
           fontWeight: FontWeight.normal,
         ),
         onChanged: (value) {
-          widget.tc!.text = textController!.text;
+          widget.tc.text = textController.text;
         },
         textAlign: TextAlign.start,
       ),
