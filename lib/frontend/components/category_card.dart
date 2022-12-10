@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'abstract/card.dart';
@@ -20,6 +23,8 @@ class CategoryCard extends StatefulWidget {
 }
 
 class CategoryCardState extends State<CategoryCard> with MyCard {
+  Widget cardImage = const SizedBox.shrink();
+
   @override
   onExitHover() {
     setState(() {
@@ -32,6 +37,14 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
     setState(() {
       cardColor = Colors.white30;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    readImageCategoryStorage(widget.category.path).then((value) => setState(() {
+          cardImage = value;
+        }));
   }
 
   @override
@@ -109,7 +122,6 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                             style: TextStyle(
                               fontFamily: 'Outfit',
                               color: Color(widget.category.colorValue),
-                              backgroundColor: Color(0xFFFF5252),
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
@@ -119,12 +131,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                     ),
                   ),
                   Expanded(
-                    child: Image.asset(
-                      'assets/images/test.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.scaleDown,
-                    ),
+                    child: cardImage,
                   ),
                 ],
               ),
@@ -132,6 +139,36 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
           ),
         ),
       ),
+    );
+  }
+
+  Future<Image> readImageCategoryStorage(String catName) async {
+    final storageRef = FirebaseStorage.instance.ref("categories");
+    // print(await storageRef.child("Pictures.png").getDownloadURL());
+    print("bro $catName");
+    final catRef = storageRef.child(catName);
+
+    try {
+      const oneMegabyte = 1024 * 1024;
+
+      return await catRef
+          .getData(oneMegabyte)
+          .then((value) => cardImage = Image.memory(
+                value!,
+                width: 100,
+                height: 100,
+                fit: BoxFit.fitWidth,
+              ));
+
+      // Data for "images/island.jpg" is returned, use this as needed.
+    } on FirebaseException catch (e) {
+      // Handle any errors.
+      print("Error $e!");
+    }
+    return Image.asset(
+      "images/test.png",
+      width: 100,
+      height: 100,
     );
   }
 }

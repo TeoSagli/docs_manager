@@ -13,8 +13,8 @@ class InputFieldState extends State<InputField> {
 
   @override
   void initState() {
-    super.initState();
     textController = TextEditingController();
+    super.initState();
   }
 
   @override

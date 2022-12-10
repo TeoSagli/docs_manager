@@ -37,8 +37,8 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
       200);
   @override
   void initState() {
-    super.initState();
     textController1 = TextEditingController();
+    super.initState();
   }
 
   @override
@@ -149,28 +149,13 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     }
   }
 
-  saveImage(imageLoaded, imageName) async {
-    Directory docDir = await getApplicationDocumentsDirectory();
-    File f = File(path.join(docDir.path, imageName));
-    var bytes = await rootBundle.load(imageLoaded);
-    await f.writeAsBytes(imageLoaded.buffer
-        .asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text("Image saved!"),
-        content: Image.file(f),
-      ),
-    );
-  }
-
   onSubmit() async {
     // else if (!await isCategoryNew(textController1!.text)) {
     // onErrorCategoryExisting();}
     if (textController1.text == "" || textController1.text == " ") {
       onErrorText();
     } else if (imageGallery != null) {
-      createCategory(textController1.text, imageGallery!.path.toString());
+      createCategory(textController1.text, imageGallery!.name.toString());
       loadFileToStorage(imageGallery, textController1.text);
     } else {
       onErrorImage();

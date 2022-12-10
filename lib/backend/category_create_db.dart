@@ -24,21 +24,18 @@ createCategory(name, path) async {
 loadFileToStorage(XFile? image, String catName) async {
   final fPath = image!.path;
   final fName = image.name;
-  print("Dentro");
+  //print("Dentro");
   Directory documentDirectory = await getApplicationDocumentsDirectory();
 
-  print("$documentDirectory/$fName");
-  print(fPath);
+  /* print("$documentDirectory/$fName");
+  print(fPath);*/
   final file = File(fPath);
-
-// Create the file metadata
-  final metadata = SettableMetadata(contentType: "image/jpg");
 
 // Create a reference to the Firebase Storage bucket
   final storageRef = FirebaseStorage.instance.ref("categories");
 
 // Upload file and metadata to the path 'images/mountains.jpg'
-  final uploadTask = storageRef.child(catName).putFile(file, metadata);
+  final uploadTask = storageRef.child(catName).putFile(file);
 
 // Listen for state changes, errors, and completion of the upload.
   uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
