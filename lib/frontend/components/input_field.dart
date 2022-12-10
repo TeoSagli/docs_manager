@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
   TextEditingController tc;
+
+  ///My custom InputField:
+  ///
+  ///1-set the controller.
+  ///
+
   InputField(this.tc, {super.key});
 
   @override

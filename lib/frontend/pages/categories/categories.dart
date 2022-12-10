@@ -1,12 +1,11 @@
+import 'package:docs_manager/backend/category_read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
+import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_add.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:docs_manager/frontend/components/category_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-import '../../components/bottom_bar.dart';
-import '../../components/category_card.dart';
 
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
@@ -16,7 +15,7 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class CategoriesPageState extends State<CategoriesPage> {
-  List<Widget> cardsList = [];
+  List<CategoryCard> cardsList = [];
 
   //  loading wheel
 
@@ -33,17 +32,7 @@ class CategoriesPageState extends State<CategoriesPage> {
   @override
   void initState() {
     cardsList.clear();
-    print("InitState called");
-    final dbRef = FirebaseDatabase.instance.ref("categories");
-    dbRef.get().asStream().forEach((element) {
-      for (var el in element.children) {
-        //el.value contenuto di category{path:..., nfiles:...}
-        final data =
-            Map<String, dynamic>.from(el.value as Map<String, dynamic>);
-        //el.key nome di category
-        fullfillCard(el.key.toString(), Category.fromRTDB(data));
-      }
-    });
+    listCategoryStorage(fullfillCard);
     super.initState();
   }
 

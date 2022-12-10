@@ -9,6 +9,7 @@ class TitleText extends StatelessWidget {
   /// 1-title text
   ///
   /// 2-color text
+  ///
   const TitleText(this.title, this.textColor, {super.key});
 
   @override

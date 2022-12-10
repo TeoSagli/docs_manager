@@ -5,6 +5,14 @@ import 'package:docs_manager/others/constants.dart' as constants;
 class MyButton extends StatefulWidget {
   final dynamic function;
   final String text;
+
+  ///My custom Button:
+  ///
+  ///1-set button text.
+  ///
+  ///2-set behaviour
+  ///
+
   const MyButton(this.text, this.function, {super.key});
 
   @override

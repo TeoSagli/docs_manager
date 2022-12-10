@@ -4,6 +4,7 @@ import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_rounded.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -153,60 +154,15 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     // else if (!await isCategoryNew(textController1!.text)) {
     // onErrorCategoryExisting();}
     if (textController1.text == "" || textController1.text == " ") {
-      onErrorText();
+      onErrorText(context);
     } else if (imageGallery != null) {
-      createCategory(textController1.text, imageGallery!.name.toString());
-      loadFileToStorage(imageGallery, textController1.text);
+      String ext = imageGallery!.name.toString().split(".")[1];
+      String saveName = "${textController1.text}.$ext";
+      createCategory(textController1.text, saveName);
+      loadFileToStorage(imageGallery, textController1.text, saveName);
+      onSuccess(context);
     } else {
-      onErrorImage();
+      onErrorImage(context);
     }
-  }
-
-  onErrorImage() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Something went wrong!'),
-        content: const Text('Upload an image for your category!'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  onErrorText() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Something went wrong!'),
-        content: const Text('Text cannot be empty!'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  onErrorCategoryExisting() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Something went wrong!'),
-        content: const Text('Category already existing!'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
   }
 }
