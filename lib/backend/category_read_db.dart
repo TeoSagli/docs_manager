@@ -44,7 +44,7 @@ listCategoryStorage(dynamic fullfillCard) {
   dbRef.get().asStream().forEach((element) {
     for (var el in element.children) {
       //el.value contenuto di category{path:..., nfiles:...}
-      final data = Map<String, dynamic>.from(el.value as Map<String, dynamic>);
+      final data = Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
       //el.key nome di category
       fullfillCard(el.key.toString(), Category.fromRTDB(data));
     }

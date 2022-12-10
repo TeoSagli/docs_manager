@@ -1,7 +1,6 @@
+import 'package:docs_manager/backend/category_read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:flutter/material.dart';
-
-import '../../backend/category_read_db.dart';
 import 'abstract/card.dart';
 
 class CategoryCard extends StatefulWidget {
@@ -45,17 +44,6 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
     super.initState();
   }
 
-/*
-  @override
-  void didUpdateWidget(CategoryCard oldWidget) {
-    print("Activated update");
-    readImageCategoryStorage(widget.category.path, cardImage)
-        .then((value) => setState(() {
-              cardImage = value;
-            }));
-    super.didUpdateWidget(oldWidget);
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return Padding(
