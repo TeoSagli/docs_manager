@@ -1,20 +1,15 @@
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
-import 'package:docs_manager/frontend/components/button_rounded.dart';
+import 'package:docs_manager/frontend/components/button_function.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'dart:core';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import '../../../backend/category_create_db.dart';
 import '../../components/image_network.dart';
@@ -53,7 +48,7 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     return Scaffold(
       key: scaffoldKey,
       bottomNavigationBar: MyBottomBar(context, 4),
-      appBar: MyAppBar('Create a Category', true, context),
+      appBar: MyAppBar('Category creation', true, context),
       body: Stack(
         children: [
           SafeArea(
@@ -140,10 +135,10 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
       );
     } catch (e) {
       setState(() {
-        widgetChanging = Center(
+        widgetChanging = const Center(
           child: Text(
-            "Error uploading! $e",
-            style: const TextStyle(color: Colors.redAccent, fontSize: 50),
+            "Please select a valid image!",
+            style: TextStyle(color: Colors.redAccent, fontSize: 40),
           ),
         );
       });

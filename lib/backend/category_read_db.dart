@@ -13,16 +13,12 @@ Future<Image> readImageCategoryStorage(String catName, Widget cardImage) async {
   final catRef = storageRef.child(catName);
 
   try {
-    const oneMegabyte = 1024 * 1024;
-
-    return await catRef
-        .getData(oneMegabyte)
-        .then((value) => cardImage = Image.memory(
-              value!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.fitWidth,
-            ));
+    return await catRef.getData().then((value) => cardImage = Image.memory(
+          value!,
+          width: 100,
+          height: 100,
+          fit: BoxFit.fitWidth,
+        ));
 
     // Data for "images/island.jpg" is returned, use this as needed.
   } on FirebaseException catch (e) {

@@ -19,9 +19,7 @@ class CategoriesPageState extends State<CategoriesPage> {
   @override
   void initState() {
     listCategoryStorage(fullfillCard);
-    setState(() {
-      super.initState();
-    });
+    super.initState();
   }
 
   @override

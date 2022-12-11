@@ -2,7 +2,7 @@ import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
-class MyButton extends StatefulWidget {
+class MyButton extends StatelessWidget {
   final dynamic function;
   final String text;
 
@@ -15,11 +15,6 @@ class MyButton extends StatefulWidget {
 
   const MyButton(this.text, this.function, {super.key});
 
-  @override
-  State<StatefulWidget> createState() => MyButtonState();
-}
-
-class MyButtonState extends State<MyButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,8 +34,8 @@ class MyButtonState extends State<MyButton> {
           ),
         ),
         //   style: ButtonStyle( maximumSize: Size(width: 130,height: 40,)),
-        onPressed: () => widget.function(),
-        child: TitleText(widget.text, Colors.white),
+        onPressed: () => function(),
+        child: TitleText(text, Colors.white),
       ),
     );
   }

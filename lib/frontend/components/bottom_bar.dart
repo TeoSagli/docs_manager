@@ -33,22 +33,22 @@ class _MyBottomBarState extends State<MyBottomBar> {
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           label: 'Home',
-          //  activeIcon: Icon(Icons.home),
+          activeIcon: Icon(Icons.home),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_balance_wallet_outlined),
           label: 'Wallet',
-          //  activeIcon: Icon(Icons.account_balance_wallet_rounded),
+          activeIcon: Icon(Icons.account_balance_wallet_rounded),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.category_outlined),
           label: 'Categories',
-          //  activeIcon: Icon(Icons.category),
+          activeIcon: Icon(Icons.category),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.favorite_outline_rounded),
           label: 'Favourites',
-          //  activeIcon: Icon(Icons.favorite),
+          activeIcon: Icon(Icons.favorite),
         ),
       ],
       currentIndex: widget.activeIndex < 4 ? widget.activeIndex : 0,
