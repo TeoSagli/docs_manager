@@ -1,12 +1,12 @@
+import 'package:docs_manager/frontend/components/app_bar.dart';
+import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_function.dart';
 import 'package:docs_manager/frontend/components/button_icon_function.dart';
+import 'package:docs_manager/frontend/components/dropdown_menu.dart';
+import 'package:docs_manager/frontend/components/image_network.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:flutter/material.dart';
-
-import '../../components/app_bar.dart';
-import '../../components/bottom_bar.dart';
-import '../../components/image_network.dart';
 
 class FileCreatePage extends StatefulWidget {
   const FileCreatePage({super.key});
@@ -21,6 +21,11 @@ class FileCreateState extends State<FileCreatePage> {
       'https://media.istockphoto.com/id/1206044836/vector/preview-stamp-preview-round-vintage-grunge-sign-preview.jpg?s=612x612&w=0&k=20&c=SSZ0NLA7Bsv3Zlq_9DhalidL0Fc2ofhF7BCq2vjcNwc=',
       150,
       150);
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +63,7 @@ class FileCreateState extends State<FileCreatePage> {
                                     children: [
                                       Align(
                                         alignment:
-                                            AlignmentDirectional(0, -0.9),
+                                            const AlignmentDirectional(0, -0.9),
                                         child: Column(
                                           children: [
                                             const TitleText(
@@ -107,7 +112,7 @@ class FileCreateState extends State<FileCreatePage> {
                                                 //==================================WIDGET PDF PREVIEW
                                                 Stack(
                                                   alignment:
-                                                      AlignmentDirectional(
+                                                      const AlignmentDirectional(
                                                           1, -1),
                                                   children: [
                                                     Align(
@@ -222,46 +227,7 @@ class FileCreateState extends State<FileCreatePage> {
                                     ],
                                   ),
                                   //==================================WIDGET CATEGORIES CHOICE
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 0),
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            16, 12, 16, 12),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Category Name',
-                                              style: TextStyle(
-                                                fontFamily: 'Outfit',
-                                                color: Color(0xFF090F13),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            ),
-                                            Icon(
-                                              Icons.chevron_right_rounded,
-                                              color: Color(0xFF7C8791),
-                                              size: 24,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  //  const MyDropdown(),
                                   //==================================
                                   Padding(
                                     padding:

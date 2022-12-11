@@ -35,7 +35,6 @@ Future<Image> readImageCategoryStorage(String catName, Widget cardImage) async {
 //===================================================================================
 // Load categories fields from Firebase Database
 listCategoryStorage(dynamic fullfillCard) {
-  print("InitState called");
   final dbRef = FirebaseDatabase.instance.ref("categories");
   dbRef.get().asStream().forEach((element) {
     for (var el in element.children) {
@@ -43,6 +42,18 @@ listCategoryStorage(dynamic fullfillCard) {
       final data = Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
       //el.key nome di category
       fullfillCard(el.key.toString(), Category.fromRTDB(data));
+    }
+  });
+}
+
+//===================================================================================
+// Return all categories names
+listCategoriesNamesStorage(fillCategoriesNames) {
+  final dbRef = FirebaseDatabase.instance.ref("categories");
+  dbRef.get().asStream().forEach((element) {
+    for (var el in element.children) {
+      //el.key nome di category
+      fillCategoriesNames(el.key.toString());
     }
   });
 }
