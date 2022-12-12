@@ -4,6 +4,7 @@ import 'package:docs_manager/others/constants.dart' as constants;
 class ButtonAdd extends StatelessWidget {
   final String linkNav;
   final BuildContext pageContext;
+  final IconData icon;
 
   /// Creates an 'add button' that redirect you to [link] creation page
   ///
@@ -11,7 +12,7 @@ class ButtonAdd extends StatelessWidget {
   ///
   /// 2-link to move
   ///
-  const ButtonAdd(this.pageContext, this.linkNav, {super.key});
+  const ButtonAdd(this.pageContext, this.linkNav, this.icon, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,8 @@ class ButtonAdd extends StatelessWidget {
           },
           backgroundColor: constants.mainBackColor,
           elevation: 8,
-          child: const Icon(
-            Icons.add,
+          child: Icon(
+            icon,
             color: Colors.white,
             size: 30,
           ),

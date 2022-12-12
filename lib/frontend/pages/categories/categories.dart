@@ -14,7 +14,8 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class CategoriesPageState extends State<CategoriesPage> {
-  List<CategoryCard> cardsList = [];
+  List<Widget> cardsList = [];
+  final List<int> items = [];
 
   @override
   void initState() {
@@ -28,24 +29,44 @@ class CategoriesPageState extends State<CategoriesPage> {
       appBar: MyAppBar("All categories", true, context),
       bottomNavigationBar: MyBottomBar(context, 2),
       body: Stack(children: [
-        ListView(
+        ReorderableListView(
           padding: EdgeInsets.zero,
           primary: false,
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
+          onReorder: (int oldIndex, int newIndex) {
+            setState(() {
+              if (oldIndex < newIndex) {
+                newIndex -= 1;
+              }
+              final int item = items.removeAt(oldIndex);
+              items.insert(newIndex, item);
+              print("Items:$items");
+            });
+          },
           children: cardsList.isEmpty ? [] : cardsList,
         ),
-        ButtonAdd(context, '/categories/create')
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ButtonAdd(context, '/categories/edit', Icons.edit),
+            ButtonAdd(context, '/categories/create', Icons.add)
+          ],
+        )
       ]),
     );
   }
 
 //========================================================
 //Fill category card
-  fullfillCard(String catName, Category c) {
+  fullfillCard(String catName, int index, Category c) {
     setState(() {
-      cardsList.add(
-          CategoryCard(catName, c, '3 upcoming due dates', 0, moveToCategory));
+      items.add(index);
+      cardsList.add(Container(
+        key: Key(index.toString()),
+        child:
+            CategoryCard(catName, c, '3 upcoming due dates', 0, moveToCategory),
+      ));
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'frontend/pages/categories/categories.dart';
+import 'frontend/pages/categories/categories_edit.dart';
 import 'frontend/pages/categories/category_create.dart';
 import 'frontend/pages/wallet.dart';
 import 'frontend/pages/categories/category_view.dart';
@@ -59,6 +60,9 @@ class MyApp extends StatelessWidget {
                   case 'create':
                     return MaterialPageRoute(
                         builder: (context) => const CategoryCreatePage());
+                  case 'edit':
+                    return MaterialPageRoute(
+                        builder: (context) => CategoryEditPage());
                   default:
                     break;
                 }

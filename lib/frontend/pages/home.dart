@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: MyBottomBar(context, 0),
       body: Stack(children: [
         const Text("Home"),
-        ButtonAdd(context, '/files/create'),
+        ButtonAdd(context, '/files/create', Icons.add),
       ]),
     );
   }

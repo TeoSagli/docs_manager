@@ -121,6 +121,8 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     );
   }
 
+//===================================================================================
+// Upload photo from gallery and catch errors
   setPhotoFromGallery() async {
     try {
       imageGallery = await picker.pickImage(source: ImageSource.gallery);
@@ -145,6 +147,8 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     }
   }
 
+//===================================================================================
+// Submit category to db if everything is correct
   onSubmit() async {
     // else if (!await isCategoryNew(textController1!.text)) {
     // onErrorCategoryExisting();}
@@ -160,4 +164,5 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
       onErrorImage(context);
     }
   }
+  //===================================================================================
 }

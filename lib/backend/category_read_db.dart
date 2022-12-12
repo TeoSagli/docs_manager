@@ -37,11 +37,13 @@ Future<Image> readImageCategoryStorage(String catName, Widget cardImage) async {
 listCategoryStorage(dynamic fullfillCard) {
   final dbRef = FirebaseDatabase.instance.ref("categories");
   dbRef.get().asStream().forEach((element) {
+    int count = 0;
     for (var el in element.children) {
       //el.value contenuto di category{path:..., nfiles:...}
       final data = Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
       //el.key nome di category
-      fullfillCard(el.key.toString(), Category.fromRTDB(data));
+      fullfillCard(el.key.toString(), count, Category.fromRTDB(data));
+      count++;
     }
   });
 }
