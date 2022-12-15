@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:docs_manager/backend/category_read_db.dart';
 import 'package:docs_manager/backend/category_update_db.dart';
-import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_add.dart';
@@ -15,24 +16,27 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class CategoriesPageState extends State<CategoriesPage> {
-  List<Widget> cardsList = [];
+  List<Container> cardsList = [];
   List<int> itemsList = [];
   int length = 0;
-
+  late StreamSubscription readCards;
+//===================================================================================
+// Activate listeners
   @override
   void initState() {
-    // retrieveCardsLength(setLength);
-
-    print("OOOOOO$length");
-    retrieveCategoryDB(fullfillCard);
-    cardsList.sort((a, b) {
-      //a.key.toString().compareTo(b.key.toString());
-      print("${a.key.toString()}+${b.key.toString()}");
-      return 0;
-    });
+    readCards = retrieveCategoryDB(fullfilCard, moveToCategory);
     super.initState();
   }
 
+//===================================================================================
+// Deactivate listeners
+  @override
+  void deactivate() {
+    readCards.cancel();
+    super.deactivate();
+  }
+
+//===================================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,18 +49,23 @@ class CategoriesPageState extends State<CategoriesPage> {
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
           onReorder: (int oldIndex, int newIndex) {
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
             setState(() {
-              if (oldIndex < newIndex) {
-                newIndex -= 1;
-              }
-              setState(() {
-                final int item = itemsList.removeAt(oldIndex);
-                itemsList.insert(newIndex, item);
-              });
-
-              updateOrderDB(itemsList);
-              print("Items:$itemsList");
+              final Container card = cardsList.removeAt(oldIndex);
+              final int item = itemsList.removeAt(oldIndex);
+              itemsList.insert(newIndex, item);
+              cardsList.insert(newIndex, card);
             });
+            for (int element in itemsList) {
+              updateOrderDB(
+                  element,
+                  (cardsList.elementAt(element).child! as CategoryCard)
+                      .categoryName);
+            }
+
+            //   print("Items refreshing: $itemsList");
           },
           children: cardsList.isEmpty ? [] : cardsList,
         ),
@@ -73,15 +82,16 @@ class CategoriesPageState extends State<CategoriesPage> {
 
 //========================================================
 //Fill category card
-  fullfillCard(String catName, Category cat) {
-    int count = 0;
+  fullfilCard(
+    List<Container> myCards,
+    List<int> myOrders,
+  ) {
     setState(() {
-      itemsList.add(cat.order);
-      cardsList.add(Container(
-        key: Key(cat.order.toString()),
-        child: CategoryCard(catName, cat, moveToCategory),
-      ));
+      itemsList = myOrders;
+      cardsList = myCards;
     });
+    /*print("Cardlist ${cardsList.toList().toString()} is here");
+    print("Orderlist ${itemsList.toList().toString()} is here");*/
   }
 
 //========================================================
@@ -92,11 +102,7 @@ class CategoriesPageState extends State<CategoriesPage> {
       '/categories/view/$id',
     );
   }
+
 //========================================================
 
-  setLength(int l) {
-    setState(() {
-      length = l;
-    });
-  }
 }

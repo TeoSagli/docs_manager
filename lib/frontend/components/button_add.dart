@@ -21,6 +21,7 @@ class ButtonAdd extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 30, 30),
         child: FloatingActionButton(
+          heroTag: icon.toString(),
           onPressed: () {
             Navigator.pushNamed(
               pageContext,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -8,7 +9,8 @@ import 'dart:math' as math;
 
 //===================================================================================
 // Upload categories images to Firebase Storage
-loadFileToStorage(XFile? image, String catName, String saveName) async {
+StreamSubscription loadFileToStorage(
+    XFile? image, String catName, String saveName) {
   final fPath = image!.path;
 
   final file = File(fPath);
@@ -20,7 +22,7 @@ loadFileToStorage(XFile? image, String catName, String saveName) async {
   final uploadTask = storageRef.child(saveName).putFile(file);
 
 // Listen for state changes, errors, and completion of the upload.
-  uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
+  return uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
     switch (taskSnapshot.state) {
       case TaskState.running:
         final progress =
@@ -49,11 +51,18 @@ loadFileToStorage(XFile? image, String catName, String saveName) async {
 createCategory(name, path) async {
   var categories = FirebaseDatabase.instance.ref("categories");
   var newCategory = categories.child(name);
+  int length = 0;
+
+  await categories
+      .get()
+      .asStream()
+      .forEach((element) => length = element.children.length);
+
   await newCategory
       .update({
         "path": path,
         "nfiles": 0,
-        "order": await categories.get().asStream().length,
+        "order": length,
         "colorValue": Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
             .withOpacity(1.0)
             .value

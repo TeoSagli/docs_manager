@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
@@ -155,11 +157,17 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     if (textController1.text == "" || textController1.text == " ") {
       onErrorText(context);
     } else if (imageGallery != null) {
-      String ext = imageGallery!.name.toString().split(".")[1];
-      String saveName = "${textController1.text}.$ext";
-      createCategory(textController1.text, saveName);
-      loadFileToStorage(imageGallery, textController1.text, saveName);
-      onSuccess(context);
+      try {
+        String ext = imageGallery!.name.toString().split(".")[1];
+        String saveName = "${textController1.text}.$ext";
+        createCategory(textController1.text, saveName);
+        StreamSubscription listenLoading =
+            loadFileToStorage(imageGallery, textController1.text, saveName);
+        onSuccess(context);
+        listenLoading.cancel();
+      } catch (e) {
+        print("Error: $e");
+      }
     } else {
       onErrorImage(context);
     }

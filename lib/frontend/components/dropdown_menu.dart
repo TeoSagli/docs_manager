@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:docs_manager/backend/category_read_db.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +14,24 @@ class MyDropdown extends StatefulWidget {
 class MyDropdownState extends State<MyDropdown> {
   List<String> categoriesNames = [];
   String dropdownValue = "";
+  late StreamSubscription readCategoriesNames;
+//===================================================================================
+// Activate listeners
   @override
   void initState() {
-    retrieveCategoriesNamesDB(fillCategoriesNames);
-    //  dropdownValue = categoriesNames.first;
-    print(categoriesNames.toString());
+    readCategoriesNames = retrieveCategoriesNamesDB(fillCategoriesNames);
     super.initState();
   }
 
+//===================================================================================
+// Deactivate listeners
+  @override
+  void deactivate() {
+    readCategoriesNames.cancel();
+    super.deactivate();
+  }
+
+//===================================================================================
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -64,9 +76,12 @@ class MyDropdownState extends State<MyDropdown> {
     );
   }
 
+//===================================================================================
+// Add category to menu
   fillCategoriesNames(String el) {
     setState(() {
       categoriesNames.add(el);
     });
   }
 }
+//===================================================================================

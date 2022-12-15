@@ -7,11 +7,12 @@ class Category {
   int nfiles;
   final int colorValue;
   int order;
-  Category(
-      {required this.path,
-      required this.nfiles,
-      required this.colorValue,
-      required this.order});
+  Category({
+    required this.path,
+    required this.nfiles,
+    required this.colorValue,
+    required this.order,
+  });
 
 //Method converting a Json(Map<String, dynamic>) to a Category
   factory Category.fromRTDB(Map<String, dynamic> data) {
