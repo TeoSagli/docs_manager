@@ -14,7 +14,7 @@ class MyDropdownState extends State<MyDropdown> {
   String dropdownValue = "";
   @override
   void initState() {
-    listCategoriesNamesStorage(fillCategoriesNames);
+    retrieveCategoriesNamesDB(fillCategoriesNames);
     //  dropdownValue = categoriesNames.first;
     print(categoriesNames.toString());
     super.initState();

@@ -6,14 +6,11 @@ import 'abstract/card.dart';
 class CategoryCard extends StatefulWidget {
   final String categoryName;
   final Category category;
-  final String subTitle2;
-  final int id;
   final dynamic function;
 
   @override
   State<StatefulWidget> createState() => CategoryCardState();
-  const CategoryCard(
-      this.categoryName, this.category, this.subTitle2, this.id, this.function,
+  const CategoryCard(this.categoryName, this.category, this.function,
       {super.key});
 }
 
@@ -65,7 +62,8 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
           onEnter: ((event) => onHover()),
           onExit: ((event) => onExitHover()),
           child: GestureDetector(
-            onTap: () => widget.function(widget.id, context),
+            //TODO
+            onTap: () => widget.function(0, context),
             child: Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 5, 5),
               child: Row(

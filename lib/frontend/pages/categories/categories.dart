@@ -1,4 +1,5 @@
 import 'package:docs_manager/backend/category_read_db.dart';
+import 'package:docs_manager/backend/category_update_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
@@ -15,11 +16,20 @@ class CategoriesPage extends StatefulWidget {
 
 class CategoriesPageState extends State<CategoriesPage> {
   List<Widget> cardsList = [];
-  final List<int> items = [];
+  List<int> itemsList = [];
+  int length = 0;
 
   @override
   void initState() {
-    listCategoryStorage(fullfillCard);
+    // retrieveCardsLength(setLength);
+
+    print("OOOOOO$length");
+    retrieveCategoryDB(fullfillCard);
+    cardsList.sort((a, b) {
+      //a.key.toString().compareTo(b.key.toString());
+      print("${a.key.toString()}+${b.key.toString()}");
+      return 0;
+    });
     super.initState();
   }
 
@@ -39,9 +49,13 @@ class CategoriesPageState extends State<CategoriesPage> {
               if (oldIndex < newIndex) {
                 newIndex -= 1;
               }
-              final int item = items.removeAt(oldIndex);
-              items.insert(newIndex, item);
-              print("Items:$items");
+              setState(() {
+                final int item = itemsList.removeAt(oldIndex);
+                itemsList.insert(newIndex, item);
+              });
+
+              updateOrderDB(itemsList);
+              print("Items:$itemsList");
             });
           },
           children: cardsList.isEmpty ? [] : cardsList,
@@ -59,13 +73,13 @@ class CategoriesPageState extends State<CategoriesPage> {
 
 //========================================================
 //Fill category card
-  fullfillCard(String catName, int index, Category c) {
+  fullfillCard(String catName, Category cat) {
+    int count = 0;
     setState(() {
-      items.add(index);
+      itemsList.add(cat.order);
       cardsList.add(Container(
-        key: Key(index.toString()),
-        child:
-            CategoryCard(catName, c, '3 upcoming due dates', 0, moveToCategory),
+        key: Key(cat.order.toString()),
+        child: CategoryCard(catName, cat, moveToCategory),
       ));
     });
   }
@@ -79,4 +93,10 @@ class CategoriesPageState extends State<CategoriesPage> {
     );
   }
 //========================================================
+
+  setLength(int l) {
+    setState(() {
+      length = l;
+    });
+  }
 }

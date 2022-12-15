@@ -47,11 +47,13 @@ loadFileToStorage(XFile? image, String catName, String saveName) async {
 //===================================================================================
 // Upload categories fields to Firebase Database
 createCategory(name, path) async {
-  var newCategory = FirebaseDatabase.instance.ref("categories/$name");
+  var categories = FirebaseDatabase.instance.ref("categories");
+  var newCategory = categories.child(name);
   await newCategory
       .update({
         "path": path,
         "nfiles": 0,
+        "order": await categories.get().asStream().length,
         "colorValue": Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
             .withOpacity(1.0)
             .value
