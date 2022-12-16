@@ -19,7 +19,7 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
-      child: TextButton(
+      child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(constants.mainBackColor),
           fixedSize: MaterialStateProperty.all(const Size(130, 40)),

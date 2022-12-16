@@ -35,7 +35,7 @@ class InputFieldState extends State<InputField> {
       padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
       child: TextFormField(
         controller: textController,
-        autofocus: true,
+        autofocus: false,
         obscureText: false,
         decoration: InputDecoration(
           hintText: 'Put here text',
