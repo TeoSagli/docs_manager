@@ -40,7 +40,7 @@ class CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar("All categories", true, context),
+      appBar: MyAppBar("All categories", false, context),
       bottomNavigationBar: MyBottomBar(context, 2),
       body: Stack(children: [
         ReorderableListView(

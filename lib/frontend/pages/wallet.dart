@@ -9,7 +9,7 @@ class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar("Wallet", true, context),
+      appBar: MyAppBar("Wallet", false, context),
       bottomNavigationBar: MyBottomBar(context, 1),
       body: Column(
         mainAxisSize: MainAxisSize.max,

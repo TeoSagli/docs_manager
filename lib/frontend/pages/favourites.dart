@@ -10,7 +10,7 @@ class FavouritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar("Favourites", true, context),
+      appBar: MyAppBar("Favourites", false, context),
       bottomNavigationBar: MyBottomBar(context, 3),
       body: Column(mainAxisSize: MainAxisSize.max, children: [
         Padding(
