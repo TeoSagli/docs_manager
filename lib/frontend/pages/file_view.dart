@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../components/app_bar.dart';
-import '../../components/bottom_bar.dart';
+import '../components/app_bar.dart';
+import '../components/bottom_bar.dart';
 
 class FileViewPage extends StatelessWidget {
   final String id;

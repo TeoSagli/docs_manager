@@ -56,7 +56,7 @@ onErrorCategoryExisting(context) {
 
 //========================================================
 //Alert success submit
-onSuccess(context) {
+onSuccess(context, path) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -64,7 +64,7 @@ onSuccess(context) {
       content: const Text('Subit ended successfully!'),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pushNamed(context, '/categories'),
+          onPressed: () => Navigator.pushNamed(context, path),
           child: const Text('OK'),
         ),
       ],

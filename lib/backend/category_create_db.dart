@@ -10,13 +10,11 @@ import 'dart:math' as math;
 //===================================================================================
 // Upload categories images to Firebase Storage
 StreamSubscription loadFileToStorage(
-    XFile? image, String catName, String saveName) {
-  final fPath = image!.path;
-
+    String fPath, String catName, String saveName, String nameRef) {
   final file = File(fPath);
 
 // Create a reference to the Firebase Storage bucket
-  final storageRef = FirebaseStorage.instance.ref("categories");
+  final storageRef = FirebaseStorage.instance.ref(nameRef);
 
 // Upload file and metadata to the path 'images/mountains.jpg'
   final uploadTask = storageRef.child(saveName).putFile(file);

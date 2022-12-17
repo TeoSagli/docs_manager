@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'frontend/pages/categories/categories.dart';
-import 'frontend/pages/categories/categories_edit.dart';
-import 'frontend/pages/categories/category_create.dart';
+import 'frontend/pages/categories.dart';
+import 'frontend/pages/categories_edit.dart';
+import 'frontend/pages/category_create.dart';
 import 'frontend/pages/wallet.dart';
-import 'frontend/pages/categories/category_view.dart';
+import 'frontend/pages/category_view.dart';
 import 'frontend/pages/favourites.dart';
 import 'frontend/pages/home.dart';
-import 'frontend/pages/files/file_view.dart';
+import 'frontend/pages/file_view.dart';
 import 'frontend/pages/unknown.dart';
-import 'frontend/pages/files/file_create.dart';
+import 'frontend/pages/file_create.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';

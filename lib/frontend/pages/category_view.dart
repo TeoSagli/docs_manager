@@ -1,8 +1,8 @@
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/app_bar.dart';
-import '../../components/bottom_bar.dart';
+import '../components/app_bar.dart';
+import '../components/bottom_bar.dart';
 
 class CategoryViewPage extends StatelessWidget {
   final String id;

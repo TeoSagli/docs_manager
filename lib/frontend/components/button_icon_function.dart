@@ -38,7 +38,7 @@ class MyButtonIcon extends StatelessWidget {
           ),
           alignment: const AlignmentDirectional(0, 0),
           child: IconButton(
-            onPressed: () => function,
+            onPressed: () => function(),
             icon: Icon(
               icon,
               color: Colors.white,

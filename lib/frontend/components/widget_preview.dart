@@ -1,33 +1,31 @@
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-import 'package:docs_manager/frontend/components/image_network.dart';
+import 'package:cross_file_image/cross_file_image.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
+import 'package:image_picker/image_picker.dart';
 
-class DocumentPreview extends StatefulWidget {
-  dynamic removeImage;
-  Widget loadedImage;
-  final double cardWidth;
+class DocumentPreview extends StatelessWidget {
+  final dynamic removeImage;
+  final XFile loadedImage;
+  final double cardSize;
 
-  DocumentPreview(this.loadedImage, this.cardWidth, this.removeImage,
+  /// A preview image card with remove button:
+  ///
+  /// 1-image loaded
+  ///
+  /// 2-height and width fixed
+  ///
+  /// 3-remove image method
+  ///
+  const DocumentPreview(this.loadedImage, this.cardSize, this.removeImage,
       {super.key});
-
-  @override
-  State<StatefulWidget> createState() => DocumentPreviewState();
-}
-
-class DocumentPreviewState extends State<DocumentPreview> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(10, 8, 10, 8),
       child: Container(
-        width: widget.cardWidth,
-        height: widget.cardWidth,
+        width: cardSize,
+        height: cardSize,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: const [
@@ -52,10 +50,13 @@ class DocumentPreviewState extends State<DocumentPreview> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              child: widget.loadedImage,
+              child: Image(
+                image: XFileImage(loadedImage as XFile),
+                fit: BoxFit.fitWidth,
+              ),
             ),
             InkWell(
-              onTap: () => widget.removeImage(),
+              onTap: () => removeImage(this),
               child: Container(
                 width: double.infinity,
                 height: 44,

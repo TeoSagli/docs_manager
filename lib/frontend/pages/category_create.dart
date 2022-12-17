@@ -5,7 +5,6 @@ import 'package:docs_manager/backend/category_create_db.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_function.dart';
-import 'package:docs_manager/frontend/components/image_network.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:docs_manager/frontend/components/widget_preview.dart';
@@ -27,22 +26,18 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
   final ImagePicker picker = ImagePicker();
   bool hasUploaded = false;
   XFile? imageGallery;
-  late TextEditingController textController1;
+  late TextEditingController catNameController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  Widget widgetChanging = const ImageFromNetwork(
-      Colors.white,
-      'https://media.istockphoto.com/id/1206044836/vector/preview-stamp-preview-round-vintage-grunge-sign-preview.jpg?s=612x612&w=0&k=20&c=SSZ0NLA7Bsv3Zlq_9DhalidL0Fc2ofhF7BCq2vjcNwc=',
-      150,
-      150);
+  Widget widgetChanging = constants.defaultImg;
   @override
   void initState() {
-    textController1 = TextEditingController();
+    catNameController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    textController1.dispose();
+    catNameController.dispose();
     super.dispose();
   }
 
@@ -75,43 +70,41 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
                           //title 1
                           const TitleText('Category name:', Colors.black),
                           //input 1
-                          InputField(textController1),
+                          InputField(catNameController),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          //title 2
-                          const TitleText(
-                              'Select a category image:', Colors.black),
-                          //button upload 1
-                          MyButton('Upload', setPhotoFromGallery),
-                          Center(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                hasUploaded
-                                    ? DocumentPreview(
-                                        widgetChanging, 200, removeImage)
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: constants.mainBackColor),
-                                        ),
-                                        child: widgetChanging,
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        //title 2
+                        const TitleText(
+                            'Select a category image:', Colors.black),
+                        //button upload 1
+                        MyButton('Upload', setPhotoFromGallery),
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              hasUploaded
+                                  ? DocumentPreview(
+                                      imageGallery!,
+                                      MediaQuery.of(context).size.width * 0.9,
+                                      removeImage)
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: constants.mainBackColor),
                                       ),
-                              ],
-                            ),
+                                      child: widgetChanging,
+                                    ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -154,16 +147,16 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
   onSubmit() {
     // else if (!await isCategoryNew(textController1!.text)) {
     // onErrorCategoryExisting();}
-    if (textController1.text == "" || textController1.text == " ") {
+    if (catNameController.text == "" || catNameController.text == " ") {
       onErrorText(context);
     } else if (imageGallery != null) {
       try {
         String ext = imageGallery!.name.toString().split(".")[1];
-        String saveName = "${textController1.text}.$ext";
-        createCategory(textController1.text, saveName);
-        StreamSubscription listenLoading =
-            loadFileToStorage(imageGallery, textController1.text, saveName);
-        onSuccess(context);
+        String saveName = "${catNameController.text}.$ext";
+        createCategory(catNameController.text, saveName);
+        StreamSubscription listenLoading = loadFileToStorage(
+            imageGallery!.path, catNameController.text, saveName, 'categories');
+        onSuccess(context, '/categories');
         listenLoading.cancel();
       } catch (e) {
         print("Error: $e");
@@ -175,14 +168,9 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
 
   //===================================================================================
   // Submit category to db if everything is correct
-  removeImage() {
+  removeImage(Widget w) {
     setState(() {
-      print("Fra sto qua");
-      widgetChanging = const ImageFromNetwork(
-          Colors.white,
-          'https://media.istockphoto.com/id/1206044836/vector/preview-stamp-preview-round-vintage-grunge-sign-preview.jpg?s=612x612&w=0&k=20&c=SSZ0NLA7Bsv3Zlq_9DhalidL0Fc2ofhF7BCq2vjcNwc=',
-          200,
-          200);
+      widgetChanging = constants.defaultImg;
       hasUploaded = false;
       imageGallery = null;
     });

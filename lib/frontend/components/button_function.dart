@@ -18,24 +18,35 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(constants.mainBackColor),
-          fixedSize: MaterialStateProperty.all(const Size(130, 40)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              side: const BorderSide(
-                color: Colors.transparent,
-                width: 1,
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(constants.mainBackColor),
+                fixedSize: MaterialStateProperty.all(const Size(130, 40)),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
-              borderRadius: BorderRadius.circular(8),
+              //   style: ButtonStyle( maximumSize: Size(width: 130,height: 40,)),
+              onPressed: () => function(),
+              child: TitleText(text, Colors.white),
             ),
           ),
-        ),
-        //   style: ButtonStyle( maximumSize: Size(width: 130,height: 40,)),
-        onPressed: () => function(),
-        child: TitleText(text, Colors.white),
+        ],
       ),
     );
   }

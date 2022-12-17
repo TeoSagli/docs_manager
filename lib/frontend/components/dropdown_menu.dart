@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:docs_manager/backend/category_read_db.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:docs_manager/others/constants.dart' as constants;
 
 class MyDropdown extends StatefulWidget {
-  const MyDropdown({super.key});
+  String dropdownValue = "";
+  MyDropdown(this.dropdownValue, {super.key});
 
   @override
   State<StatefulWidget> createState() => MyDropdownState();
@@ -13,12 +15,13 @@ class MyDropdown extends StatefulWidget {
 
 class MyDropdownState extends State<MyDropdown> {
   List<String> categoriesNames = [];
-  String dropdownValue = "";
+
   late StreamSubscription readCategoriesNames;
 //===================================================================================
 // Activate listeners
   @override
   void initState() {
+    categoriesNames.clear();
     readCategoriesNames = retrieveCategoriesNamesDB(fillCategoriesNames);
     super.initState();
   }
@@ -35,7 +38,7 @@ class MyDropdownState extends State<MyDropdown> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+      padding: const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -49,24 +52,21 @@ class MyDropdownState extends State<MyDropdown> {
         child: Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
           child: DropdownButton<String>(
-            value: dropdownValue,
-            icon: const Icon(Icons.arrow_downward),
+            isExpanded: true,
+            value: widget.dropdownValue,
+            icon: const Icon(Icons.arrow_drop_down_rounded),
             elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
-            underline: Container(
-              height: 2,
-              color: Colors.deepPurpleAccent,
-            ),
+            style: const TextStyle(color: Colors.black, fontSize: 16.0),
             onChanged: (String? value) {
               // This is called when the user selects an item.
               setState(() {
-                dropdownValue = value!;
+                widget.dropdownValue = value!;
               });
             },
             items:
                 categoriesNames.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
-                value: value,
+                value: value.toString(),
                 child: Text(value),
               );
             }).toList(),
@@ -81,6 +81,7 @@ class MyDropdownState extends State<MyDropdown> {
   fillCategoriesNames(String el) {
     setState(() {
       categoriesNames.add(el);
+      widget.dropdownValue = categoriesNames.first;
     });
   }
 }

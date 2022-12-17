@@ -48,13 +48,15 @@ StreamSubscription retrieveCategoryDB(
       final cardCat = Category.fromRTDB(data);
       //el.key nome di category
       final cardName = el.key.toString();
-      //update cards list
+
+      //insert card in order
       cards.insert(
           cardCat.order,
           Container(
             key: Key(cardCat.order.toString()),
             child: CategoryCard(cardName, cardCat, moveToCategory),
           ));
+
       orders.insert(cardCat.order, cardCat.order);
       cards.removeAt(cardCat.order + 1);
       orders.removeAt(cardCat.order + 1);
@@ -73,3 +75,12 @@ StreamSubscription retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
     }
   });
 }
+
+//===================================================================================
+// Return all categories names
+int retrieveNFilesCategoryDB(String catName) {
+  int nfiles = 0;
+
+  return nfiles;
+}
+//===================================================================================
