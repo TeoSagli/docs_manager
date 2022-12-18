@@ -1,4 +1,4 @@
-import 'package:docs_manager/backend/category_read_db.dart';
+import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:flutter/material.dart';
 import 'abstract/card.dart';
@@ -61,7 +61,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
         onExit: ((event) => onExitHover()),
         child: GestureDetector(
           //TODO
-          onTap: () => widget.function(0, context),
+          onTap: () => widget.function(widget.categoryName, context),
           child: Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 5, 5),
             child: Row(

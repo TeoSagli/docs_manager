@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:cross_file_image/cross_file_image.dart';
-import 'package:docs_manager/backend/category_create_db.dart';
-import 'package:docs_manager/backend/file_create_db.dart';
-import 'package:docs_manager/backend/file_update_db.dart';
+import 'package:docs_manager/backend/create_db.dart';
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_function.dart';

@@ -1,19 +1,59 @@
+import 'dart:async';
+
+import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:flutter/material.dart';
 
 import '../components/app_bar.dart';
 import '../components/bottom_bar.dart';
 
-class CategoryViewPage extends StatelessWidget {
-  final String id;
-  const CategoryViewPage({required this.id, super.key});
+class CategoryViewPage extends StatefulWidget {
+  final String catName;
+  const CategoryViewPage({required this.catName, super.key});
 
+  @override
+  State<StatefulWidget> createState() => CategoryViewPageState();
+}
+
+class CategoryViewPageState extends State<CategoryViewPage> {
+  late StreamSubscription readCards;
+  List<Widget> cardsList = [];
+//===================================================================================
+// Activate listeners
+  @override
+  void initState() {
+    setState(() {
+      readCards = retrieveFilesDB(widget.catName, fulfillCard, moveToFile);
+    });
+    super.initState();
+  }
+
+//===================================================================================
+// Deactivate listeners
+  @override
+  void deactivate() {
+    readCards.cancel();
+    super.deactivate();
+  }
+
+//===================================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: MyBottomBar(context, 4),
-      appBar: MyAppBar('View category $id', true, context),
-      body: Column(
+      appBar: MyAppBar('View category ${widget.catName}', true, context),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Wrap(
+            spacing: 8,
+            runSpacing: 12,
+            alignment: WrapAlignment.spaceEvenly,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            direction: Axis.horizontal,
+            runAlignment: WrapAlignment.start,
+            verticalDirection: VerticalDirection.down,
+            children: cardsList.isEmpty ? [] : cardsList),
+      ), /* Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
@@ -50,51 +90,32 @@ class CategoryViewPage extends StatelessWidget {
               ),
             ),
           ),
-          Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            alignment: WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            direction: Axis.horizontal,
-            runAlignment: WrapAlignment.start,
-            verticalDirection: VerticalDirection.down,
-            clipBehavior: Clip.none,
-            children: [
-              FileCard(
-                  'The Running Ragamuffins',
-                  'Fitness',
-                  '216 Members',
-                  'assets/images/test.png',
-                  Icons.fitness_center,
-                  0,
-                  moveToFile),
-              FileCard(
-                  'Dads for Gas-free Groceries',
-                  'Health',
-                  '352 Members',
-                  'assets/images/test.png',
-                  Icons.favorite_rounded,
-                  1,
-                  moveToFile),
-              FileCard(
-                  'My card',
-                  'Health',
-                  '352 Members',
-                  'assets/images/test.png',
-                  Icons.favorite_rounded,
-                  2,
-                  moveToFile)
-            ],
-          ),
+          
         ],
-      ),
+      ),*/
     );
   }
 
-  moveToFile(id, context) {
+//===================================================================================
+// Move to file page
+  moveToFile(fileName, context) {
     Navigator.pushNamed(
       context,
-      '/files/view/$id',
+      '/files/view/$fileName',
     );
   }
+
+//========================================================
+//Fill file card
+  fulfillCard(
+    List<Widget> myCards,
+  ) {
+    setState(() {
+      cardsList = myCards;
+    });
+    /*print("Cardlist ${cardsList.toList().toString()} is here");
+    print("Orderlist ${itemsList.toList().toString()} is here");*/
+  }
+//===================================================================================
+
 }

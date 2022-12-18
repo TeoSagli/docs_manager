@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:docs_manager/backend/category_read_db.dart';
-import 'package:docs_manager/backend/category_update_db.dart';
+import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_add.dart';
@@ -24,7 +24,9 @@ class CategoriesPageState extends State<CategoriesPage> {
 // Activate listeners
   @override
   void initState() {
-    readCards = retrieveCategoryDB(fullfilCard, moveToCategory);
+    setState(() {
+      readCards = retrieveCategoryDB(fulfillCard, moveToCategory);
+    });
     super.initState();
   }
 
@@ -82,7 +84,7 @@ class CategoriesPageState extends State<CategoriesPage> {
 
 //========================================================
 //Fill category card
-  fullfilCard(
+  fulfillCard(
     List<Container> myCards,
     List<int> myOrders,
   ) {
@@ -96,10 +98,10 @@ class CategoriesPageState extends State<CategoriesPage> {
 
 //========================================================
 //Move router to Category View page
-  moveToCategory(id, context) {
+  moveToCategory(catName, context) {
     Navigator.pushNamed(
       context,
-      '/categories/view/$id',
+      '/categories/view/$catName',
     );
   }
 

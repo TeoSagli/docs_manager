@@ -56,20 +56,7 @@ class FavouritesPage extends StatelessWidget {
           runAlignment: WrapAlignment.start,
           verticalDirection: VerticalDirection.down,
           clipBehavior: Clip.none,
-          children: [
-            FileCard('The Running Ragamuffins', 'Fitness', '216 Members',
-                'assets/images/test.png', Icons.fitness_center, 0, moveToFile),
-            FileCard(
-                'Dads for Gas-free Groceries',
-                'Health',
-                '352 Members',
-                'assets/images/test.png',
-                Icons.favorite_rounded,
-                1,
-                moveToFile),
-            FileCard('My card', 'Health', '352 Members',
-                'assets/images/test.png', Icons.favorite_rounded, 2, moveToFile)
-          ],
+          children: [],
         ),
       ]),
     );

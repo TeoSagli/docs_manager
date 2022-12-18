@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cross_file_image/cross_file_image.dart';
-import 'package:docs_manager/backend/category_create_db.dart';
+import 'package:docs_manager/backend/create_db.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_function.dart';
@@ -28,7 +28,7 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
   XFile? imageGallery;
   late TextEditingController catNameController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  Widget widgetChanging = constants.defaultImg;
+  Widget widgetChanging = constants.loadingWheel;
   @override
   void initState() {
     catNameController = TextEditingController();

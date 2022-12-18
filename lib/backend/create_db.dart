@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:math' as math;
 
 //===================================================================================
-// Upload categories images to Firebase Storage
+/// Upload categories images to Firebase Storage
 StreamSubscription loadFileToStorage(
     String fPath, String catName, String saveName, String nameRef) {
   final file = File(fPath);
@@ -45,7 +45,7 @@ StreamSubscription loadFileToStorage(
 }
 
 //===================================================================================
-// Upload categories fields to Firebase Database
+/// Upload categories fields to Firebase Database
 createCategory(name, path) async {
   var categories = FirebaseDatabase.instance.ref("categories");
   var newCategory = categories.child(name);
@@ -68,5 +68,19 @@ createCategory(name, path) async {
       .then((value) => print("Category created!"))
       .catchError((error) => print("An error occured!"));
 }
-//===================================================================================
 
+//===================================================================================
+/// Upload file fields to Firebase Database
+createFile(String nameCat, String nameFile, path) async {
+  var catRef = FirebaseDatabase.instance.ref("files/$nameCat");
+  var fileRef = catRef.child(nameFile);
+  await fileRef
+      .update({
+        "path": path,
+        "categoryName": nameCat,
+        "isFavourite": false,
+      })
+      .then((value) => print("File created!"))
+      .catchError((error) => print("An error occured!"));
+}
+//===================================================================================

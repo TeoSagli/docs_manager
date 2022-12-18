@@ -1,24 +1,21 @@
+import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/backend/models/file.dart';
 import 'package:flutter/material.dart';
-
+import 'package:docs_manager/others/constants.dart' as constants;
 import 'abstract/card.dart';
 
 class FileCard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => FileCardState();
-  final String path;
-  final IconData icon;
-  final String mainTitle;
-  final String subTitle1;
-  final String subTitle2;
-  final int id;
+  final String fileName;
+  final File file;
   final dynamic function;
 
-  const FileCard(this.mainTitle, this.subTitle1, this.subTitle2, this.path,
-      this.icon, this.id, this.function,
-      {super.key});
+  const FileCard(this.fileName, this.file, this.function, {super.key});
 }
 
 class FileCardState extends State<FileCard> with MyCard {
+  Widget cardImage = constants.loadingWheel;
   @override
   onExitHover() {
     setState(() {
@@ -34,6 +31,18 @@ class FileCardState extends State<FileCard> with MyCard {
   }
 
   @override
+  void initState() {
+    readImageFileStorage(widget.file.path.elementAt(0).toString(),
+            widget.file.categoryName, widget.fileName, cardImage)
+        .then(
+      (value) => setState(() {
+        cardImage = value;
+      }),
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
@@ -41,7 +50,7 @@ class FileCardState extends State<FileCard> with MyCard {
         onEnter: ((event) => onHover()),
         onExit: ((event) => onExitHover()),
         child: GestureDetector(
-          onTap: () => widget.function(widget.id, context),
+          onTap: () => widget.function(widget.fileName, context),
           child: Container(
             width: MediaQuery.of(context).size.width * 0.45,
             decoration: BoxDecoration(
@@ -66,10 +75,7 @@ class FileCardState extends State<FileCard> with MyCard {
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        widget.path,
-                        fit: BoxFit.contain,
-                      ),
+                      child: cardImage,
                     ),
                   ),
                   Row(
@@ -79,13 +85,13 @@ class FileCardState extends State<FileCard> with MyCard {
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
                         child: Icon(
-                          widget.icon,
+                          widget.file.icon,
                           color: const Color(0xFF57636C),
                           size: 24,
                         ),
                       ),
                       Text(
-                        widget.subTitle1,
+                        widget.file.categoryName,
                         style: const TextStyle(
                           fontFamily: 'Outfit',
                           color: Color(0xFF57636C),
@@ -98,7 +104,7 @@ class FileCardState extends State<FileCard> with MyCard {
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
                     child: Text(
-                      widget.mainTitle,
+                      widget.fileName,
                       style: const TextStyle(
                         fontFamily: 'Outfit',
                         color: Colors.black,
@@ -110,7 +116,7 @@ class FileCardState extends State<FileCard> with MyCard {
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 0, 0),
                     child: Text(
-                      widget.subTitle2,
+                      widget.file.subTitle1,
                       style: const TextStyle(
                         fontFamily: 'Outfit',
                         color: Color(0xFF57636C),

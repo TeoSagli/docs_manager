@@ -83,9 +83,10 @@ class MyApp extends StatelessWidget {
               case 'categories':
                 switch (uri.pathSegments[1]) {
                   case 'view':
-                    var id = uri.pathSegments[2];
+                    var catName = uri.pathSegments[2];
                     return MaterialPageRoute(
-                        builder: (context) => CategoryViewPage(id: id));
+                        builder: (context) =>
+                            CategoryViewPage(catName: catName));
                   default:
                     break;
                 }
@@ -93,9 +94,9 @@ class MyApp extends StatelessWidget {
               case 'files':
                 switch (uri.pathSegments[1]) {
                   case 'view':
-                    var id = uri.pathSegments[2];
+                    var fileName = uri.pathSegments[2];
                     return MaterialPageRoute(
-                        builder: (context) => FileViewPage(id: id));
+                        builder: (context) => FileViewPage(fileName: fileName));
                   default:
                     break;
                 }
