@@ -20,16 +20,18 @@ class CategoriesPageState extends State<CategoriesPage> {
   List<Container> cardsList = [];
   List<int> itemsList = [];
   int length = 0;
-  late StreamSubscription readCards;
+  late StreamSubscription listenCards;
 
 //===================================================================================
 // Activate listeners
   @override
   void initState() {
     setState(() {
-      readCards = retrieveCategoryDB(
+      listenCards = retrieveCategoryDB(
           fulfillCard, moveToCategory, moveToEditCategory, removeCard);
+      // listenCards.pause();
     });
+
     super.initState();
   }
 
@@ -37,7 +39,7 @@ class CategoriesPageState extends State<CategoriesPage> {
 // Deactivate listeners
   @override
   void deactivate() {
-    readCards.cancel();
+    listenCards.cancel();
     super.deactivate();
   }
 
@@ -121,8 +123,8 @@ class CategoriesPageState extends State<CategoriesPage> {
     for (var element in cardsList) {
       if (element.child == cardToDelete) {
         deleteCategoryDB(cardToDelete.categoryName);
-        deleteCategoryStorage(cardToDelete.category.path);
-
+        deleteCategoryStorage(
+            cardToDelete.category.path, cardToDelete.categoryName);
         for (int j = 0; j < itemsList.length; j++) {
           if (itemsList.elementAt(i) < itemsList[j]) {
             itemsList[j]--;

@@ -1,5 +1,6 @@
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'abstract/card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -64,7 +65,6 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
         onEnter: ((event) => onHover()),
         onExit: ((event) => onExitHover()),
         child: GestureDetector(
-          //TODO
           onTap: () => widget.function(widget.categoryName, context),
           child: Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 5, 5),
@@ -141,7 +141,8 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                       IconButton(
                         color: Colors.redAccent,
                         icon: const Icon(Icons.delete_outline_rounded),
-                        onPressed: () => widget.removeCard(widget),
+                        onPressed: () => onDelete(
+                            context, widget.removeCard, widget, "/categories"),
                       ),
                     ]),
               ],

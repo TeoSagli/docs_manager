@@ -132,7 +132,8 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
 // Upload photo from gallery and catch errors
   setPhotoFromGallery() async {
     try {
-      imageGallery = await picker.pickImage(source: ImageSource.gallery);
+      imageGallery =
+          await picker.pickImage(source: ImageSource.gallery, imageQuality: 15);
       setState(
         () {
           widgetChanging = Image(

@@ -71,4 +71,33 @@ onSuccess(context, path) {
     ),
   );
 }
+
+//========================================================
+//Alert delete category
+onDelete(context, deleteCategory, card, path) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Delete this category?'),
+      content: const Text(
+          'You are permanently deleting this category and all files contained in it. Do you confirm?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            deleteCategory(card);
+            Navigator.pushNamed(context, path);
+          },
+          child: const Text(
+            'Yes, delete this category',
+            style: TextStyle(color: Colors.redAccent),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 //========================================================
