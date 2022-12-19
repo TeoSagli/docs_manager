@@ -1,3 +1,4 @@
+import 'package:docs_manager/frontend/pages/file_edit.dart';
 import 'package:flutter/material.dart';
 import 'frontend/pages/categories.dart';
 import 'frontend/pages/categories_edit.dart';
@@ -60,9 +61,6 @@ class MyApp extends StatelessWidget {
                   case 'create':
                     return MaterialPageRoute(
                         builder: (context) => const CategoryCreatePage());
-                  case 'edit':
-                    return MaterialPageRoute(
-                        builder: (context) => CategoryEditPage());
                   default:
                     break;
                 }
@@ -87,6 +85,11 @@ class MyApp extends StatelessWidget {
                     return MaterialPageRoute(
                         builder: (context) =>
                             CategoryViewPage(catName: catName));
+                  case 'edit':
+                    var catName = uri.pathSegments[2];
+                    return MaterialPageRoute(
+                        builder: (context) =>
+                            CategoryEditPage(catName: catName));
                   default:
                     break;
                 }
@@ -97,6 +100,10 @@ class MyApp extends StatelessWidget {
                     var fileName = uri.pathSegments[2];
                     return MaterialPageRoute(
                         builder: (context) => FileViewPage(fileName: fileName));
+                  case 'edit':
+                    var fileName = uri.pathSegments[2];
+                    return MaterialPageRoute(
+                        builder: (context) => FileEditPage(fileName: fileName));
                   default:
                     break;
                 }

@@ -26,8 +26,8 @@ class FileCreateState extends State<FileCreatePage> {
   final ImagePicker picker = ImagePicker();
   bool hasUploaded = false;
   late StreamSubscription listenNFiles;
-  XFile? imageGallery;
-  XFile? imageCamera;
+  XFile? imageGallery = XFile("");
+  XFile? imageCamera = XFile("");
   TextEditingController docNameController = TextEditingController();
   TextEditingController textController2 = TextEditingController();
   List<Widget> previewList = [];

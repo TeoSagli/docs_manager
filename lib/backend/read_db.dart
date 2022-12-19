@@ -56,8 +56,8 @@ Future<Widget> readImageFileStorage(
 
 //===================================================================================
 /// Load categories fields from Firebase Database
-StreamSubscription retrieveCategoryDB(
-    dynamic fulfillCard, dynamic moveToCategory) {
+StreamSubscription retrieveCategoryDB(dynamic fulfillCard,
+    dynamic moveToCategory, dynamic moveToEditCategory, dynamic removeCard) {
   return FirebaseDatabase.instance.ref("categories").onValue.listen((event) {
     List<Container> cards =
         List.generate(event.snapshot.children.length, (index) => Container());
@@ -75,12 +75,15 @@ StreamSubscription retrieveCategoryDB(
           cardCat.order,
           Container(
             key: Key(cardCat.order.toString()),
-            child: CategoryCard(cardName, cardCat, moveToCategory),
+            child: CategoryCard(cardName, cardCat, moveToCategory,
+                moveToEditCategory, removeCard),
           ));
-
+      // TO FIX====================================
       orders.insert(cardCat.order, cardCat.order);
-      cards.removeAt(cardCat.order + 1);
-      orders.removeAt(cardCat.order + 1);
+      if (cardCat.order < event.snapshot.children.length) {
+        cards.removeAt(cardCat.order + 1);
+        orders.removeAt(cardCat.order + 1);
+      }
     }
     fulfillCard(cards, orders);
   });

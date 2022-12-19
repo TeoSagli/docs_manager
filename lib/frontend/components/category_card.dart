@@ -2,15 +2,19 @@ import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:flutter/material.dart';
 import 'abstract/card.dart';
+import 'package:docs_manager/others/constants.dart' as constants;
 
 class CategoryCard extends StatefulWidget {
   final String categoryName;
   final CategoryModel category;
   final dynamic function;
+  final dynamic moveToEditCatPage;
+  final dynamic removeCard;
 
   @override
   State<StatefulWidget> createState() => CategoryCardState();
   const CategoryCard(this.categoryName, this.category, this.function,
+      this.moveToEditCatPage, this.removeCard,
       {super.key});
 }
 
@@ -68,7 +72,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 4, 8),
+                  padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 0, 8),
                   child: Container(
                     width: 4,
                     height: 90,
@@ -125,6 +129,21 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                 Expanded(
                   child: cardImage,
                 ),
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        color: constants.mainBackColor,
+                        icon: const Icon(Icons.mode_edit_outline_rounded),
+                        onPressed: () => widget.moveToEditCatPage(
+                            widget.categoryName, context),
+                      ),
+                      IconButton(
+                        color: Colors.redAccent,
+                        icon: const Icon(Icons.delete_outline_rounded),
+                        onPressed: () => widget.removeCard(widget),
+                      ),
+                    ]),
               ],
             ),
           ),

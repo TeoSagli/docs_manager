@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
@@ -20,12 +21,14 @@ class CategoriesPageState extends State<CategoriesPage> {
   List<int> itemsList = [];
   int length = 0;
   late StreamSubscription readCards;
+
 //===================================================================================
 // Activate listeners
   @override
   void initState() {
     setState(() {
-      readCards = retrieveCategoryDB(fulfillCard, moveToCategory);
+      readCards = retrieveCategoryDB(
+          fulfillCard, moveToCategory, moveToEditCategory, removeCard);
     });
     super.initState();
   }
@@ -73,10 +76,7 @@ class CategoriesPageState extends State<CategoriesPage> {
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ButtonAdd(context, '/categories/edit', Icons.edit),
-            ButtonAdd(context, '/categories/create', Icons.add)
-          ],
+          children: [ButtonAdd(context, '/categories/create', Icons.add)],
         )
       ]),
     );
@@ -106,5 +106,38 @@ class CategoriesPageState extends State<CategoriesPage> {
   }
 
 //========================================================
+//Move router to Category View page
+  moveToEditCategory(catName, context) {
+    Navigator.pushNamed(
+      context,
+      '/categories/edit/$catName',
+    );
+  }
 
+  //========================================================
+//Move router to Category View page
+  removeCard(CategoryCard cardToDelete) {
+    int i = 0;
+    for (var element in cardsList) {
+      if (element.child == cardToDelete) {
+        deleteCategoryDB(cardToDelete.categoryName);
+        deleteCategoryStorage(cardToDelete.category.path);
+
+        for (int j = 0; j < itemsList.length; j++) {
+          if (itemsList.elementAt(i) < itemsList[j]) {
+            itemsList[j]--;
+            updateOrderDB(itemsList[j],
+                (cardsList.elementAt(j).child as CategoryCard).categoryName);
+          }
+        }
+        setState(() {
+          cardsList.remove(element);
+          itemsList.removeAt(i);
+        });
+        break;
+      }
+      i++;
+    }
+  }
+  //========================================================
 }

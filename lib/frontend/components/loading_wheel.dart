@@ -16,7 +16,7 @@ class _MyLoadingWheelState extends State<MyLoadingWheel>
         padding: const EdgeInsets.all(20.0),
         child: TweenAnimationBuilder<double>(
           tween: Tween<double>(begin: 0.0, end: 1),
-          duration: const Duration(milliseconds: 4000),
+          duration: const Duration(milliseconds: 3000),
           builder: (context, value, _) =>
               CircularProgressIndicator(value: value),
         ));

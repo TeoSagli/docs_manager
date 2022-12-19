@@ -1,6 +1,6 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
 
-import 'models/category.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 //===================================================================================
 /// Update order value on Firebase Database
@@ -11,7 +11,7 @@ updateOrderDB(int index, String catName) async {
 
 //===================================================================================
 /// Update nfiles value on Firebase Database
-onUpdateNFiles(String nameCat) {
+StreamSubscription onUpdateNFiles(String nameCat) {
   return FirebaseDatabase.instance
       .ref("files/$nameCat")
       .onValue
