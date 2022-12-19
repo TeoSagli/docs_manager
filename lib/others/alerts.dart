@@ -100,4 +100,33 @@ onDelete(context, deleteCategory, card, path) {
     ),
   );
 }
+
+//========================================================
+//Alert delete file
+onDeleteFile(context, deleteCategory, card, path) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Delete this file?'),
+      content: const Text(
+          'You are permanently deleting this file . Do you confirm?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            deleteCategory(card);
+            Navigator.pushNamed(context, path);
+          },
+          child: const Text(
+            'Yes, delete this file',
+            style: TextStyle(color: Colors.redAccent),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 //========================================================

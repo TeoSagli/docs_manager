@@ -130,21 +130,22 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                   child: cardImage,
                 ),
                 Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        color: constants.mainBackColor,
-                        icon: const Icon(Icons.mode_edit_outline_rounded),
-                        onPressed: () => widget.moveToEditCatPage(
-                            widget.categoryName, context),
-                      ),
-                      IconButton(
-                        color: Colors.redAccent,
-                        icon: const Icon(Icons.delete_outline_rounded),
-                        onPressed: () => onDelete(
-                            context, widget.removeCard, widget, "/categories"),
-                      ),
-                    ]),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      color: constants.mainBackColor,
+                      icon: const Icon(Icons.mode_edit_outline_rounded),
+                      onPressed: () => widget.moveToEditCatPage(
+                          widget.categoryName, context),
+                    ),
+                    IconButton(
+                      color: Colors.redAccent,
+                      icon: const Icon(Icons.delete_outline_rounded),
+                      onPressed: () => onDelete(
+                          context, widget.removeCard, widget, "/categories"),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

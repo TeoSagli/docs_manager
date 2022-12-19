@@ -15,7 +15,7 @@ class FileEditPageState extends State<FileEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: MyBottomBar(context, 4),
-        appBar: MyAppBar('View file ${widget.fileName}', true, context),
+        appBar: MyAppBar('Edit file ${widget.fileName}', true, context),
         body: Text("Editing file ${widget.fileName}"));
   }
 }

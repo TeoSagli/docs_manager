@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,8 @@ class CategoryViewPageState extends State<CategoryViewPage> {
   @override
   void initState() {
     setState(() {
-      readCards = retrieveFilesDB(widget.catName, fulfillCard, moveToFile);
+      readCards = retrieveFilesDB(
+          widget.catName, fulfillCard, moveToFile, moveToEditFile, removeCard);
     });
     super.initState();
   }
@@ -53,46 +55,7 @@ class CategoryViewPageState extends State<CategoryViewPage> {
             runAlignment: WrapAlignment.start,
             verticalDirection: VerticalDirection.down,
             children: cardsList.isEmpty ? [] : cardsList),
-      ), /* Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 8,
-                    color: Color(0x230F1113),
-                    offset: Offset(0, 4),
-                  )
-                ],
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 8,
-                    color: Color(0x230F1113),
-                    offset: Offset(0, 4),
-                  )
-                ],
-                borderRadius: BorderRadius.circular(12),
-                shape: BoxShape.rectangle,
-              ),
-            ),
-          ),
-          
-        ],
-      ),*/
+      ),
     );
   }
 
@@ -116,6 +79,32 @@ class CategoryViewPageState extends State<CategoryViewPage> {
     /*print("Cardlist ${cardsList.toList().toString()} is here");
     print("Orderlist ${itemsList.toList().toString()} is here");*/
   }
-//===================================================================================
 
+//===================================================================================
+//Move router to Category View page
+  moveToEditFile(fileName, context) {
+    Navigator.pushNamed(
+      context,
+      '/files/edit/$fileName',
+    );
+  }
+
+  //========================================================
+//Move router to Category View page
+  removeCard(FileCard cardToDelete) {
+    int i = 0;
+    for (var element in cardsList) {
+      if (element == cardToDelete) {
+        deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+        deleteFileStorage(cardToDelete.file.path[0] as String,
+            cardToDelete.file.categoryName);
+        setState(() {
+          cardsList.remove(element);
+        });
+        break;
+      }
+      i++;
+    }
+  }
+  //========================================================
 }

@@ -91,8 +91,8 @@ StreamSubscription retrieveCategoryDB(dynamic fulfillCard,
 
 //===================================================================================
 /// Load files fields from Firebase Database
-StreamSubscription retrieveFilesDB(
-    String catName, dynamic fulfillCard, dynamic moveToFile) {
+StreamSubscription retrieveFilesDB(String catName, dynamic fulfillCard,
+    dynamic moveToFile, dynamic moveToEditFile, dynamic removeCard) {
   return FirebaseDatabase.instance
       .ref("files/$catName")
       .onValue
@@ -112,7 +112,7 @@ StreamSubscription retrieveFilesDB(
 
       //insert card in order
       cards.add(
-        FileCard(cardName, cardFile, moveToFile),
+        FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
       );
 
       //   orders.insert(cardCat.order, cardCat.order);
