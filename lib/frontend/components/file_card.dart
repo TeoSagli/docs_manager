@@ -1,5 +1,5 @@
-import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/file.dart';
+import 'package:docs_manager/backend/read_db.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'abstract/card.dart';
@@ -8,7 +8,7 @@ class FileCard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => FileCardState();
   final String fileName;
-  final File file;
+  final FileModel file;
   final dynamic function;
 
   const FileCard(this.fileName, this.file, this.function, {super.key});

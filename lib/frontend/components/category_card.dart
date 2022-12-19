@@ -5,7 +5,7 @@ import 'abstract/card.dart';
 
 class CategoryCard extends StatefulWidget {
   final String categoryName;
-  final Category category;
+  final CategoryModel category;
   final dynamic function;
 
   @override

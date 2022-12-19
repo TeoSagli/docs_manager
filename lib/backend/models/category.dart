@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-
 //===========================================================
 //Model of category
-class Category {
+class CategoryModel {
   final String path;
   int nfiles;
   final int colorValue;
   int order;
-  Category({
+  CategoryModel({
     required this.path,
     required this.nfiles,
     required this.colorValue,
@@ -15,8 +13,8 @@ class Category {
   });
 
 //Method converting a Json(Map<String, dynamic>) to a Category
-  factory Category.fromRTDB(Map<String, dynamic> data) {
-    return Category(
+  factory CategoryModel.fromRTDB(Map<String, dynamic> data) {
+    return CategoryModel(
         path: data['path'],
         nfiles: data['nfiles'],
         colorValue: data['colorValue'],

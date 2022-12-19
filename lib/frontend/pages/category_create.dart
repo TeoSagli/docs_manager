@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
@@ -28,7 +29,7 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
   XFile? imageGallery;
   late TextEditingController catNameController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  Widget widgetChanging = constants.loadingWheel;
+  Widget widgetChanging = constants.defaultImg;
   @override
   void initState() {
     catNameController = TextEditingController();
@@ -79,8 +80,12 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         //title 2
-                        const TitleText(
-                            'Select a category image:', Colors.black),
+                        const Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                          child: TitleText(
+                              'Select a category image:', Colors.black),
+                        ),
+
                         //button upload 1
                         MyButton('Upload', setPhotoFromGallery),
                         Center(
@@ -175,6 +180,6 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
       imageGallery = null;
     });
   }
-  //===================================================================================
 
+  //===================================================================================
 }

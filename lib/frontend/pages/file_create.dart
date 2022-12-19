@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
@@ -8,7 +6,6 @@ import 'package:docs_manager/frontend/components/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/button_function.dart';
 import 'package:docs_manager/frontend/components/button_icon_function.dart';
 import 'package:docs_manager/frontend/components/dropdown_menu.dart';
-import 'package:docs_manager/frontend/components/image_network.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:docs_manager/frontend/components/widget_preview.dart';
@@ -203,7 +200,10 @@ class FileCreateState extends State<FileCreatePage> {
 // Upload photo from gallery and catch errors
   setPhotoFromGallery() async {
     try {
-      imageGallery = await picker.pickImage(source: ImageSource.gallery);
+      imageGallery = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 15,
+      );
       setState(
         () {
           previewList.add(DocumentPreview(imageGallery!,
@@ -220,7 +220,10 @@ class FileCreateState extends State<FileCreatePage> {
 // Upload photo from camera and catch errors
   setPhotoFromCamera() async {
     try {
-      imageCamera = await picker.pickImage(source: ImageSource.camera);
+      imageCamera = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 15,
+      );
       setState(
         () {
           previewList.add(DocumentPreview(imageCamera!,

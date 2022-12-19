@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/category_card.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
@@ -67,7 +66,7 @@ StreamSubscription retrieveCategoryDB(
     for (var el in event.snapshot.children) {
       //el.value contenuto di category{path:..., nfiles:...}
       final data = Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
-      final cardCat = Category.fromRTDB(data);
+      final cardCat = CategoryModel.fromRTDB(data);
       //el.key nome di category
       final cardName = el.key.toString();
 
@@ -103,7 +102,7 @@ StreamSubscription retrieveFilesDB(
       //el.value contenuto di category{path:..., nfiles:...}
       final data = Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
 
-      File cardFile = File.fromRTDB(data);
+      FileModel cardFile = FileModel.fromRTDB(data);
 
       //el.key nome di category
       final cardName = el.key.toString();

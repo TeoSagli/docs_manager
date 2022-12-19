@@ -4,21 +4,17 @@ import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:math' as math;
 
 //===================================================================================
-/// Upload categories images to Firebase Storage
+/// Upload images to Firebase Storage
 StreamSubscription loadFileToStorage(
     String fPath, String catName, String saveName, String nameRef) {
   final file = File(fPath);
-
-// Create a reference to the Firebase Storage bucket
+  // Create a reference to the Firebase Storage bucket
   final storageRef = FirebaseStorage.instance.ref(nameRef);
-
 // Upload file and metadata to the path 'images/mountains.jpg'
   final uploadTask = storageRef.child(saveName).putFile(file);
-
 // Listen for state changes, errors, and completion of the upload.
   return uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
     switch (taskSnapshot.state) {

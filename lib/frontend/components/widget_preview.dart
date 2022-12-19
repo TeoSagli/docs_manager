@@ -51,7 +51,7 @@ class DocumentPreview extends StatelessWidget {
           children: [
             Expanded(
               child: Image(
-                image: XFileImage(loadedImage as XFile),
+                image: XFileImage(loadedImage),
                 fit: BoxFit.fitWidth,
               ),
             ),
