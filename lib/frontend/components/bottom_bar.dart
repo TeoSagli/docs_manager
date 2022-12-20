@@ -20,10 +20,12 @@ class MyBottomBar extends StatefulWidget {
 class _MyBottomBarState extends State<MyBottomBar> {
   final List<String> paths = ['', 'wallet', 'categories', 'favourites'];
   void _onItemTapped(int index) {
-    Navigator.pushNamed(
-      widget.barContext,
-      '/${paths[index]}',
-    );
+    if (index != widget.activeIndex) {
+      Navigator.pushNamed(
+        widget.barContext,
+        '/${paths[index]}',
+      );
+    }
   }
 
   @override

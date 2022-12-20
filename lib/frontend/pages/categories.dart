@@ -78,7 +78,10 @@ class CategoriesPageState extends State<CategoriesPage> {
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [ButtonAdd(context, '/categories/create', Icons.add)],
+          children: [
+            ButtonAdd(context, '/categories/create', Icons.add,
+                "Create a new category")
+          ],
         )
       ]),
     );

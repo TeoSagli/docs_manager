@@ -37,12 +37,13 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
 
   @override
   void initState() {
-    readImageCategoryStorage(widget.category.path, cardImage).then(
-      (value) => setState(() {
-        cardImage = value;
-      }),
-    );
+    readImageCategoryStorage(widget.category.path, setCard);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -152,5 +153,16 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
         ),
       ),
     );
+  }
+
+  setCard(file) {
+    setState(() {
+      cardImage = Image.memory(
+        file,
+        width: 100,
+        height: 100,
+        fit: BoxFit.fitWidth,
+      );
+    });
   }
 }

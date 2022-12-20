@@ -83,7 +83,7 @@ class FileCreateState extends State<FileCreatePage> {
                                       children: [
                                         const TitleText(
                                             "Document name:", Colors.black),
-                                        InputField(docNameController),
+                                        InputField(docNameController, true),
                                       ],
                                     ),
                                   ),

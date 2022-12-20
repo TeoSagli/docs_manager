@@ -4,34 +4,27 @@ import 'package:docs_manager/frontend/components/category_card.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'models/category.dart';
 
 //===================================================================================
 /// Load categories images from Firebase Storage
-Future<Widget> readImageCategoryStorage(
-    String catName, Widget cardImage) async {
+readImageCategoryStorage(String catName, dynamic setCard) async {
   final storageRef = FirebaseStorage.instance.ref("categories");
   // print(await storageRef.child("Pictures.png").getDownloadURL());
   // print("bro $catName");
   final catRef = storageRef.child(catName);
 
   try {
-    return await catRef.getData().then((value) => cardImage = Image.memory(
-          value!,
-          width: 100,
-          height: 100,
-          fit: BoxFit.fitWidth,
-        ));
-
-    // Data for "images/island.jpg" is returned, use this as needed.
+    Uint8List? data = await catRef.getData();
+    setCard(data);
     // Data for "images/island.jpg" is returned, use this as needed.
   } on FirebaseException catch (e) {
     // Handle any errors.
     print("Error $e!");
   }
-  return Image.asset("images/test.jpeg");
 }
 
 //===================================================================================
@@ -134,10 +127,16 @@ StreamSubscription retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
 }
 
 //===================================================================================
-/// Return for a category the number of files in it
-int retrieveNFilesCategoryDB(String catName) {
-  int nfiles = 0;
-
-  return nfiles;
+/// Return for the category color
+StreamSubscription getColorCategory(dynamic setColor, String catName) {
+  return FirebaseDatabase.instance
+      .ref("categories/$catName")
+      .onValue
+      .listen((event) {
+    final data = Map<String, dynamic>.from(
+        event.snapshot.value as Map<Object?, Object?>);
+    final cardCat = CategoryModel.fromRTDB(data);
+    setColor(cardCat.colorValue);
+  });
 }
 //===================================================================================

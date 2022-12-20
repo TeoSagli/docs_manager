@@ -71,7 +71,7 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
                           //title 1
                           const TitleText('Category name:', Colors.black),
                           //input 1
-                          InputField(catNameController),
+                          InputField(catNameController, true),
                         ],
                       ),
                     ),

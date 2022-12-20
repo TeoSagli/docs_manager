@@ -103,13 +103,13 @@ onDelete(context, deleteCategory, card, path) {
 
 //========================================================
 //Alert delete file
-onDeleteFile(context, deleteCategory, card, path) {
+onDeleteFile(context, deleteCategory, card) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
       title: const Text('Delete this file?'),
-      content: const Text(
-          'You are permanently deleting this file . Do you confirm?'),
+      content:
+          const Text('You are permanently deleting this file. Do you confirm?'),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -118,7 +118,7 @@ onDeleteFile(context, deleteCategory, card, path) {
         TextButton(
           onPressed: () {
             deleteCategory(card);
-            Navigator.pushNamed(context, path);
+            Navigator.pop(context);
           },
           child: const Text(
             'Yes, delete this file',

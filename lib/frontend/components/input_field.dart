@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
   TextEditingController tc;
+  final bool isTitle;
 
   ///My custom InputField:
   ///
   ///1-set the controller.
   ///
+  ///2-set if it has a title limit of 20 characters.
+  ///
 
-  InputField(this.tc, {super.key});
+  InputField(this.tc, this.isTitle, {super.key});
 
   @override
   State<StatefulWidget> createState() => InputFieldState();
@@ -34,6 +37,7 @@ class InputFieldState extends State<InputField> {
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
       child: TextFormField(
+        maxLength: widget.isTitle ? 20 : 50,
         controller: textController,
         autofocus: false,
         obscureText: false,

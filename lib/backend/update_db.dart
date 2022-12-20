@@ -26,4 +26,11 @@ StreamSubscription onUpdateNFiles(String nameCat) {
         .catchError((error) => print("An error occured!"));
   });
 }
+
+//===================================================================================d
+/// Update favourite value on Firebase Database
+updateFavouriteDB(String nameCat, String nameFile, bool value) async {
+  final dbRef = FirebaseDatabase.instance.ref("files/$nameCat/$nameFile");
+  await dbRef.update({"isFavourite": value});
+}
 //===================================================================================d

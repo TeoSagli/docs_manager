@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -21,6 +25,9 @@ class FileCard extends StatefulWidget {
 
 class FileCardState extends State<FileCard> with MyCard {
   Widget cardImage = constants.loadingWheel;
+  late StreamSubscription listenColor;
+  late bool isFav;
+  Color catColor = Colors.grey;
   @override
   onExitHover() {
     setState(() {
@@ -37,6 +44,7 @@ class FileCardState extends State<FileCard> with MyCard {
 
   @override
   void initState() {
+    listenColor = getColorCategory(setColor, widget.file.categoryName);
     readImageFileStorage(widget.file.path.elementAt(0).toString(),
             widget.file.categoryName, widget.fileName, cardImage)
         .then(
@@ -44,7 +52,16 @@ class FileCardState extends State<FileCard> with MyCard {
         cardImage = value;
       }),
     );
+    setState(() {
+      isFav = widget.file.isFavourite;
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    listenColor.cancel();
+    super.dispose();
   }
 
   @override
@@ -84,79 +101,96 @@ class FileCardState extends State<FileCard> with MyCard {
                     ),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 0, 12, 0),
-                                child: Icon(
-                                  widget.file.icon,
-                                  color: const Color(0xFF57636C),
-                                  size: 24,
-                                ),
-                              ),
-                              Text(
-                                widget.file.categoryName,
-                                style: const TextStyle(
-                                  fontFamily: 'Outfit',
-                                  color: Color(0xFF57636C),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
+                                    4, 0, 0, 0),
+                                child: Text(
+                                  widget.file.categoryName,
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: catColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                4, 0, 0, 0),
-                            child: Text(
-                              widget.fileName,
-                              style: const TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    4, 4, 0, 0),
+                                child: Text(
+                                  widget.fileName,
+                                  style: const TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                4, 4, 0, 0),
-                            child: Text(
-                              widget.file.subTitle1,
-                              style: const TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    4, 4, 0, 0),
+                                child: Text(
+                                  widget.file.subTitle1,
+                                  style: const TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          IconButton(
-                            color: constants.mainBackColor,
-                            icon: const Icon(Icons.mode_edit_outline_rounded),
-                            onPressed: () => widget.moveToEditFilePage(
-                                widget.fileName, context),
-                          ),
-                          IconButton(
-                            color: Colors.redAccent,
-                            icon: const Icon(Icons.delete_outline_rounded),
-                            onPressed: () => onDeleteFile(
-                                context, widget.removeCard, widget, "/"),
+                          Row(
+                            children: [
+                              IconButton(
+                                color: constants.mainBackColor,
+                                icon:
+                                    const Icon(Icons.mode_edit_outline_rounded),
+                                onPressed: () => widget.moveToEditFilePage(
+                                    widget.fileName, context),
+                              ),
+                              // TODO
+                              IconButton(
+                                  color: constants.mainBackColor,
+                                  icon: Icon(isFav
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_border_rounded),
+                                  onPressed: () {
+                                    setState(() {
+                                      isFav = !isFav;
+                                    });
+                                    updateFavouriteDB(widget.file.categoryName,
+                                        widget.fileName, isFav);
+                                  }),
+                              IconButton(
+                                color: Colors.redAccent,
+                                icon: const Icon(Icons.delete_outline_rounded),
+                                onPressed: () => onDeleteFile(
+                                    context, widget.removeCard, widget),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -164,5 +198,11 @@ class FileCardState extends State<FileCard> with MyCard {
         ),
       ),
     );
+  }
+
+  setColor(int c) {
+    setState(() {
+      catColor = Color(c);
+    });
   }
 }
