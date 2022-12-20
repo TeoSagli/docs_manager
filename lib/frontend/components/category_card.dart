@@ -159,9 +159,9 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
     setState(() {
       cardImage = Image.memory(
         file,
-        width: 100,
+        width: MediaQuery.of(context).size.width * 0.4,
         height: 100,
-        fit: BoxFit.fitWidth,
+        fit: BoxFit.scaleDown,
       );
     });
   }

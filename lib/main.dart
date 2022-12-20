@@ -69,7 +69,9 @@ class MyApp extends StatelessWidget {
                 switch (uri.pathSegments[1]) {
                   case 'create':
                     return MaterialPageRoute(
-                        builder: (context) => const FileCreatePage());
+                        builder: (context) => FileCreatePage(
+                              catSelected: "",
+                            ));
                   default:
                     break;
                 }
@@ -104,6 +106,11 @@ class MyApp extends StatelessWidget {
                     var fileName = uri.pathSegments[2];
                     return MaterialPageRoute(
                         builder: (context) => FileEditPage(fileName: fileName));
+                  case 'create':
+                    var catSelected = uri.pathSegments[2];
+                    return MaterialPageRoute(
+                        builder: (context) =>
+                            FileCreatePage(catSelected: catSelected));
                   default:
                     break;
                 }

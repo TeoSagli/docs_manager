@@ -16,8 +16,8 @@ import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:image_picker/image_picker.dart';
 
 class FileCreatePage extends StatefulWidget {
-  const FileCreatePage({super.key});
-
+  String catSelected;
+  FileCreatePage({required this.catSelected, super.key});
   @override
   State<StatefulWidget> createState() => FileCreateState();
 }
@@ -35,13 +35,15 @@ class FileCreateState extends State<FileCreatePage> {
 
   @override
   void initState() {
+    setState(() {
+      dropdown = MyDropdown(widget.catSelected);
+    });
     previewList = [];
     super.initState();
   }
 
   @override
   void dispose() {
-    listenNFiles.cancel();
     super.dispose();
   }
 
@@ -62,108 +64,112 @@ class FileCreateState extends State<FileCreatePage> {
                 children: [
                   Align(
                     alignment: const AlignmentDirectional(0, -0.9),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              10, 30, 10, 0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Align(
-                                    alignment:
-                                        const AlignmentDirectional(0, -0.9),
-                                    child: Column(
-                                      children: [
-                                        const TitleText(
-                                            "Document name:", Colors.black),
-                                        InputField(docNameController, true),
-                                      ],
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                10, 30, 10, 0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Align(
+                                      alignment:
+                                          const AlignmentDirectional(0, -0.9),
+                                      child: Column(
+                                        children: [
+                                          const TitleText(
+                                              "Document name:", Colors.black),
+                                          InputField(docNameController, true),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsetsDirectional.fromSTEB(
-                                            10, 10, 10, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        const TitleText(
-                                            "Add document from:", Colors.black),
-                                        Padding(
-                                          padding: const EdgeInsetsDirectional
-                                              .fromSTEB(8, 8, 8, 8),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              MyButtonIcon(
-                                                  'CAMERA',
-                                                  setPhotoFromCamera,
-                                                  Icons.photo_camera),
-                                              MyButtonIcon(
-                                                  'GALLERY',
-                                                  setPhotoFromGallery,
-                                                  Icons.image),
-                                              const MyButtonIcon('PDF, TXT....',
-                                                  {}, Icons.picture_as_pdf),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              10, 10, 10, 0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          const TitleText("Add document from:",
+                                              Colors.black),
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(8, 8, 8, 8),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                MyButtonIcon(
+                                                    'CAMERA',
+                                                    setPhotoFromCamera,
+                                                    Icons.photo_camera),
+                                                MyButtonIcon(
+                                                    'GALLERY',
+                                                    setPhotoFromGallery,
+                                                    Icons.image),
+                                                const MyButtonIcon(
+                                                    'PDF, TXT....',
+                                                    {},
+                                                    Icons.picture_as_pdf),
+                                              ],
+                                            ),
+                                          ),
+                                          DottedBorder(
+                                            color: constants.mainBackColor,
+                                            strokeWidth: 2,
+                                            dashPattern: const [
+                                              5,
+                                              5,
                                             ],
-                                          ),
-                                        ),
-                                        DottedBorder(
-                                          color: constants.mainBackColor,
-                                          strokeWidth: 2,
-                                          dashPattern: const [
-                                            5,
-                                            5,
-                                          ],
-                                          child: SizedBox(
-                                            height: 200.0,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.9,
-                                            child: previewList.isEmpty
-                                                ? SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.9,
-                                                    child: const Center(
-                                                      child: Text(
-                                                        "Images preview",
-                                                        style: TextStyle(
-                                                            color: constants
-                                                                .mainBackColor,
-                                                            fontSize: 16.0),
+                                            child: SizedBox(
+                                              height: 200.0,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.9,
+                                              child: previewList.isEmpty
+                                                  ? SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.9,
+                                                      child: const Center(
+                                                        child: Text(
+                                                          "Images preview",
+                                                          style: TextStyle(
+                                                              color: constants
+                                                                  .mainBackColor,
+                                                              fontSize: 16.0),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  )
-                                                : ListView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    children: previewList),
+                                                    )
+                                                  : ListView(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      children: previewList),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              //==================================WIDGET CATEGORIES CHOICE
-                              dropdown,
-                              //==================================
-                              /* Padding(
+                                  ],
+                                ),
+                                //==================================WIDGET CATEGORIES CHOICE
+                                dropdown,
+                                //==================================
+                                /* Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     10, 30, 10, 0),
                                 child: Column(
@@ -175,10 +181,11 @@ class FileCreateState extends State<FileCreatePage> {
                                   ],
                                 ),
                               ),*/
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -265,6 +272,7 @@ class FileCreateState extends State<FileCreatePage> {
         createFile(dropdown.dropdownValue, docNameController.text, listPaths);
         listenNFiles = onUpdateNFiles(dropdown.dropdownValue);
         onSuccess(context, '/');
+        listenNFiles.cancel();
       } catch (e) {
         print("Error: $e");
       }

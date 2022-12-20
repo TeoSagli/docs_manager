@@ -46,7 +46,7 @@ class FileCardState extends State<FileCard> with MyCard {
   void initState() {
     listenColor = getColorCategory(setColor, widget.file.categoryName);
     readImageFileStorage(widget.file.path.elementAt(0).toString(),
-            widget.file.categoryName, widget.fileName, cardImage)
+            widget.file.categoryName, widget.fileName, cardImage, context)
         .then(
       (value) => setState(() {
         cardImage = value;
@@ -133,7 +133,7 @@ class FileCardState extends State<FileCard> with MyCard {
                                   style: const TextStyle(
                                     fontFamily: 'Outfit',
                                     color: Colors.black,
-                                    fontSize: 18,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),

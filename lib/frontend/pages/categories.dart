@@ -76,13 +76,8 @@ class CategoriesPageState extends State<CategoriesPage> {
           },
           children: cardsList.isEmpty ? [] : cardsList,
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ButtonAdd(context, '/categories/create', Icons.add,
-                "Create a new category")
-          ],
-        )
+        ButtonAdd(
+            context, '/categories/create', Icons.add, "Create a new category")
       ]),
     );
   }

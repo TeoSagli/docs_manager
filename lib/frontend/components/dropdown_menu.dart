@@ -87,7 +87,9 @@ class MyDropdownState extends State<MyDropdown> {
   fillCategoriesNames(String el) {
     setState(() {
       categoriesNames.add(el);
-      widget.dropdownValue = categoriesNames.first;
+      if (widget.dropdownValue == "") {
+        widget.dropdownValue = categoriesNames.first;
+      }
     });
   }
 }

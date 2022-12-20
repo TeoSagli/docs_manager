@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/backend/update_db.dart';
+import 'package:docs_manager/frontend/components/button_add.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:flutter/material.dart';
 
@@ -43,18 +45,24 @@ class CategoryViewPageState extends State<CategoryViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: MyBottomBar(context, 4),
-      appBar: MyAppBar('View category ${widget.catName}', true, context),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Wrap(
-            spacing: 8,
-            runSpacing: 12,
-            alignment: WrapAlignment.spaceEvenly,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            direction: Axis.horizontal,
-            runAlignment: WrapAlignment.start,
-            verticalDirection: VerticalDirection.down,
-            children: cardsList.isEmpty ? [] : cardsList),
+      appBar: MyAppBar('View ${widget.catName}', true, context),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Wrap(
+                spacing: 8,
+                runSpacing: 12,
+                alignment: WrapAlignment.spaceEvenly,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                direction: Axis.horizontal,
+                runAlignment: WrapAlignment.start,
+                verticalDirection: VerticalDirection.down,
+                children: cardsList.isEmpty ? [] : cardsList),
+          ),
+          ButtonAdd(context, '/files/create/${widget.catName}', Icons.add,
+              "Create a new file in ${widget.catName}"),
+        ],
       ),
     );
   }
@@ -98,6 +106,8 @@ class CategoryViewPageState extends State<CategoryViewPage> {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
         deleteFileStorage(cardToDelete.file.path[0] as String,
             cardToDelete.file.categoryName);
+
+        onUpdateNFiles(cardToDelete.file.categoryName);
         setState(() {
           cardsList.remove(element);
         });
