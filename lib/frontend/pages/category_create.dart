@@ -47,7 +47,6 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: scaffoldKey,
-      bottomNavigationBar: MyBottomBar(context, 4),
       appBar: MyAppBar('Category creation', true, context),
       body: Column(
         mainAxisSize: MainAxisSize.max,

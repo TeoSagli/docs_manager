@@ -34,15 +34,22 @@ class CategoryViewPageState extends State<CategoryViewPage> {
     super.initState();
   }
 
-//===================================================================================
-// Deactivate listeners
   @override
   void deactivate() {
     readCards.cancel();
     super.deactivate();
   }
+/*
+  @override
+  void didUpdateWidget(CategoryViewPage c) {
+    setState(() {
+      readCards.cancel();
+      readCards = retrieveFilesDB(
+          widget.catName, fulfillCard, moveToFile, moveToEditFile, removeCard);
+    });
+    super.didUpdateWidget(c);
+  }*/
 
-//===================================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(

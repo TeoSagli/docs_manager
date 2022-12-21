@@ -42,6 +42,12 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
   }
 
   @override
+  void didUpdateWidget(CategoryCard c) {
+    readImageCategoryStorage(widget.category.path, setCard);
+    super.didUpdateWidget(c);
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }

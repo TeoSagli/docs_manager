@@ -11,11 +11,8 @@ updateOrderDB(int index, String catName) async {
 
 //===================================================================================
 /// Update nfiles value on Firebase Database
-StreamSubscription onUpdateNFiles(String nameCat) {
-  return FirebaseDatabase.instance
-      .ref("files/$nameCat")
-      .onValue
-      .listen((event) {
+onUpdateNFiles(String nameCat) {
+  FirebaseDatabase.instance.ref("files/$nameCat").onValue.listen((event) {
     //load num of files
     FirebaseDatabase.instance
         .ref("categories/$nameCat")
