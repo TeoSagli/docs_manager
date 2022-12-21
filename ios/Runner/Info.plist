@@ -49,8 +49,6 @@
 	<string>Add photos to database</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Add photos to database</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Upload a picture</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
