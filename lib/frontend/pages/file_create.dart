@@ -31,7 +31,7 @@ class FileCreateState extends State<FileCreatePage> {
   TextEditingController docNameController = TextEditingController();
   TextEditingController textController2 = TextEditingController();
   List<Widget> previewList = [];
-  MyDropdown dropdown = MyDropdown("");
+  Widget dropdown = constants.emptyBox;
 
   @override
   void initState() {
@@ -52,7 +52,6 @@ class FileCreateState extends State<FileCreatePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar("File creation", true, context),
-      bottomNavigationBar: MyBottomBar(context, 4),
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -266,13 +265,13 @@ class FileCreateState extends State<FileCreatePage> {
               img.path,
               docNameController.text,
               saveName,
-              'files/${dropdown.dropdownValue}/${docNameController.text}');
+              'files/${(dropdown as MyDropdown).dropdownValue}/${docNameController.text}');
           listenLoading.cancel();
         }
-        createFile(dropdown.dropdownValue, docNameController.text, listPaths);
-        listenNFiles = onUpdateNFiles(dropdown.dropdownValue);
+        createFile((dropdown as MyDropdown).dropdownValue,
+            docNameController.text, listPaths);
+        onUpdateNFiles((dropdown as MyDropdown).dropdownValue);
         onSuccess(context, '/');
-        listenNFiles.cancel();
       } catch (e) {
         print("Error: $e");
       }

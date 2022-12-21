@@ -76,8 +76,8 @@ class CategoriesPageState extends State<CategoriesPage> {
           },
           children: cardsList.isEmpty ? [] : cardsList,
         ),
-        ButtonAdd(
-            context, '/categories/create', Icons.add, "Create a new category")
+        ButtonAdd(context, '/categories/create', Icons.add_to_photos,
+            "Create a new category")
       ]),
     );
   }

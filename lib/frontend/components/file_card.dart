@@ -124,17 +124,25 @@ class FileCardState extends State<FileCard> with MyCard {
                             ],
                           ),
                           Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     4, 4, 0, 0),
-                                child: Text(
-                                  widget.fileName,
-                                  style: const TextStyle(
-                                    fontFamily: 'Outfit',
-                                    color: Colors.black,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  child: Center(
+                                    child: Text(
+                                      widget.fileName,
+                                      style: const TextStyle(
+                                        fontFamily: 'Outfit',
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),

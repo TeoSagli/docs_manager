@@ -7,6 +7,8 @@ import 'package:docs_manager/frontend/components/button_add.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:flutter/material.dart';
 
+import 'package:docs_manager/others/constants.dart' as constants;
+
 import '../components/app_bar.dart';
 import '../components/bottom_bar.dart';
 
@@ -20,7 +22,7 @@ class CategoryViewPage extends StatefulWidget {
 
 class CategoryViewPageState extends State<CategoryViewPage> {
   late StreamSubscription readCards;
-  List<Widget> cardsList = [];
+  List<Widget> cardsList = [constants.emptyBox];
 //===================================================================================
 // Activate listeners
   @override
@@ -48,20 +50,22 @@ class CategoryViewPageState extends State<CategoryViewPage> {
       appBar: MyAppBar('View ${widget.catName}', true, context),
       body: Stack(
         children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Wrap(
-                spacing: 8,
-                runSpacing: 12,
-                alignment: WrapAlignment.spaceEvenly,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                direction: Axis.horizontal,
-                runAlignment: WrapAlignment.start,
-                verticalDirection: VerticalDirection.down,
-                children: cardsList.isEmpty ? [] : cardsList),
-          ),
-          ButtonAdd(context, '/files/create/${widget.catName}', Icons.add,
-              "Create a new file in ${widget.catName}"),
+          cardsList.isEmpty
+              ? constants.emptyPage
+              : SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Wrap(
+                      spacing: 8,
+                      runSpacing: 12,
+                      alignment: WrapAlignment.spaceEvenly,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      direction: Axis.horizontal,
+                      runAlignment: WrapAlignment.start,
+                      verticalDirection: VerticalDirection.down,
+                      children: cardsList),
+                ),
+          ButtonAdd(context, '/files/create/${widget.catName}',
+              Icons.post_add_rounded, "Create a new file in ${widget.catName}"),
         ],
       ),
     );

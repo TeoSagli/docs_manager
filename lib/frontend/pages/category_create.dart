@@ -49,82 +49,79 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
       key: scaffoldKey,
       bottomNavigationBar: MyBottomBar(context, 4),
       appBar: MyAppBar('Category creation', true, context),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Align(
-                alignment: const AlignmentDirectional(0, -0.9),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          //title 1
-                          const TitleText('Category name:', Colors.black),
-                          //input 1
-                          InputField(catNameController, true),
-                        ],
-                      ),
-                    ),
-                    Column(
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Align(
+              alignment: const AlignmentDirectional(0, -0.9),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        //title 2
-                        const Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                          child: TitleText(
-                              'Select a category image:', Colors.black),
-                        ),
-
-                        //button upload 1
-                        MyButton('Upload', setPhotoFromGallery),
-                        Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              hasUploaded
-                                  ? DocumentPreview(
-                                      imageGallery!,
-                                      MediaQuery.of(context).size.width * 0.9,
-                                      removeImage)
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: constants.mainBackColor),
-                                      ),
-                                      child: widgetChanging,
-                                    ),
-                            ],
-                          ),
-                        ),
+                        //title 1
+                        const TitleText('Category name:', Colors.black),
+                        //input 1
+                        InputField(catNameController, true),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      //title 2
+                      const Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                        child:
+                            TitleText('Select a category image:', Colors.black),
+                      ),
+
+                      //button upload 1
+                      MyButton('Upload', setPhotoFromGallery),
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            hasUploaded
+                                ? DocumentPreview(
+                                    imageGallery!,
+                                    MediaQuery.of(context).size.width * 0.9,
+                                    removeImage)
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: constants.mainBackColor),
+                                    ),
+                                    child: widgetChanging,
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: MyButton('Submit', onSubmit),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: MyButton('Submit', onSubmit),
+            ),
+          ),
+        ],
       ),
-      //button submit 1
     );
   }
 

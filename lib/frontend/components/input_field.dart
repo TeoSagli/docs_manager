@@ -37,7 +37,7 @@ class InputFieldState extends State<InputField> {
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
       child: TextFormField(
-        maxLength: widget.isTitle ? 20 : 50,
+        maxLength: widget.isTitle ? 30 : 100,
         controller: textController,
         autofocus: false,
         obscureText: false,

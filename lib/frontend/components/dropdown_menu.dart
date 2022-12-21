@@ -27,7 +27,6 @@ class MyDropdownState extends State<MyDropdown> {
 // Activate listeners
   @override
   void initState() {
-    categoriesNames.clear();
     readCategoriesNames = retrieveCategoriesNamesDB(fillCategoriesNames);
     super.initState();
   }
@@ -84,9 +83,9 @@ class MyDropdownState extends State<MyDropdown> {
 
 //===================================================================================
 // Add category to menu
-  fillCategoriesNames(String el) {
+  fillCategoriesNames(List<String> list) {
     setState(() {
-      categoriesNames.add(el);
+      categoriesNames = list;
       if (widget.dropdownValue == "") {
         widget.dropdownValue = categoriesNames.first;
       }

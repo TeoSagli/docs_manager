@@ -15,3 +15,13 @@ const Widget loadingWheel = SizedBox(
   height: 150,
   child: MyLoadingWheel(),
 );
+
+const Widget emptyPage = Align(
+  alignment: Alignment.center,
+  child: Text(
+    "Page is empty",
+    style: TextStyle(color: mainBackColor, fontSize: 20),
+  ),
+);
+
+const emptyBox = SizedBox.shrink();
