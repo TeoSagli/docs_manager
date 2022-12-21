@@ -191,10 +191,13 @@ StreamSubscription retrieveFilesDB(String catName, dynamic fulfillCard,
 /// Return all categories names
 StreamSubscription retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
   return FirebaseDatabase.instance.ref("categories").onValue.listen((event) {
+    List<String> list = [];
     for (var el in event.snapshot.children) {
       //el.key nome di category
-      fillCategoriesNames(el.key.toString());
+      list.add(el.key.toString());
+      //fillCategoriesNames(el.key.toString());
     }
+    fillCategoriesNames(list);
   });
 }
 

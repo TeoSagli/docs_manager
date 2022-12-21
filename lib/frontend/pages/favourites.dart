@@ -104,8 +104,8 @@ class FavouriteViewPageState extends State<FavouritesPage> {
     for (var element in cardsList) {
       if (element == cardToDelete) {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-        deleteFileStorage(cardToDelete.file.path[0] as String,
-            cardToDelete.file.categoryName);
+        deleteFileStorage(
+            cardToDelete.file.path, cardToDelete.file.categoryName);
         onUpdateNFiles(cardToDelete.file.categoryName);
         setState(() {
           cardsList.remove(element);
