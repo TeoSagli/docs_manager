@@ -87,12 +87,7 @@ StreamSubscription retrieveCategoryDB(dynamic fulfillCard,
 StreamSubscription retrieveAllFavouriteFilesDB(dynamic fulfillCard,
     dynamic moveToFile, dynamic moveToEditFile, dynamic removeCard) {
   return FirebaseDatabase.instance.ref("files").onValue.listen((event) {
-    int cardListSize = 0;
-    for (var cat in event.snapshot.children) {
-      cardListSize += cat.children.length;
-    }
-
-    List<Widget> cards = List.generate(cardListSize, (index) => Container());
+    List<Widget> tempCards = List.empty(growable: true);
 
     for (var cat in event.snapshot.children) {
       for (var el in cat.children) {
@@ -108,7 +103,7 @@ StreamSubscription retrieveAllFavouriteFilesDB(dynamic fulfillCard,
         final cardName = el.key.toString();
 
         //insert card in order
-        cards.add(
+        tempCards.add(
           FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
         );
 
@@ -116,6 +111,12 @@ StreamSubscription retrieveAllFavouriteFilesDB(dynamic fulfillCard,
         //   orders.removeAt(cardCat.order + 1);
       }
     }
+
+    List<Widget> cards =
+        List.generate(tempCards.length, (index) => Container());
+
+    cards.addAll(tempCards);
+
     fulfillCard(cards);
   });
 }

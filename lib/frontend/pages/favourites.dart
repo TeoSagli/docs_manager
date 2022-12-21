@@ -9,6 +9,8 @@ import '../components/app_bar.dart';
 import '../components/bottom_bar.dart';
 import '../components/file_card.dart';
 
+import 'package:docs_manager/others/constants.dart' as constants;
+
 class FavouritesPage extends StatefulWidget {
   const FavouritesPage({super.key});
 
@@ -47,18 +49,20 @@ class FavouriteViewPageState extends State<FavouritesPage> {
       appBar: MyAppBar("Favourites", false, context),
       body: Stack(
         children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Wrap(
-                spacing: 8,
-                runSpacing: 12,
-                alignment: WrapAlignment.spaceEvenly,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                direction: Axis.horizontal,
-                runAlignment: WrapAlignment.start,
-                verticalDirection: VerticalDirection.down,
-                children: cardsList.isEmpty ? [] : cardsList),
-          ),
+          cardsList.isEmpty
+              ? constants.emptyPage
+              : SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Wrap(
+                      spacing: 8,
+                      runSpacing: 12,
+                      alignment: WrapAlignment.spaceEvenly,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      direction: Axis.horizontal,
+                      runAlignment: WrapAlignment.start,
+                      verticalDirection: VerticalDirection.down,
+                      children: cardsList),
+                ),
         ],
       ),
     );
