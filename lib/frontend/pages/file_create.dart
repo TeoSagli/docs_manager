@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:docs_manager/backend/create_db.dart';
+import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/app_bar.dart';
 import 'package:docs_manager/frontend/components/bottom_bar.dart';
@@ -32,7 +33,7 @@ class FileCreateState extends State<FileCreatePage> {
   TextEditingController textController2 = TextEditingController();
   List<Widget> previewList = [];
   Widget dropdown = constants.emptyBox;
-
+  late StreamSubscription listenColor;
   @override
   void initState() {
     setState(() {
@@ -44,6 +45,7 @@ class FileCreateState extends State<FileCreatePage> {
 
   @override
   void dispose() {
+    listenColor.cancel();
     super.dispose();
   }
 
@@ -258,14 +260,14 @@ class FileCreateState extends State<FileCreatePage> {
           String ext = img.name.toString().split(".")[1];
           //create save name
           int index = previewList.indexOf(element);
-          String saveName = "$index.$ext";
+          String saveName = "${docNameController.text}$index.$ext";
           listPaths.add(saveName);
           //load file
           StreamSubscription listenLoading = loadFileToStorage(
               img.path,
               docNameController.text,
               saveName,
-              'files/${(dropdown as MyDropdown).dropdownValue}/${docNameController.text}');
+              'files/${(dropdown as MyDropdown).dropdownValue}');
           listenLoading.cancel();
         }
         createFile((dropdown as MyDropdown).dropdownValue,

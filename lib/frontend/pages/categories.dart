@@ -59,9 +59,9 @@ class CategoriesPageState extends State<CategoriesPage> {
             if (oldIndex < newIndex) {
               newIndex -= 1;
             }
+            final Container card = cardsList.removeAt(oldIndex);
+            final int item = itemsList.removeAt(oldIndex);
             setState(() {
-              final Container card = cardsList.removeAt(oldIndex);
-              final int item = itemsList.removeAt(oldIndex);
               itemsList.insert(newIndex, item);
               cardsList.insert(newIndex, card);
             });

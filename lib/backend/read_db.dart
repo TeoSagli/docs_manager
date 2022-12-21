@@ -31,7 +31,7 @@ readImageCategoryStorage(String catName, dynamic setCard) async {
 /// Load files images from Firebase Storage
 Future<Widget> readImageFileStorage(String filePath, String catName,
     String fileName, Widget cardImage, BuildContext context) async {
-  final storageRef = FirebaseStorage.instance.ref("files/$catName/$fileName");
+  final storageRef = FirebaseStorage.instance.ref("files/$catName");
   // print(await storageRef.child("Pictures.png").getDownloadURL());
   // print("bro $catName");
   final fileRef = storageRef.child(filePath);
@@ -101,7 +101,6 @@ StreamSubscription retrieveFilesDB(String catName, dynamic fulfillCard,
       final data = Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
 
       FileModel cardFile = FileModel.fromRTDB(data);
-
       //el.key nome di category
       final cardName = el.key.toString();
 
