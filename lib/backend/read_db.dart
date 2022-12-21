@@ -84,6 +84,76 @@ StreamSubscription retrieveCategoryDB(dynamic fulfillCard,
   });
 }
 
+StreamSubscription retrieveAllFavouriteFilesDB(dynamic fulfillCard,
+    dynamic moveToFile, dynamic moveToEditFile, dynamic removeCard) {
+  return FirebaseDatabase.instance.ref("files").onValue.listen((event) {
+    int cardListSize = 0;
+    for (var cat in event.snapshot.children) {
+      cardListSize += cat.children.length;
+    }
+
+    List<Widget> cards = List.generate(cardListSize, (index) => Container());
+
+    for (var cat in event.snapshot.children) {
+      for (var el in cat.children) {
+        //el.value contenuto di category{path:..., nfiles:...}
+        final data =
+            Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
+
+        FileModel cardFile = FileModel.fromRTDB(data);
+
+        if (!cardFile.isFavourite) continue;
+
+        //el.key nome di category
+        final cardName = el.key.toString();
+
+        //insert card in order
+        cards.add(
+          FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+        );
+
+        //   orders.insert(cardCat.order, cardCat.order);
+        //   orders.removeAt(cardCat.order + 1);
+      }
+    }
+    fulfillCard(cards);
+  });
+}
+
+StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
+    dynamic moveToEditFile, dynamic removeCard) {
+  return FirebaseDatabase.instance.ref("files").onValue.listen((event) {
+    int cardListSize = 0;
+    for (var cat in event.snapshot.children) {
+      cardListSize += cat.children.length;
+    }
+
+    List<Widget> cards = List.generate(cardListSize, (index) => Container());
+
+    for (var cat in event.snapshot.children) {
+      for (var el in cat.children) {
+        //el.value contenuto di category{path:..., nfiles:...}
+        final data =
+            Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
+
+        FileModel cardFile = FileModel.fromRTDB(data);
+
+        //el.key nome di category
+        final cardName = el.key.toString();
+
+        //insert card in order
+        cards.add(
+          FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+        );
+
+        //   orders.insert(cardCat.order, cardCat.order);
+        //   orders.removeAt(cardCat.order + 1);
+      }
+    }
+    fulfillCard(cards);
+  });
+}
+
 //===================================================================================
 /// Load files fields from Firebase Database
 StreamSubscription retrieveFilesDB(String catName, dynamic fulfillCard,
@@ -121,12 +191,10 @@ StreamSubscription retrieveFilesDB(String catName, dynamic fulfillCard,
 /// Return all categories names
 StreamSubscription retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
   return FirebaseDatabase.instance.ref("categories").onValue.listen((event) {
-    List<String> list = [];
     for (var el in event.snapshot.children) {
       //el.key nome di category
-      list.add(el.key.toString());
+      fillCategoriesNames(el.key.toString());
     }
-    fillCategoriesNames(list);
   });
 }
 
