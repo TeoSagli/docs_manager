@@ -84,9 +84,13 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
                         children: [
                           hasUploaded
                               ? DocumentPreview(
-                                  imageGallery!,
+                                  Image(
+                                    image: XFileImage(imageGallery!),
+                                    fit: BoxFit.fitWidth,
+                                  ),
                                   MediaQuery.of(context).size.width * 0.9,
-                                  removeImage)
+                                  removeImage,
+                                )
                               : Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(

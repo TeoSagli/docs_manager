@@ -10,7 +10,7 @@ class FileEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: MyBottomBar(context, 4),
+        resizeToAvoidBottomInset: false,
         appBar: MyAppBar('Edit file $fileName', true, context),
         body: ContentFileEdit(fileName));
   }

@@ -67,7 +67,7 @@ createCategory(name, path) async {
 
 //===================================================================================
 /// Upload file fields to Firebase Database
-createFile(String nameCat, String nameFile, path) async {
+createFile(String nameCat, String nameFile, path, ext) async {
   var catRef = FirebaseDatabase.instance.ref("files/$nameCat");
   var fileRef = catRef.child(nameFile);
   await fileRef
@@ -75,6 +75,27 @@ createFile(String nameCat, String nameFile, path) async {
         "path": path,
         "categoryName": nameCat,
         "isFavourite": false,
+        "dateUpload": DateTime.now().toString(),
+        "extension": ext,
+      })
+      .then((value) => print("File created!"))
+      .catchError((error) => print("An error occured!"));
+
+  createListOfAllFile(nameCat, nameFile, path, ext);
+}
+
+//===================================================================================
+/// Upload all files list to Firebase Database
+createListOfAllFile(String nameCat, String nameFile, path, ext) async {
+  var catRef = FirebaseDatabase.instance.ref("allFiles/");
+  var fileRef = catRef.child(nameFile);
+  await fileRef
+      .update({
+        "path": path,
+        "categoryName": nameCat,
+        "isFavourite": false,
+        "dateUpload": DateTime.now().toString(),
+        "extension": ext,
       })
       .then((value) => print("File created!"))
       .catchError((error) => print("An error occured!"));

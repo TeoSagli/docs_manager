@@ -15,6 +15,7 @@ class CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: MyAppBar("All categories", false, context),
       bottomNavigationBar: MyBottomBar(context, 2),
       body: Stack(children: [

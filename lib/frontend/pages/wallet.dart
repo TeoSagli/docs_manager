@@ -9,6 +9,7 @@ class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: MyAppBar("Wallet", false, context),
         bottomNavigationBar: MyBottomBar(context, 1),
         body: SafeArea(

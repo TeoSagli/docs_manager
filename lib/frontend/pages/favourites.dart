@@ -14,6 +14,7 @@ class FavouriteViewPageState extends State<FavouritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: MyBottomBar(context, 3),
       appBar: MyAppBar("Favourites", false, context),
       body: const ContentFavourites(),

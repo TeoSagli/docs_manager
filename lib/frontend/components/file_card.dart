@@ -45,8 +45,14 @@ class FileCardState extends State<FileCard> with MyCard {
   @override
   void initState() {
     listenColor = getColorCategory(setColor, widget.file.categoryName);
-    readImageFileStorage(widget.file.path.elementAt(0).toString(),
-            widget.file.categoryName, widget.fileName, cardImage, context)
+    readImageFileStorage(
+            0,
+            widget.file.categoryName,
+            widget.fileName,
+            widget.file.extension.elementAt(0) as String,
+            cardImage,
+            context,
+            false)
         .then(
       (value) => setState(() {
         cardImage = value;

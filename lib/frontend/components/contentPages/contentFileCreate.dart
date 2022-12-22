@@ -1,17 +1,21 @@
 import 'dart:async';
+import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
 
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/button_function.dart';
-import 'package:docs_manager/frontend/components/button_icon_function.dart';
+import 'package:docs_manager/frontend/components/buttons_upload_photo_pdf.dart';
+import 'package:docs_manager/frontend/components/carouselSlider.dart';
+
 import 'package:docs_manager/frontend/components/dropdown_menu.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
-import 'package:docs_manager/frontend/components/widget_preview.dart';
+
 import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
+import 'package:docs_manager/frontend/components/widget_preview.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ContentFileCreate extends StatefulWidget {
@@ -24,27 +28,23 @@ class ContentFileCreate extends StatefulWidget {
 
 class ContentFileCreateState extends State<ContentFileCreate> {
   final ImagePicker picker = ImagePicker();
-  bool hasUploaded = false;
-  late StreamSubscription listenNFiles;
-  XFile? imageGallery = XFile("");
-  XFile? imageCamera = XFile("");
   TextEditingController docNameController = TextEditingController();
   TextEditingController textController2 = TextEditingController();
-  List<Widget> previewList = [];
+  List<Image> previewImgList = [];
+  List<String> nameImgList = [];
+  List<String> pathImgList = [];
   Widget dropdown = constants.emptyBox;
-  late StreamSubscription listenColor;
   @override
   void initState() {
     setState(() {
       dropdown = MyDropdown(widget.catSelected);
     });
-    previewList = [];
+    previewImgList = [];
     super.initState();
   }
 
   @override
   void dispose() {
-    listenColor.cancel();
     super.dispose();
   }
 
@@ -98,21 +98,9 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
                                               8, 8, 8, 8),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          MyButtonIcon(
-                                              'CAMERA',
-                                              setPhotoFromCamera,
-                                              Icons.photo_camera),
-                                          MyButtonIcon('GALLERY',
-                                              setPhotoFromGallery, Icons.image),
-                                          const MyButtonIcon('PDF, TXT....', {},
-                                              Icons.picture_as_pdf),
-                                        ],
-                                      ),
+                                      child: ButtonsUploadPhotoes(
+                                          setPhotoFromCamera,
+                                          setPhotoFromGallery),
                                     ),
                                     DottedBorder(
                                       color: constants.mainBackColor,
@@ -122,31 +110,29 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                         5,
                                       ],
                                       child: SizedBox(
-                                        height: 200.0,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
-                                        child: previewList.isEmpty
-                                            ? SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.9,
-                                                child: const Center(
-                                                  child: Text(
-                                                    "Images preview",
-                                                    style: TextStyle(
-                                                        color: constants
-                                                            .mainBackColor,
-                                                        fontSize: 16.0),
+                                          height: 200.0,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          child: previewImgList.isEmpty
+                                              ? SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.9,
+                                                  child: const Center(
+                                                    child: Text(
+                                                      "Images preview",
+                                                      style: TextStyle(
+                                                          color: constants
+                                                              .mainBackColor,
+                                                          fontSize: 16.0),
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            : ListView(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                children: previewList),
-                                      ),
+                                                )
+                                              : MyCarousel(
+                                                  previewImgList, removeImage)),
                                     ),
                                   ],
                                 ),
@@ -176,6 +162,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   //===================================================================================
 // Upload photo from gallery and catch errors
   setPhotoFromGallery() async {
+    XFile? imageGallery = XFile("");
     try {
       imageGallery = await picker.pickImage(
         source: ImageSource.gallery,
@@ -183,9 +170,15 @@ class ContentFileCreateState extends State<ContentFileCreate> {
       );
       setState(
         () {
-          previewList.add(DocumentPreview(imageGallery!,
-              MediaQuery.of(context).size.width * 0.9, removeImage));
-          hasUploaded = true;
+          previewImgList.add(
+            Image(
+              image: XFileImage(imageGallery!),
+              fit: BoxFit.cover,
+              width: 1000.0,
+            ),
+          );
+          nameImgList.add(imageGallery.name);
+          pathImgList.add(imageGallery.path);
         },
       );
     } catch (e) {
@@ -196,6 +189,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
 //===================================================================================
 // Upload photo from camera and catch errors
   setPhotoFromCamera() async {
+    XFile? imageCamera = XFile("");
     try {
       imageCamera = await picker.pickImage(
         source: ImageSource.camera,
@@ -203,9 +197,15 @@ class ContentFileCreateState extends State<ContentFileCreate> {
       );
       setState(
         () {
-          previewList.add(DocumentPreview(imageCamera!,
-              MediaQuery.of(context).size.width * 0.9, removeImage));
-          hasUploaded = true;
+          previewImgList.add(
+            Image(
+              image: XFileImage(imageCamera!),
+              fit: BoxFit.cover,
+              width: 1000.0,
+            ),
+          );
+          nameImgList.add(imageCamera.name);
+          pathImgList.add(imageCamera.path);
         },
       );
     } catch (e) {
@@ -217,32 +217,34 @@ class ContentFileCreateState extends State<ContentFileCreate> {
 // Submit category to db if everything is correct
   onSubmit() {
     List<String> listPaths = [];
+    List<String> listExt = [];
     // else if (!await isCategoryNew(docNameController!.text)) {
     // onErrorCategoryExisting();}
     if (docNameController.text == "" || docNameController.text == " ") {
       onErrorText(context);
-    } else if (previewList.isNotEmpty) {
+    } else if (previewImgList.isNotEmpty) {
       try {
-        for (var element in previewList) {
+        for (var element in previewImgList) {
+          int index = previewImgList.indexOf(element);
           //prepare image and extension
-          XFile img = ((element as DocumentPreview).loadedImage);
-          String ext = img.name.toString().split(".")[1];
+          String path = pathImgList[index];
+          String ext = nameImgList[index].split(".")[1];
           //create save name
-          int index = previewList.indexOf(element);
           String saveName = "${docNameController.text}$index.$ext";
-          listPaths.add(saveName);
+          listPaths.add(path);
+          listExt.add(ext);
           //load file
           StreamSubscription listenLoading = loadFileToStorage(
-              img.path,
+              path,
               docNameController.text,
               saveName,
               'files/${(dropdown as MyDropdown).dropdownValue}');
           listenLoading.cancel();
         }
         createFile((dropdown as MyDropdown).dropdownValue,
-            docNameController.text, listPaths);
+            docNameController.text, listPaths, listExt);
         onUpdateNFiles((dropdown as MyDropdown).dropdownValue);
-        onSuccess(context, '/');
+        onSuccess(context, '/categories');
       } catch (e) {
         print("Error: $e");
       }
@@ -251,17 +253,14 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     }
   }
 
-//===================================================================================
+  //===================================================================================
   // Submit category to db if everything is correct
-  removeImage(Widget w) {
-    print("List status before${previewList.toString()}");
+  removeImage(Image w) {
     setState(() {
-      previewList.remove(w);
-      hasUploaded = false;
-      imageGallery = null;
+      nameImgList.removeAt(previewImgList.indexOf(w));
+      pathImgList.removeAt(previewImgList.indexOf(w));
+      previewImgList.remove(w);
     });
-    print("List status after${previewList.toString()}");
   }
   //===================================================================================
-
 }

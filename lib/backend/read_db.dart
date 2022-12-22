@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/category_card.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
+import 'package:docs_manager/frontend/components/widget_preview.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -28,18 +29,47 @@ readImageCategoryStorage(String catName, dynamic setCard) async {
 }
 
 //===================================================================================
-/// Load files images from Firebase Storage
-Future<Widget> readImageFileStorage(String filePath, String catName,
-    String fileName, Widget cardImage, BuildContext context) async {
+/// Load file image at index i from Firebase Storage
+Future<Widget> readImageFileStorage(
+    int i,
+    String catName,
+    String fileName,
+    String ext,
+    Widget cardImage,
+    BuildContext context,
+    bool isFullHeigth) async {
   final storageRef = FirebaseStorage.instance.ref("files/$catName");
   // print(await storageRef.child("Pictures.png").getDownloadURL());
   // print("bro $catName");
-  final fileRef = storageRef.child(filePath);
+  final fileRef = storageRef.child("$fileName$i.$ext");
   try {
     return await fileRef.getData().then((value) => cardImage = Image.memory(
           value!,
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.15,
+          height:
+              isFullHeigth ? null : MediaQuery.of(context).size.height * 0.15,
+          fit: BoxFit.cover,
+        ));
+  } on FirebaseException catch (e) {
+    // Handle any errors.
+    print("Error $e!");
+  }
+  return Image.asset("images/test.jpeg");
+}
+
+//===================================================================================
+/// Load file image at index i from Firebase Storage
+Future<Widget> readImageFileStorageEditFiles(int i, String catName,
+    String fileName, String ext, Widget cardImage, BuildContext context) async {
+  final storageRef = FirebaseStorage.instance.ref("files/$catName");
+  // print(await storageRef.child("Pictures.png").getDownloadURL());
+  // print("bro $catName");
+  final fileRef = storageRef.child("$fileName$i.$ext");
+  try {
+    return await fileRef.getData().then((value) => cardImage = Image.memory(
+          value!,
+          width: MediaQuery.of(context).size.width,
+          height: 1000,
           fit: BoxFit.fitWidth,
         ));
   } on FirebaseException catch (e) {
@@ -214,4 +244,40 @@ StreamSubscription getColorCategory(dynamic setColor, String catName) {
     setColor(cardCat.colorValue);
   });
 }
+
 //===================================================================================
+//TODO
+/*StreamSubscription retrievePreviewListFromFileNameDB(
+    String fileName, dynamic setList) {
+  return FirebaseDatabase.instance
+      .ref("allFiles/$fileName")
+      .onValue
+      .listen((event) {
+    final data = Map<String, dynamic>.from(
+        event.snapshot.value as Map<Object?, Object?>);
+
+    FileModel cardFile = FileModel.fromRTDB(data);
+    List<Widget> list = [];
+    for (var element in cardFile.path) {
+      int index = cardFile.path.indexOf(element);
+      Image img= ;
+      list.add(DocumentPreview(
+          img, MediaQuery.of(context).size.width * 0.9, removeImage));
+    }
+
+    setList(list);
+  });
+}*/
+//===================================================================================
+retrieveFileDataFromFileNameDB(String fileName, dynamic setFileData) {
+  return FirebaseDatabase.instance
+      .ref("allFiles/$fileName")
+      .onValue
+      .listen((event) {
+    final data = Map<String, dynamic>.from(
+        event.snapshot.value as Map<Object?, Object?>);
+
+    FileModel cardFile = FileModel.fromRTDB(data);
+    setFileData(cardFile);
+  });
+}

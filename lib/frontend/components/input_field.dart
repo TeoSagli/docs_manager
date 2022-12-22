@@ -22,7 +22,7 @@ class InputFieldState extends State<InputField> {
 
   @override
   void initState() {
-    textController = TextEditingController();
+    textController = TextEditingController(text: widget.tc.text);
     super.initState();
   }
 

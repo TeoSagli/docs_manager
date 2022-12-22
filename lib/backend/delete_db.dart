@@ -20,6 +20,7 @@ deleteCategoryStorage(String catPath, String catName) async {
 /// remove a file on Firebase Database
 deleteFileDB(String catName, String fileName) async {
   await FirebaseDatabase.instance.ref("files/$catName/$fileName").remove();
+  await FirebaseDatabase.instance.ref("allFiles/$fileName").remove();
 }
 
 //===================================================================================

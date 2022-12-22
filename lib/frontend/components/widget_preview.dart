@@ -1,11 +1,11 @@
-import 'package:cross_file_image/cross_file_image.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'package:image_picker/image_picker.dart';
 
 class DocumentPreview extends StatelessWidget {
   final dynamic removeImage;
-  final XFile loadedImage;
+  final Image loadedImage;
+  final String? pathImage;
+  final String? nameImage;
   final double cardSize;
 
   /// A preview image card with remove button:
@@ -16,8 +16,10 @@ class DocumentPreview extends StatelessWidget {
   ///
   /// 3-remove image method
   ///
+  /// 4-path image
+  ///
   const DocumentPreview(this.loadedImage, this.cardSize, this.removeImage,
-      {super.key});
+      {this.pathImage, this.nameImage, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +52,7 @@ class DocumentPreview extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              child: Image(
-                image: XFileImage(loadedImage),
-                fit: BoxFit.fitWidth,
-              ),
+              child: loadedImage,
             ),
             InkWell(
               onTap: () => removeImage(this),

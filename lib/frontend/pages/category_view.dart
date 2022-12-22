@@ -11,6 +11,7 @@ class CategoryViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         bottomNavigationBar: MyBottomBar(context, 4),
         appBar: MyAppBar('View $catName', true, context),
         body: Stack(

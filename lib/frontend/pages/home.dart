@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: MyAppBar("Homepage", false, context),
       bottomNavigationBar: MyBottomBar(context, 0),
       body: Stack(children: [

@@ -10,6 +10,7 @@ class CategoryEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: MyBottomBar(context, 4),
       appBar: MyAppBar('View category $catName', true, context),
       body: ContentCategoryEdit(catName),
