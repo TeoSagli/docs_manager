@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       onGenerateRoute: (settings) {
         // Handle '/'
         if (settings.name == '/') {
@@ -69,7 +70,7 @@ class MyApp extends StatelessWidget {
                 switch (uri.pathSegments[1]) {
                   case 'create':
                     return MaterialPageRoute(
-                        builder: (context) => FileCreatePage(
+                        builder: (context) => const FileCreatePage(
                               catSelected: "",
                             ));
                   default:

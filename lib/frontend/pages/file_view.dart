@@ -1,25 +1,18 @@
-import 'dart:async';
-
+import 'package:docs_manager/frontend/components/app_bar.dart';
+import 'package:docs_manager/frontend/components/bottom_bar.dart';
+import 'package:docs_manager/frontend/components/contentPages/contentFileView.dart';
 import 'package:flutter/material.dart';
 
-import '../components/app_bar.dart';
-import '../components/bottom_bar.dart';
-
-class FileViewPage extends StatefulWidget {
+class FileViewPage extends StatelessWidget {
   final String fileName;
   const FileViewPage({required this.fileName, super.key});
 
   @override
-  State<StatefulWidget> createState() => FileViewPageState();
-}
-
-class FileViewPageState extends State<FileViewPage> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: MyBottomBar(context, 4),
-      appBar: MyAppBar('View file ${widget.fileName}', true, context),
-      body: Text(widget.fileName),
+      appBar: MyAppBar('View file $fileName', true, context),
+      body: ContentFileView(fileName),
     );
   }
 }
