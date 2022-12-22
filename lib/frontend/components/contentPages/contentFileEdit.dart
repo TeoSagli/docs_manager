@@ -30,8 +30,6 @@ class ContentFileEdit extends StatefulWidget {
 
 class ContentFileEditState extends State<ContentFileEdit> {
   final ImagePicker picker = ImagePicker();
-  late StreamSubscription listenCatName;
-  late StreamSubscription listenPreviewList;
   late StreamSubscription listenFileData;
   late TextEditingController docNameController;
   TextEditingController textController2 = TextEditingController();
@@ -53,8 +51,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
 
   @override
   void dispose() {
-    listenCatName.cancel();
-    listenPreviewList.cancel();
     listenFileData.cancel();
     super.dispose();
   }
