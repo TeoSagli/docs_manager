@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/category_card.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
+import 'package:docs_manager/frontend/components/wallet_card.dart';
 import 'package:docs_manager/frontend/components/widget_preview.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -181,6 +182,50 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
         //   orders.removeAt(cardCat.order + 1);
       }
     }
+    fulfillCard(cards);
+  });
+}
+
+StreamSubscription retrieveAllExpirationFilesDB(dynamic fulfillCard,
+    dynamic moveToFile, dynamic moveToEditFile, dynamic removeCard) {
+  return FirebaseDatabase.instance.ref("files").onValue.listen((event) {
+    List<WalletCard> tempCards = List.empty(growable: true);
+
+    for (var cat in event.snapshot.children) {
+      for (var el in cat.children) {
+        //el.value contenuto di category{path:..., nfiles:...}
+        final data =
+            Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
+
+        FileModel cardFile = FileModel.fromRTDB(data);
+
+        if (cardFile.expiration.isEmpty) continue;
+
+        //el.key nome di category
+        final cardName = el.key.toString();
+
+        //insert card in order
+        tempCards.add(
+          WalletCard(cardName, cardFile.expiration, cardFile, moveToFile,
+              moveToEditFile, removeCard),
+        );
+
+        //   orders.insert(cardCat.order, cardCat.order);
+        //   orders.removeAt(cardCat.order + 1);
+      }
+    }
+
+    tempCards.sort((a, b) {
+      DateTime adate = a.expiration;
+      DateTime bdate = b.expiration;
+      return adate.compareTo(bdate);
+    });
+
+    List<Widget> cards =
+        List.generate(tempCards.length, (index) => Container());
+
+    cards.addAll(tempCards);
+
     fulfillCard(cards);
   });
 }

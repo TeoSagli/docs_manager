@@ -1,5 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:docs_manager/frontend/components/wallet_card.dart';
+
+import '../../../backend/delete_db.dart';
+import '../../../backend/read_db.dart';
+import '../../../backend/update_db.dart';
+import '../file_card.dart';
 
 class ContentWallet extends StatefulWidget {
   const ContentWallet({super.key});
@@ -9,29 +17,90 @@ class ContentWallet extends StatefulWidget {
 }
 
 class ContentWalletState extends State<ContentWallet> {
+  late StreamSubscription readCards;
+  List<Widget> cardsList = [];
+
+  @override
+  void initState() {
+    setState(() {
+      readCards = retrieveAllExpirationFilesDB(
+          fulfillCard, moveToFile, moveToEditFile, removeCard);
+    });
+    super.initState();
+  }
+
+  @override
+  void deactivate() {
+    readCards.cancel();
+    super.deactivate();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
+    return Stack(
       children: [
-        Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Color(0xFFF1F4F8),
-          ),
-        ),
-        WalletCard('Tesla Model Y', 'Car', '1969-07-20',
-            'assets/images/test.png', Icons.fitness_center, 0, moveToFile),
-        WalletCard('The Running Ragamuffins', 'Fitness', '2001-09-20',
-            'assets/images/test.png', Icons.fitness_center, 1, moveToFile)
+        cardsList.isEmpty
+            ? constants.emptyPage
+            : SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Wrap(
+                    spacing: 8,
+                    runSpacing: 12,
+                    alignment: WrapAlignment.spaceEvenly,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    direction: Axis.horizontal,
+                    runAlignment: WrapAlignment.start,
+                    verticalDirection: VerticalDirection.down,
+                    children: cardsList),
+              ),
       ],
     );
   }
 
+//===================================================================================
+// Move to file page
   moveToFile(id, context) {
     Navigator.pushNamed(
       context,
       '/files/view/$id',
     );
+  }
+
+//========================================================
+//Fill file card
+  fulfillCard(
+    List<Widget> myCards,
+  ) {
+    setState(() {
+      cardsList = myCards;
+    });
+    /*print("Cardlist ${cardsList.toList().toString()} is here");
+    print("Orderlist ${itemsList.toList().toString()} is here");*/
+  }
+
+//===================================================================================
+//Move router to Category View page
+  moveToEditFile(fileName, context) {
+    Navigator.pushNamed(
+      context,
+      '/files/edit/$fileName',
+    );
+  }
+
+//========================================================
+//Move router to Category View page
+  removeCard(FileCard cardToDelete) {
+    for (var element in cardsList) {
+      if (element == cardToDelete) {
+        deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+        deleteFileStorage(
+            cardToDelete.file.path, cardToDelete.file.categoryName);
+        onUpdateNFiles(cardToDelete.file.categoryName);
+        setState(() {
+          cardsList.remove(element);
+        });
+        break;
+      }
+    }
   }
 }

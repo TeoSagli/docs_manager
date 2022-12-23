@@ -1,26 +1,35 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../../backend/models/file.dart';
+import 'package:docs_manager/others/constants.dart' as constants;
+import '../../backend/read_db.dart';
 import 'abstract/card.dart';
 
 class WalletCard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => WalletCardState();
-
-  final String path;
-  final IconData icon;
-  final String mainTitle;
-  final String subTitle;
-  final DateTime expiration;
-  final int id;
+  final String fileName;
+  final FileModel file;
   final dynamic function;
+  final dynamic moveToEditFilePage;
+  final dynamic removeCard;
+  final DateTime expiration;
 
-  WalletCard(this.mainTitle, this.subTitle, expiration, this.path, this.icon,
-      this.id, this.function,
+  WalletCard(this.fileName, String expiration, this.file, this.function,
+      this.moveToEditFilePage, this.removeCard,
       {super.key})
       : expiration = DateTime.parse(expiration);
 }
 
 class WalletCardState extends State<WalletCard> with MyCard {
+  Widget cardImage = constants.loadingWheel;
+  late StreamSubscription listenColor;
+  late bool isFav;
+  Color catColor = Colors.grey;
+
   @override
   onExitHover() {
     setState(() {
@@ -33,6 +42,28 @@ class WalletCardState extends State<WalletCard> with MyCard {
     setState(() {
       cardColor = Colors.white30;
     });
+  }
+
+  @override
+  void initState() {
+    listenColor = getColorCategory(setColor, widget.file.categoryName);
+    readImageFileStorage(
+            0,
+            widget.file.categoryName,
+            widget.fileName,
+            widget.file.extension.elementAt(0) as String,
+            cardImage,
+            context,
+            false)
+        .then(
+      (value) => setState(() {
+        cardImage = value;
+      }),
+    );
+    setState(() {
+      isFav = widget.file.isFavourite;
+    });
+    super.initState();
   }
 
   @override
@@ -56,7 +87,7 @@ class WalletCardState extends State<WalletCard> with MyCard {
           onEnter: ((event) => onHover()),
           onExit: ((event) => onExitHover()),
           child: GestureDetector(
-            onTap: () => widget.function(widget.id, context),
+            onTap: () => widget.function(widget.fileName, context),
             child: Container(
               width: MediaQuery.of(context).size.width * 0.45,
               decoration: BoxDecoration(
@@ -89,7 +120,7 @@ class WalletCardState extends State<WalletCard> with MyCard {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.subTitle,
+                                  widget.file.subTitle1,
                                   style: const TextStyle(
                                     fontFamily: 'Outfit',
                                     color: Color(0xFF57636C),
@@ -101,7 +132,7 @@ class WalletCardState extends State<WalletCard> with MyCard {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 4, 0, 0),
                                   child: Text(
-                                    widget.mainTitle,
+                                    widget.fileName,
                                     style: const TextStyle(
                                       fontFamily: 'Outfit',
                                       color: Color(0xFF101213),
@@ -132,12 +163,7 @@ class WalletCardState extends State<WalletCard> with MyCard {
                               0, 10, 10, 0),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
-                              widget.path,
-                              width: 160,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
+                            child: cardImage,
                           ),
                         ),
                       ],
@@ -168,7 +194,8 @@ class WalletCardState extends State<WalletCard> with MyCard {
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 12, 0, 0, 0),
                             child: Text(
-                              '${widget.expiration.year}-${widget.expiration.month}-${widget.expiration.day}',
+                              DateFormat('yyyy-MM-dd')
+                                  .format(widget.expiration),
                               style: const TextStyle(
                                 fontFamily: 'Outfit',
                                 color: Color(0xFF57636C),
@@ -188,5 +215,11 @@ class WalletCardState extends State<WalletCard> with MyCard {
         ),
       ),
     );
+  }
+
+  setColor(int c) {
+    setState(() {
+      catColor = Color(c);
+    });
   }
 }
