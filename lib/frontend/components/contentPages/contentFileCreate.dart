@@ -46,6 +46,9 @@ class ContentFileCreateState extends State<ContentFileCreate> {
 
   @override
   void dispose() {
+    docNameController.dispose();
+    textController2.dispose();
+    _date.dispose();
     super.dispose();
   }
 

@@ -29,6 +29,15 @@ class ContentCategoriesState extends State<ContentCategories> {
   }
 
   @override
+  void didUpdateWidget(covariant ContentCategories oldWidget) {
+    setState(() {
+      listenCards = retrieveCategoryDB(
+          fulfillCard, moveToCategory, moveToEditCategory, removeCard);
+    });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void deactivate() {
     listenCards.cancel();
     super.deactivate();

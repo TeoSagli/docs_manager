@@ -1,7 +1,7 @@
 //===========================================================
 //Model of category
 class CategoryModel {
-  final String path;
+  String path;
   int nfiles;
   final int colorValue;
   int order;

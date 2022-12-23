@@ -58,6 +58,9 @@ class ContentFileEditState extends State<ContentFileEdit> {
   @override
   void dispose() {
     listenFileData.cancel();
+    docNameController.dispose();
+    textController2.dispose();
+    _date.dispose();
     super.dispose();
   }
 
