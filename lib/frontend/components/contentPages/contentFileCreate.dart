@@ -132,8 +132,8 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                                     ),
                                                   ),
                                                 )
-                                              : MyCarousel(
-                                                  previewImgList, removeImage)),
+                                              : MyCarousel(previewImgList,
+                                                  removeImage, true)),
                                     ),
                                   ],
                                 ),
@@ -191,7 +191,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     try {
       imageGallery = await picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 15,
+        imageQuality: constants.imageQuality,
       );
       setState(
         () {
@@ -218,7 +218,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     try {
       imageCamera = await picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 15,
+        imageQuality: constants.imageQuality,
       );
       setState(
         () {

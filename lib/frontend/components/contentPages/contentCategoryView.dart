@@ -89,8 +89,8 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
     for (var element in cardsList) {
       if (element == cardToDelete) {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-        deleteFileStorage(
-            (cardToDelete.file.path), cardToDelete.file.categoryName);
+        deleteFileStorage(cardToDelete.file.extension,
+            cardToDelete.file.categoryName, cardToDelete.fileName);
 
         onUpdateNFiles(cardToDelete.file.categoryName);
         setState(() {

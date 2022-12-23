@@ -121,8 +121,8 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
 // Upload photo from gallery and catch errors
   setPhotoFromGallery() async {
     try {
-      imageGallery =
-          await picker.pickImage(source: ImageSource.gallery, imageQuality: 15);
+      imageGallery = await picker.pickImage(
+          source: ImageSource.gallery, imageQuality: constants.imageQuality);
       setState(
         () {
           widgetChanging = Image(

@@ -5,7 +5,8 @@ import 'package:docs_manager/others/constants.dart' as constants;
 class MyCarousel extends StatefulWidget {
   final List<Image> imgList;
   final dynamic removeImg;
-  const MyCarousel(this.imgList, this.removeImg, {super.key});
+  final bool showRemove;
+  const MyCarousel(this.imgList, this.removeImg, this.showRemove, {super.key});
 
   @override
   State<StatefulWidget> createState() => MyCarouselState();
@@ -74,14 +75,16 @@ class MyCarouselState extends State<MyCarousel> {
                             ),
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: IconButton(
-                            color: Colors.redAccent,
-                            icon: const Icon(Icons.delete_rounded),
-                            onPressed: () => widget.removeImg(item),
-                          ),
-                        ),
+                        widget.showRemove == true
+                            ? Align(
+                                alignment: Alignment.bottomRight,
+                                child: IconButton(
+                                  color: Colors.redAccent,
+                                  icon: const Icon(Icons.delete_rounded),
+                                  onPressed: () => widget.removeImg(item),
+                                ),
+                              )
+                            : constants.emptyBox
                       ],
                     )),
               ))

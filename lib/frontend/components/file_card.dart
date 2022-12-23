@@ -195,7 +195,7 @@ class FileCardState extends State<FileCard> with MyCard {
                                   }),
                               IconButton(
                                 color: Colors.redAccent,
-                                icon: const Icon(Icons.delete_outline_rounded),
+                                icon: const Icon(Icons.delete_rounded),
                                 onPressed: () => onDeleteFile(
                                     context, widget.removeCard, widget),
                               ),

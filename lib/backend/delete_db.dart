@@ -25,10 +25,11 @@ deleteFileDB(String catName, String fileName) async {
 
 //===================================================================================
 /// remove a file on Firebase Storage
-deleteFileStorage(List<Object?> fileNameList, String catName) async {
-  for (var element in fileNameList) {
+deleteFileStorage(List<Object?> ext, String catName, String fName) async {
+  for (var element in ext) {
+    int i = ext.indexOf(element);
     await FirebaseStorage.instance
-        .ref("files/$catName/${element.toString()}")
+        .ref("files/$catName/$fName$i.${element.toString()}")
         .delete();
   }
 }

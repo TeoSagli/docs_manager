@@ -7,7 +7,6 @@ import 'package:docs_manager/backend/read_db.dart';
 
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/button_function.dart';
-import 'package:docs_manager/frontend/components/button_icon_function.dart';
 import 'package:docs_manager/frontend/components/buttons_upload_photo_pdf.dart';
 import 'package:docs_manager/frontend/components/carouselSlider.dart';
 import 'package:docs_manager/frontend/components/dropdown_menu.dart';
@@ -30,15 +29,22 @@ class ContentFileEdit extends StatefulWidget {
 
 class ContentFileEditState extends State<ContentFileEdit> {
   final ImagePicker picker = ImagePicker();
-  late StreamSubscription listenFileData;
   late TextEditingController docNameController;
   TextEditingController textController2 = TextEditingController();
-  final TextEditingController _date = TextEditingController();
+  TextEditingController _date = TextEditingController();
   List<Image> previewImgList = [];
   List<String> nameImgList = [];
   List<String> pathImgList = [];
   Widget dropdown = constants.emptyBox;
-  late FileModel fileData;
+  late StreamSubscription listenFileData;
+  FileModel fileData = FileModel(
+      path: [],
+      categoryName: "",
+      subTitle1: "",
+      isFavourite: false,
+      dateUpload: "",
+      extension: [],
+      expiration: "");
   @override
   void initState() {
     setState(() {
@@ -46,7 +52,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
       listenFileData =
           retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     });
-
     super.initState();
   }
 
@@ -75,7 +80,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
                   children: [
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
+                          const EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -139,14 +144,14 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                                     ),
                                                   ),
                                                 )
-                                              : MyCarousel(
-                                                  previewImgList, removeImage)),
+                                              : MyCarousel(previewImgList,
+                                                  removeImage, true)),
                                     ),
                                   ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(30.0),
+                                padding: const EdgeInsets.all(15.0),
                                 child: TextField(
                                   controller: _date,
                                   decoration: const InputDecoration(
@@ -198,7 +203,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     try {
       imageGallery = await picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 15,
+        imageQuality: constants.imageQuality,
       );
       setState(
         () {
@@ -225,7 +230,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     try {
       imageCamera = await picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 15,
+        imageQuality: constants.imageQuality,
       );
       setState(
         () {
@@ -268,6 +273,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
           listPaths.add(path);
           listExts.add(ext);
           //load file
+          print("Name to save $saveName");
           StreamSubscription listenLoading = loadFileToStorage(
               path,
               docNameController.text,
@@ -275,7 +281,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
               'files/${(dropdown as MyDropdown).dropdownValue}');
           listenLoading.cancel();
         }
-        deleteFileStorage(fileData.path, fileData.categoryName);
+        deleteFileStorage(
+            fileData.extension, fileData.categoryName, widget.fileName);
         deleteFileDB(fileData.categoryName, widget.fileName);
         createFile((dropdown as MyDropdown).dropdownValue,
             docNameController.text, _date.text, listPaths, listExts);
@@ -314,6 +321,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
     Widget img = constants.defaultImg;
     setState(() {
       fileData = f;
+      _date = TextEditingController(text: f.expiration);
+
       dropdown = MyDropdown(fileData.categoryName);
       for (var element in f.path) {
         pathImgList.add(element as String);
