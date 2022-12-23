@@ -9,14 +9,20 @@ class FileCreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyAppBar("File creation", true, context),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: ContentFileCreate(catSelected),
-        ),
-      ),
-    );
+        resizeToAvoidBottomInset: false,
+        appBar: MyAppBar("File creation", true, context),
+        body: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: SafeArea(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: ContentFileCreate(catSelected),
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }

@@ -13,12 +13,12 @@ import 'package:docs_manager/frontend/components/carouselSlider.dart';
 import 'package:docs_manager/frontend/components/dropdown_menu.dart';
 import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
-import 'package:docs_manager/frontend/components/widget_preview.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class ContentFileEdit extends StatefulWidget {
   final String fileName;
@@ -33,6 +33,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
   late StreamSubscription listenFileData;
   late TextEditingController docNameController;
   TextEditingController textController2 = TextEditingController();
+  final TextEditingController _date = TextEditingController();
   List<Image> previewImgList = [];
   List<String> nameImgList = [];
   List<String> pathImgList = [];
@@ -144,6 +145,30 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                   ],
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: TextField(
+                                  controller: _date,
+                                  decoration: const InputDecoration(
+                                      icon: Icon(Icons.calendar_today_rounded),
+                                      labelText: "(Optional) Expiration"),
+                                  onTap: (() async {
+                                    DateTime? pickeddate = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime(
+                                            DateTime.now().year + 100));
+
+                                    if (pickeddate != null) {
+                                      setState(() {
+                                        _date.text = DateFormat('yyyy-MM-dd')
+                                            .format(pickeddate);
+                                      });
+                                    }
+                                  }),
+                                ),
+                              )
                             ],
                           ),
                           dropdown,
@@ -253,7 +278,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
         deleteFileStorage(fileData.path, fileData.categoryName);
         deleteFileDB(fileData.categoryName, widget.fileName);
         createFile((dropdown as MyDropdown).dropdownValue,
-            docNameController.text, listPaths, listExts);
+            docNameController.text, _date.text, listPaths, listExts);
 
         onUpdateNFiles((dropdown as MyDropdown).dropdownValue);
         onSuccess(context, '/categories');

@@ -13,9 +13,15 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('Category creation', true, context),
-      body: const ContentCategoryCreate(),
-    );
+        resizeToAvoidBottomInset: false,
+        appBar: MyAppBar('Category creation', true, context),
+        body: const CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: ContentCategoryCreate(),
+            )
+          ],
+        ));
   }
 }

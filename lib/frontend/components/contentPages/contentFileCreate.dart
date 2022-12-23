@@ -15,8 +15,8 @@ import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'package:docs_manager/frontend/components/widget_preview.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class ContentFileCreate extends StatefulWidget {
   final String catSelected;
@@ -30,6 +30,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   final ImagePicker picker = ImagePicker();
   TextEditingController docNameController = TextEditingController();
   TextEditingController textController2 = TextEditingController();
+  final TextEditingController _date = TextEditingController();
   List<Image> previewImgList = [];
   List<String> nameImgList = [];
   List<String> pathImgList = [];
@@ -137,6 +138,30 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                   ],
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: TextField(
+                                  controller: _date,
+                                  decoration: const InputDecoration(
+                                      icon: Icon(Icons.calendar_today_rounded),
+                                      labelText: "(Optional) Expiration"),
+                                  onTap: (() async {
+                                    DateTime? pickeddate = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime(
+                                            DateTime.now().year + 100));
+
+                                    if (pickeddate != null) {
+                                      setState(() {
+                                        _date.text = DateFormat('yyyy-MM-dd')
+                                            .format(pickeddate);
+                                      });
+                                    }
+                                  }),
+                                ),
+                              )
                             ],
                           ),
                           dropdown,
@@ -242,7 +267,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
           listenLoading.cancel();
         }
         createFile((dropdown as MyDropdown).dropdownValue,
-            docNameController.text, listPaths, listExt);
+            docNameController.text, _date.text, listPaths, listExt);
         onUpdateNFiles((dropdown as MyDropdown).dropdownValue);
         onSuccess(context, '/categories');
       } catch (e) {

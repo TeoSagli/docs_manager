@@ -10,10 +10,16 @@ class CategoryEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      bottomNavigationBar: MyBottomBar(context, 4),
-      appBar: MyAppBar('View category $catName', true, context),
-      body: ContentCategoryEdit(catName),
-    );
+        resizeToAvoidBottomInset: false,
+        bottomNavigationBar: MyBottomBar(context, 4),
+        appBar: MyAppBar('View category $catName', true, context),
+        body: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: ContentCategoryEdit(catName),
+            )
+          ],
+        ));
   }
 }
