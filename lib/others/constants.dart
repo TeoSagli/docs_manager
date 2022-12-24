@@ -15,6 +15,11 @@ const Widget loadingWheel = SizedBox(
   height: 150,
   child: MyLoadingWheel(),
 );
+const Widget loadingWheel2 = SizedBox(
+  width: 100,
+  height: 100,
+  child: MyLoadingWheel(),
+);
 
 const Widget emptyPage = Align(
   alignment: Alignment.center,

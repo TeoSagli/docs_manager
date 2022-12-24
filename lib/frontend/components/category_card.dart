@@ -20,7 +20,7 @@ class CategoryCard extends StatefulWidget {
 }
 
 class CategoryCardState extends State<CategoryCard> with MyCard {
-  Widget cardImage = constants.emptyBox;
+  Widget cardImage = constants.loadingWheel2;
   @override
   onExitHover() {
     setState(() {
