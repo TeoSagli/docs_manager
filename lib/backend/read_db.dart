@@ -59,6 +59,34 @@ Future<Widget> readImageFileStorage(
 
 //===================================================================================
 /// Load file image at index i from Firebase Storage
+Future<Widget> readImageWalletFileStorage(
+    int i,
+    String catName,
+    String fileName,
+    String ext,
+    Widget cardImage,
+    BuildContext context,
+    bool isFullHeigth) async {
+  final storageRef = FirebaseStorage.instance.ref("files/$catName");
+  // print(await storageRef.child("Pictures.png").getDownloadURL());
+  // print("bro $catName");
+  final fileRef = storageRef.child("$fileName$i.$ext");
+  try {
+    return await fileRef.getData().then((value) => cardImage = Image.memory(
+          value!,
+          width: 160,
+          height: 100,
+          fit: BoxFit.cover,
+        ));
+  } on FirebaseException catch (e) {
+    // Handle any errors.
+    print("Error $e!");
+  }
+  return Image.asset("images/test.jpeg");
+}
+
+//===================================================================================
+/// Load file image at index i from Firebase Storage
 Future<Widget> readImageFileStorageEditFiles(int i, String catName,
     String fileName, String ext, Widget cardImage, BuildContext context) async {
   final storageRef = FirebaseStorage.instance.ref("files/$catName");
