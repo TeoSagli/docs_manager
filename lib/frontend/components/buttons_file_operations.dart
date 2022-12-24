@@ -1,8 +1,11 @@
+import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
+import 'dart:io';
 
 class ButtonsFileOperations extends StatefulWidget {
   final FileModel file;
@@ -64,7 +67,20 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
               IconButton(
                 color: constants.mainBackColor,
                 icon: const Icon(Icons.add_to_drive_rounded),
-                onPressed: () => {},
+                onPressed: () async {
+                  var drive = GoogleDrive();
+                  /*    GoogleDrive googleDrive = GoogleDrive();
+                  googleDrive.uploadFileToGoogleDrive();*/
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles();
+
+                  if (result != null) {
+                    File file = File(result.files.single.path!);
+                    await drive.upload(file, "my test file");
+                  } else {
+                    // User canceled the picker
+                  }
+                },
               ),
               IconButton(
                   color: constants.mainBackColor,
