@@ -1,18 +1,9 @@
 import 'dart:async';
-import 'package:cross_file_image/cross_file_image.dart';
-import 'package:docs_manager/backend/create_db.dart';
+
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/read_db.dart';
-
-import 'package:docs_manager/backend/update_db.dart';
-import 'package:docs_manager/frontend/components/button_function.dart';
-import 'package:docs_manager/frontend/components/buttons_upload_photo_pdf.dart';
 import 'package:docs_manager/frontend/components/carouselSlider.dart';
-
-import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
-
-import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -54,119 +45,77 @@ class ContentFileViewState extends State<ContentFileView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Align(
-              alignment: const AlignmentDirectional(0, -0.9),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              DottedBorder(
+                color: constants.mainBackColor,
+                strokeWidth: 2,
+                dashPattern: const [
+                  5,
+                  5,
+                ],
+                child: SizedBox(
+                    height: 200.0,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: MyCarousel(previewImgList, removeImage, false)),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const TitleText(
+                    "Document name:",
+                    Colors.black,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(widget.fileName,
+                      style: const TextStyle(
+                          color: constants.mainBackColor, fontSize: 20.0)),
+                ],
+              ),
+              fileData.expiration != ""
+                  ? Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
+                          const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    10, 10, 10, 30),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    DottedBorder(
-                                      color: constants.mainBackColor,
-                                      strokeWidth: 2,
-                                      dashPattern: const [
-                                        5,
-                                        5,
-                                      ],
-                                      child: SizedBox(
-                                          height: 200.0,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.9,
-                                          child: MyCarousel(previewImgList,
-                                              removeImage, false)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      const TitleText(
-                                          "Document name:", Colors.black),
-                                      Text(widget.fileName,
-                                          style: const TextStyle(
-                                              color: constants.mainBackColor,
-                                              fontSize: 20.0)),
-                                    ],
-                                  ),
-                                  fileData.expiration != ""
-                                      ? Padding(
-                                          padding: const EdgeInsetsDirectional
-                                              .fromSTEB(0, 10, 0, 0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              const TitleText(
-                                                  "Expiration:", Colors.black),
-                                              Text(fileData.expiration,
-                                                  style: const TextStyle(
-                                                      color: constants
-                                                          .mainBackColor,
-                                                      fontSize: 20.0)),
-                                            ],
-                                          ),
-                                        )
-                                      : constants.emptyBox,
-                                  Padding(
-                                    padding:
-                                        const EdgeInsetsDirectional.fromSTEB(
-                                            0, 10, 0, 0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        const TitleText(
-                                            "Category name:", Colors.black),
-                                        Text(fileData.categoryName,
-                                            style: TextStyle(
-                                                color: catColor,
-                                                fontSize: 20.0)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                          const TitleText("Expiration:", Colors.black),
+                          const SizedBox(width: 5),
+                          Text(fileData.expiration,
+                              style: const TextStyle(
+                                  color: constants.mainBackColor,
+                                  fontSize: 20.0)),
                         ],
                       ),
-                    ),
+                    )
+                  : constants.emptyBox,
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const TitleText("Category name:", Colors.black),
+                    const SizedBox(width: 5),
+                    Text(fileData.categoryName,
+                        style: TextStyle(color: catColor, fontSize: 20.0)),
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        )
       ],
     );
   }

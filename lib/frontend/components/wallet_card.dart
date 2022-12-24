@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import '../../backend/models/file.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import '../../backend/read_db.dart';
+import '../../backend/update_db.dart';
+import '../../others/alerts.dart';
 import 'abstract/card.dart';
 
 class WalletCard extends StatefulWidget {
@@ -47,7 +49,7 @@ class WalletCardState extends State<WalletCard> with MyCard {
   @override
   void initState() {
     listenColor = getColorCategory(setColor, widget.file.categoryName);
-    readImageFileStorage(
+    readImageWalletFileStorage(
             0,
             widget.file.categoryName,
             widget.fileName,
@@ -190,19 +192,59 @@ class WalletCardState extends State<WalletCard> with MyCard {
                           ),
                         ),
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                12, 0, 0, 0),
-                            child: Text(
-                              DateFormat('yyyy-MM-dd')
-                                  .format(widget.expiration),
-                              style: const TextStyle(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    12, 0, 0, 0),
+                                child: Text(
+                                  DateFormat('yyyy-MM-dd')
+                                      .format(widget.expiration),
+                                  style: const TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    12, 0, 0, 0),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      color: constants.mainBackColor,
+                                      icon: const Icon(
+                                          Icons.mode_edit_outline_rounded),
+                                      onPressed: () =>
+                                          widget.moveToEditFilePage(
+                                              widget.fileName, context),
+                                    ),
+                                    IconButton(
+                                        color: constants.mainBackColor,
+                                        icon: Icon(isFav
+                                            ? Icons.favorite_rounded
+                                            : Icons.favorite_border_rounded),
+                                        onPressed: () {
+                                          setState(() {
+                                            isFav = !isFav;
+                                          });
+                                          updateFavouriteDB(
+                                              widget.file.categoryName,
+                                              widget.fileName,
+                                              isFav);
+                                        }),
+                                    IconButton(
+                                      color: Colors.redAccent,
+                                      icon: const Icon(Icons.delete_rounded),
+                                      onPressed: () => onDeleteFile(
+                                          context, widget.removeCard, widget),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ],
