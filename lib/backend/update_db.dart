@@ -31,6 +31,8 @@ onUpdateNFiles(String nameCat) {
 updateFavouriteDB(String nameCat, String nameFile, bool value) async {
   final dbRef = FirebaseDatabase.instance.ref("files/$nameCat/$nameFile");
   await dbRef.update({"isFavourite": value});
+  final dbRef2 = FirebaseDatabase.instance.ref("allFiles/$nameFile");
+  await dbRef2.update({"isFavourite": value});
 }
 //===================================================================================
 

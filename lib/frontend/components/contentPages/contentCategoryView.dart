@@ -85,7 +85,6 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   //========================================================
 //Move router to Category View page
   removeCard(FileCard cardToDelete) {
-    int i = 0;
     for (var element in cardsList) {
       if (element == cardToDelete) {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
@@ -98,7 +97,6 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
         });
         break;
       }
-      i++;
     }
   }
   //========================================================

@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/backend/update_db.dart';
+import 'package:docs_manager/frontend/components/buttons_file_operations.dart';
 import 'package:docs_manager/frontend/components/carouselSlider.dart';
+import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +22,7 @@ class ContentFileView extends StatefulWidget {
 
 class ContentFileViewState extends State<ContentFileView> {
   List<Image> previewImgList = [];
+  Widget buttonList = constants.emptyBox;
   FileModel fileData = FileModel(
       path: [],
       categoryName: "",
@@ -39,6 +44,7 @@ class ContentFileViewState extends State<ContentFileView> {
   @override
   void dispose() {
     listenFileData.cancel();
+    listenColor.cancel();
     super.dispose();
   }
 
@@ -113,6 +119,10 @@ class ContentFileViewState extends State<ContentFileView> {
                   ],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                child: buttonList,
+              ),
             ],
           ),
         )
@@ -134,6 +144,8 @@ class ContentFileViewState extends State<ContentFileView> {
     Widget img = constants.defaultImg;
     setState(() {
       fileData = f;
+      buttonList = ButtonsFileOperations(
+          widget.fileName, fileData, moveToEditFile, removeCard);
       listenColor = getColorCategory(setColor, fileData.categoryName);
     });
     for (int i = 0; i < fileData.path.length; i++) {
@@ -145,6 +157,7 @@ class ContentFileViewState extends State<ContentFileView> {
         }),
       );
     }
+    listenFileData.cancel();
   }
 
   //===================================================================================
@@ -153,5 +166,23 @@ class ContentFileViewState extends State<ContentFileView> {
       catColor = Color(c);
     });
   }
+
   //===================================================================================
+//Move router to Category View page
+  moveToEditFile(fileName, context) {
+    Navigator.pushNamed(
+      context,
+      '/files/edit/$fileName',
+    );
+  }
+
+//========================================================
+//Remove File card
+  removeCard(FileCard cardToDelete) {
+    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    deleteFileStorage(cardToDelete.file.extension,
+        cardToDelete.file.categoryName, cardToDelete.fileName);
+    onUpdateNFiles(cardToDelete.file.categoryName);
+  }
+  //========================================================
 }
