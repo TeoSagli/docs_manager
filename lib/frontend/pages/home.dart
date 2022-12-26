@@ -10,14 +10,19 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyAppBar("Homepage", false, context),
-      bottomNavigationBar: MyBottomBar(context, 0),
-      body: Stack(children: [
-        const ContentHome(),
-        ButtonAdd(context, '/files/create', Icons.post_add_rounded,
-            "Create a new file"),
-      ]),
-    );
+        resizeToAvoidBottomInset: false,
+        appBar: MyAppBar('Homepage', false, context),
+        bottomNavigationBar: MyBottomBar(context, 0),
+        body: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+                hasScrollBody: false,
+                child: Stack(children: [
+                  const ContentHome(),
+                  ButtonAdd(context, '/files/create', Icons.post_add_rounded,
+                      "Create a new file"),
+                ]))
+          ],
+        ));
   }
 }
