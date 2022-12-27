@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/category_card.dart';
+import 'package:docs_manager/frontend/components/category_overview_card.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:docs_manager/frontend/components/wallet_card.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -130,6 +131,40 @@ StreamSubscription retrieveCategoryDB(dynamic fulfillCard,
             key: Key(cardCat.order.toString()),
             child: CategoryCard(cardName, cardCat, moveToCategory,
                 moveToEditCategory, removeCard),
+          ));
+      // TO FIX====================================
+      orders.insert(cardCat.order, cardCat.order);
+      if (cardCat.order < event.snapshot.children.length) {
+        cards.removeAt(cardCat.order + 1);
+        orders.removeAt(cardCat.order + 1);
+      }
+    }
+    fulfillCard(cards, orders);
+  });
+}
+
+//===================================================================================
+/// Load categories fields from Firebase Database
+StreamSubscription retrieveCategoryOverviewDB(
+    dynamic fulfillCard, dynamic moveToCategory) {
+  return FirebaseDatabase.instance.ref("categories").onValue.listen((event) {
+    List<Container> cards =
+        List.generate(event.snapshot.children.length, (index) => Container());
+    List<int> orders =
+        List.generate(event.snapshot.children.length, ((index) => 0));
+    for (var el in event.snapshot.children) {
+      //el.value contenuto di category{path:..., nfiles:...}
+      final data = Map<String, dynamic>.from(el.value as Map<Object?, Object?>);
+      final cardCat = CategoryModel.fromRTDB(data);
+      //el.key nome di category
+      final cardName = el.key.toString();
+
+      //insert card in order
+      cards.insert(
+          cardCat.order,
+          Container(
+            key: Key(cardCat.order.toString()),
+            child: CategoryOverviewCard(cardName, cardCat, moveToCategory),
           ));
       // TO FIX====================================
       orders.insert(cardCat.order, cardCat.order);

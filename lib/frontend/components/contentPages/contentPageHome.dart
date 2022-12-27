@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../backend/delete_db.dart';
 import '../../../backend/read_db.dart';
 import '../../../backend/update_db.dart';
-import '../category_card.dart';
 import '../file_card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
@@ -31,8 +30,8 @@ class ContentHomeState extends State<ContentHome> {
       readFileCards = retrieveAllFilesDB(
           fulfillFileCards, moveToFile, moveToEditFile, removeFileCard);
 
-      readCategoriesCards = retrieveCategoryDB(fulfillCategoriesCards,
-          moveToCategory, moveToEditCategory, removeCategoryCard);
+      readCategoriesCards =
+          retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
     });
     super.initState();
   }
@@ -49,7 +48,7 @@ class ContentHomeState extends State<ContentHome> {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Column(mainAxisSize: MainAxisSize.min, children: [
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
           child: SizedBox(
             width: double.infinity,
             height: 200,
@@ -59,7 +58,7 @@ class ContentHomeState extends State<ContentHome> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                     child: Text(
                       'Categories',
                       textAlign: TextAlign.center,
@@ -77,46 +76,7 @@ class ContentHomeState extends State<ContentHome> {
                         primary: false,
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                12, 12, 0, 12),
-                            child: Container(
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 4,
-                                    color: Color(0x2B202529),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                12, 12, 0, 12),
-                            child: Container(
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 4,
-                                    color: Color(0x2B202529),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          )
-                        ]),
+                        children: categoriesCardsList),
                   ),
                 ]),
           ),
@@ -205,15 +165,6 @@ class ContentHomeState extends State<ContentHome> {
     );
   }
 
-//========================================================
-//Move router to Category View page
-  moveToEditCategory(catName, context) {
-    Navigator.pushNamed(
-      context,
-      '/categories/edit/$catName',
-    );
-  }
-
   //========================================================
 //Move router to Category View page
   removeFileCard(FileCard cardToDelete) {
@@ -229,34 +180,6 @@ class ContentHomeState extends State<ContentHome> {
         });
         break;
       }
-    }
-  }
-
-  //========================================================
-//Move router to Category View page
-  removeCategoryCard(CategoryCard cardToDelete) {
-    int i = 0;
-    for (var element in categoriesCardsList) {
-      if (element.child == cardToDelete) {
-        deleteCategoryDB(cardToDelete.categoryName);
-        deleteCategoryStorage(
-            cardToDelete.category.path, cardToDelete.categoryName);
-        for (int j = 0; j < itemsList.length; j++) {
-          if (itemsList.elementAt(i) < itemsList[j]) {
-            itemsList[j]--;
-            updateOrderDB(
-                itemsList[j],
-                (categoriesCardsList.elementAt(j).child as CategoryCard)
-                    .categoryName);
-          }
-        }
-        setState(() {
-          categoriesCardsList.remove(element);
-          itemsList.removeAt(i);
-        });
-        break;
-      }
-      i++;
     }
   }
 }
