@@ -45,73 +45,80 @@ class ContentHomeState extends State<ContentHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      Column(mainAxisSize: MainAxisSize.min, children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 200,
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                    child: Text(
-                      'Categories',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Outfit',
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+            child: SizedBox(
+              width: double.infinity,
+              height: 200,
+              child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                      child: Text(
+                        'Categories',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Outfit',
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                        padding: EdgeInsets.zero,
-                        primary: false,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: categoriesCardsList),
-                  ),
-                ]),
+                    Expanded(
+                      child: ListView(
+                          padding: EdgeInsets.zero,
+                          primary: false,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          children: categoriesCardsList),
+                    ),
+                  ]),
+            ),
+          ),
+        ]),
+        const Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+          child: Text(
+            'Recent Files',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Outfit',
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
-      ]),
-      const Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-        child: Text(
-          'Recent Files',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Outfit',
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.normal,
-          ),
+        Stack(
+          children: [
+            fileCardsList.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    child: constants.emptyPage)
+                : SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Wrap(
+                        spacing: 8,
+                        runSpacing: 3,
+                        alignment: WrapAlignment.spaceEvenly,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        direction: Axis.horizontal,
+                        runAlignment: WrapAlignment.start,
+                        verticalDirection: VerticalDirection.down,
+                        children: fileCardsList),
+                  ),
+          ],
         ),
-      ),
-      Stack(children: [
-        fileCardsList.isEmpty
-            ? constants.emptyPage
-            : SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Wrap(
-                    spacing: 8,
-                    runSpacing: 12,
-                    alignment: WrapAlignment.spaceEvenly,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    direction: Axis.horizontal,
-                    runAlignment: WrapAlignment.start,
-                    verticalDirection: VerticalDirection.down,
-                    children: fileCardsList),
-              ),
-      ]),
-    ]);
+      ],
+    );
   }
 
   //===================================================================================

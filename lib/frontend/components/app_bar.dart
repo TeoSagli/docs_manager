@@ -1,4 +1,5 @@
 import 'package:docs_manager/others/constants.dart' as constants;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -20,35 +21,58 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        backgroundColor: constants.mainBackColor,
-        title: Text(title,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white,
-              fontSize: 22,
-            )),
-        elevation: 2,
-        leading: Visibility(
-          maintainSemantics: isVisibleBackButton,
-          maintainInteractivity: isVisibleBackButton,
-          maintainAnimation: isVisibleBackButton,
-          maintainSize: isVisibleBackButton,
-          maintainState: isVisibleBackButton,
-          visible: isVisibleBackButton,
-          child: IconButton(
-            iconSize: 40,
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () {
-              Navigator.pop(backContext);
-            },
+      backgroundColor: constants.mainBackColor,
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          color: Colors.white,
+          fontSize: 22,
+        ),
+      ),
+      elevation: 2,
+      leading: Visibility(
+        maintainSemantics: isVisibleBackButton,
+        maintainInteractivity: isVisibleBackButton,
+        maintainAnimation: isVisibleBackButton,
+        maintainSize: isVisibleBackButton,
+        maintainState: isVisibleBackButton,
+        visible: isVisibleBackButton,
+        child: IconButton(
+          tooltip: "Sign out",
+          iconSize: 40,
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.white,
+            size: 30,
           ),
-        ));
+          onPressed: () {
+            Navigator.pop(backContext);
+          },
+        ),
+      ),
+      actions: isLogged()
+          ? [
+              IconButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut().then(
+                        (value) => Navigator.pushNamed(
+                          context,
+                          "/login",
+                        ),
+                      );
+                },
+                icon: const Icon(Icons.logout_rounded),
+              )
+            ]
+          : [],
+    );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
+
+  bool isLogged() {
+    return FirebaseAuth.instance.currentUser != null;
+  }
 }

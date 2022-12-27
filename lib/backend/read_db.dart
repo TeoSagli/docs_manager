@@ -4,6 +4,7 @@ import 'package:docs_manager/frontend/components/category_card.dart';
 import 'package:docs_manager/frontend/components/category_overview_card.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:docs_manager/frontend/components/wallet_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -14,7 +15,9 @@ import 'models/category.dart';
 //===================================================================================
 /// Load categories images from Firebase Storage
 readImageCategoryStorage(String catName, dynamic setCard) async {
-  final storageRef = FirebaseStorage.instance.ref("categories");
+  var key = userRefDB();
+  var userPath = "users/$key";
+  final storageRef = FirebaseStorage.instance.ref("$userPath/categories");
   // print(await storageRef.child("Pictures.png").getDownloadURL());
   // print("bro $catName");
   final catRef = storageRef.child(catName);
@@ -39,7 +42,9 @@ Future<Widget> readImageFileStorage(
     Widget cardImage,
     BuildContext context,
     bool isFullHeigth) async {
-  final storageRef = FirebaseStorage.instance.ref("files/$catName");
+  var key = userRefDB();
+  var userPath = "users/$key";
+  final storageRef = FirebaseStorage.instance.ref("$userPath/files/$catName");
   // print(await storageRef.child("Pictures.png").getDownloadURL());
   // print("bro $catName");
   final fileRef = storageRef.child("$fileName$i.$ext");
@@ -68,7 +73,9 @@ Future<Widget> readImageWalletFileStorage(
     Widget cardImage,
     BuildContext context,
     bool isFullHeigth) async {
-  final storageRef = FirebaseStorage.instance.ref("files/$catName");
+  var key = userRefDB();
+  var userPath = "users/$key";
+  final storageRef = FirebaseStorage.instance.ref("$userPath/files/$catName");
   // print(await storageRef.child("Pictures.png").getDownloadURL());
   // print("bro $catName");
   final fileRef = storageRef.child("$fileName$i.$ext");
@@ -90,7 +97,9 @@ Future<Widget> readImageWalletFileStorage(
 /// Load file image at index i from Firebase Storage
 Future<Widget> readImageFileStorageEditFiles(int i, String catName,
     String fileName, String ext, Widget cardImage, BuildContext context) async {
-  final storageRef = FirebaseStorage.instance.ref("files/$catName");
+  var key = userRefDB();
+  var userPath = "users/$key";
+  final storageRef = FirebaseStorage.instance.ref("$userPath/files/$catName");
   // print(await storageRef.child("Pictures.png").getDownloadURL());
   // print("bro $catName");
   final fileRef = storageRef.child("$fileName$i.$ext");
@@ -112,7 +121,12 @@ Future<Widget> readImageFileStorageEditFiles(int i, String catName,
 /// Load categories fields from Firebase Database
 StreamSubscription retrieveCategoryDB(dynamic fulfillCard,
     dynamic moveToCategory, dynamic moveToEditCategory, dynamic removeCard) {
-  return FirebaseDatabase.instance.ref("categories").onValue.listen((event) {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  return FirebaseDatabase.instance
+      .ref("$userPath/categories")
+      .onValue
+      .listen((event) {
     List<Container> cards =
         List.generate(event.snapshot.children.length, (index) => Container());
     List<int> orders =
@@ -147,7 +161,12 @@ StreamSubscription retrieveCategoryDB(dynamic fulfillCard,
 /// Load categories fields from Firebase Database
 StreamSubscription retrieveCategoryOverviewDB(
     dynamic fulfillCard, dynamic moveToCategory) {
-  return FirebaseDatabase.instance.ref("categories").onValue.listen((event) {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  return FirebaseDatabase.instance
+      .ref("$userPath/categories")
+      .onValue
+      .listen((event) {
     List<Container> cards =
         List.generate(event.snapshot.children.length, (index) => Container());
     List<int> orders =
@@ -179,7 +198,12 @@ StreamSubscription retrieveCategoryOverviewDB(
 
 StreamSubscription retrieveAllFavouriteFilesDB(dynamic fulfillCard,
     dynamic moveToFile, dynamic moveToEditFile, dynamic removeCard) {
-  return FirebaseDatabase.instance.ref("files").onValue.listen((event) {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  return FirebaseDatabase.instance
+      .ref("$userPath/files")
+      .onValue
+      .listen((event) {
     List<Widget> tempCards = List.empty(growable: true);
 
     for (var cat in event.snapshot.children) {
@@ -216,7 +240,12 @@ StreamSubscription retrieveAllFavouriteFilesDB(dynamic fulfillCard,
 
 StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
     dynamic moveToEditFile, dynamic removeCard) {
-  return FirebaseDatabase.instance.ref("files").onValue.listen((event) {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  return FirebaseDatabase.instance
+      .ref("$userPath/files")
+      .onValue
+      .listen((event) {
     int cardListSize = 0;
     for (var cat in event.snapshot.children) {
       cardListSize += cat.children.length;
@@ -250,7 +279,12 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
 
 StreamSubscription retrieveAllExpirationFilesDB(dynamic fulfillCard,
     dynamic moveToFile, dynamic moveToEditFile, dynamic removeCard) {
-  return FirebaseDatabase.instance.ref("files").onValue.listen((event) {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  return FirebaseDatabase.instance
+      .ref("$userPath/files")
+      .onValue
+      .listen((event) {
     List<WalletCard> tempCards = List.empty(growable: true);
 
     for (var cat in event.snapshot.children) {
@@ -296,8 +330,10 @@ StreamSubscription retrieveAllExpirationFilesDB(dynamic fulfillCard,
 /// Load files fields from Firebase Database
 StreamSubscription retrieveFilesDB(String catName, dynamic fulfillCard,
     dynamic moveToFile, dynamic moveToEditFile, dynamic removeCard) {
+  var key = userRefDB();
+  var userPath = "users/$key";
   return FirebaseDatabase.instance
-      .ref("files/$catName")
+      .ref("$userPath/files/$catName")
       .onValue
       .listen((event) {
     List<Widget> cards =
@@ -327,7 +363,12 @@ StreamSubscription retrieveFilesDB(String catName, dynamic fulfillCard,
 //===================================================================================
 /// Return all categories names
 StreamSubscription retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
-  return FirebaseDatabase.instance.ref("categories").onValue.listen((event) {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  return FirebaseDatabase.instance
+      .ref("$userPath/categories")
+      .onValue
+      .listen((event) {
     List<String> list = [];
     for (var el in event.snapshot.children) {
       //el.key nome di category
@@ -341,8 +382,10 @@ StreamSubscription retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
 //===================================================================================
 /// Return for the category color
 StreamSubscription getColorCategory(dynamic setColor, String catName) {
+  var key = userRefDB();
+  var userPath = "users/$key";
   return FirebaseDatabase.instance
-      .ref("categories/$catName")
+      .ref("$userPath/categories/$catName")
       .onValue
       .listen((event) {
     final data = Map<String, dynamic>.from(
@@ -355,8 +398,10 @@ StreamSubscription getColorCategory(dynamic setColor, String catName) {
 //===================================================================================
 /// Return for the category path
 StreamSubscription getCatModelFromCatName(dynamic setCatPath, String catName) {
+  var key = userRefDB();
+  var userPath = "users/$key";
   return FirebaseDatabase.instance
-      .ref("categories/$catName")
+      .ref("$userPath/categories/$catName")
       .onValue
       .listen((event) {
     final data = Map<String, dynamic>.from(
@@ -369,8 +414,10 @@ StreamSubscription getCatModelFromCatName(dynamic setCatPath, String catName) {
 //===================================================================================
 //Get file data from file name
 retrieveFileDataFromFileNameDB(String fileName, dynamic setFileData) {
+  var key = userRefDB();
+  var userPath = "users/$key";
   return FirebaseDatabase.instance
-      .ref("allFiles/$fileName")
+      .ref("$userPath/allFiles/$fileName")
       .onValue
       .listen((event) {
     final data = Map<String, dynamic>.from(
@@ -379,5 +426,15 @@ retrieveFileDataFromFileNameDB(String fileName, dynamic setFileData) {
     FileModel cardFile = FileModel.fromRTDB(data);
     setFileData(cardFile);
   });
+}
+
+//===================================================================================
+/// Get user ref
+userRefDB() {
+  if (FirebaseAuth.instance.currentUser == null) {
+    return "";
+  } else {
+    return FirebaseAuth.instance.currentUser!.uid;
+  }
 }
 //===================================================================================

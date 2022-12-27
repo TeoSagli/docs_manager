@@ -1,8 +1,11 @@
 import 'package:docs_manager/frontend/pages/file_edit.dart';
+import 'package:docs_manager/frontend/pages/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'frontend/pages/categories.dart';
 import 'frontend/pages/categories_edit.dart';
 import 'frontend/pages/category_create.dart';
+import 'frontend/pages/register.dart';
 import 'frontend/pages/wallet.dart';
 import 'frontend/pages/category_view.dart';
 import 'frontend/pages/favourites.dart';
@@ -33,7 +36,11 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         // Handle '/'
         if (settings.name == '/') {
-          return MaterialPageRoute(builder: (context) => HomePage());
+          if (isLogged()) {
+            return MaterialPageRoute(builder: (context) => const HomePage());
+          } else {
+            return MaterialPageRoute(builder: (context) => const LoginPage());
+          }
         }
         var uri = Uri.parse(settings.name.toString());
 
@@ -50,6 +57,12 @@ class MyApp extends StatelessWidget {
               case 'favourites':
                 return MaterialPageRoute(
                     builder: (context) => const FavouritesPage());
+              case 'login':
+                return MaterialPageRoute(
+                    builder: (context) => const LoginPage());
+              case 'register':
+                return MaterialPageRoute(
+                    builder: (context) => const RegisterPage());
               default:
                 break;
             }
@@ -125,5 +138,9 @@ class MyApp extends StatelessWidget {
         return null;
       },
     );
+  }
+
+  bool isLogged() {
+    return FirebaseAuth.instance.currentUser != null;
   }
 }

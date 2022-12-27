@@ -1,14 +1,15 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:googleapis_auth/auth_io.dart';
 import 'dart:io';
 import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:googleapis_auth/auth_io.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 const _clientId =
-    "952808555359-hi3v2nnms6qe2vcdo1od9t6gmpdc4aoi.apps.googleusercontent.com";
+    "952808555359-g3fdg8tfclave8mdq5mcoiiolh2p44tc.apps.googleusercontent.com";
+const _clientSecret = "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";
 const _scopes = ['https://www.googleapis.com/auth/drive.file'];
 
 class SecureStorage {
@@ -44,8 +45,8 @@ class GoogleDrive {
     var credentials = await storage.getCredentials();
     if (credentials == null) {
       //Needs user authentication
-      var authClient =
-          await clientViaUserConsent(ClientId(_clientId), _scopes, (url) {
+      var authClient = await clientViaUserConsent(
+          ClientId(_clientId, _clientSecret), _scopes, (url) {
         //Open Url in Browser
         launchUrlString(url);
         // _launchInWebViewOrVC(toLaunch);

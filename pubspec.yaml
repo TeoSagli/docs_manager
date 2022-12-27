@@ -49,6 +49,9 @@ dependencies:
   flutter_secure_storage: ^7.0.1
   url_launcher: ^6.1.7
   file_picker: ^5.2.4
+  flutter_launcher_icons: ^0.11.0
+  email_validator: ^2.1.17
+  firebase_auth: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -102,3 +105,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_icons:
+  image_path: "images/logo.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true

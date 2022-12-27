@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //========================================================
-//Alert error during image upload
+///Alert error during image upload
 onErrorImage(context) {
   showDialog<String>(
     context: context,
@@ -19,7 +19,7 @@ onErrorImage(context) {
 }
 
 //========================================================
-//Alert error during text fill
+///Alert error during text fill
 onErrorText(context) {
   showDialog<String>(
     context: context,
@@ -37,7 +37,7 @@ onErrorText(context) {
 }
 
 //========================================================
-//Alert error category already exixsting
+///Alert error category already exixsting
 onErrorCategoryExisting(context) {
   showDialog<String>(
     context: context,
@@ -55,7 +55,7 @@ onErrorCategoryExisting(context) {
 }
 
 //========================================================
-//Alert success submit
+///Alert success submit
 onSuccess(context, path) {
   showDialog<String>(
     context: context,
@@ -73,7 +73,7 @@ onSuccess(context, path) {
 }
 
 //========================================================
-//Alert delete category
+///Alert delete category
 onDelete(context, deleteCategory, card, path) {
   showDialog<String>(
     context: context,
@@ -102,7 +102,7 @@ onDelete(context, deleteCategory, card, path) {
 }
 
 //========================================================
-//Alert delete file
+///Alert delete file
 onDeleteFile(context, deleteCategory, card) {
   showDialog<String>(
     context: context,
@@ -124,6 +124,78 @@ onDeleteFile(context, deleteCategory, card) {
             'Yes, delete this file',
             style: TextStyle(color: Colors.redAccent),
           ),
+        ),
+      ],
+    ),
+  );
+}
+
+//========================================================
+///Alert login confirmed
+onLoginConfirmed(context) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Login confirmed'),
+      content: const Text("Account successfully login"),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pushNamed(context, '/'),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
+
+//========================================================
+///Alert registration confirmed
+onRegistrationConfirmed(context) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Registration confirmed'),
+      content: const Text("Account successfully registered"),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pushNamed(context, '/'),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
+
+//========================================================
+///Alert error firebase
+onErrorFirebase(context, e) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('A problem occurred!'),
+      content: Text(e.message.toString()),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
+
+//========================================================
+///Alert error generic
+onErrorGeneric(context, e) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('A problem occurred!'),
+      content: Text(e.toString()),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
         ),
       ],
     ),
