@@ -1,6 +1,5 @@
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
-import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'abstract/card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -41,9 +40,9 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard>
   }
 
   @override
-  void didUpdateWidget(CategoryOverviewCard c) {
+  void didUpdateWidget(CategoryOverviewCard oldWidget) {
     readImageCategoryStorage(widget.category.path, setCard);
-    super.didUpdateWidget(c);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

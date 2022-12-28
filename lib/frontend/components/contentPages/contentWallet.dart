@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'package:docs_manager/frontend/components/wallet_card.dart';
 
 import '../../../backend/delete_db.dart';
 import '../../../backend/read_db.dart';

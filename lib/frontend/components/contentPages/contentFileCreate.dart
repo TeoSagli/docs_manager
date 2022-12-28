@@ -194,7 +194,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     try {
       imageGallery = await picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: constants.imageQuality,
+        imageQuality: constants.imageQuality * 2,
       );
       setState(
         () {

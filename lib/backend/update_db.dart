@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 
 //===================================================================================
 /// Update order value on Firebase Database

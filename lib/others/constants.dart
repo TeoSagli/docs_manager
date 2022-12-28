@@ -31,4 +31,4 @@ const Widget emptyPage = Align(
 
 const emptyBox = SizedBox.shrink();
 
-const imageQuality = 50;
+const imageQuality = 25;

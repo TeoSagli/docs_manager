@@ -42,12 +42,6 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
   }
 
   @override
-  void didUpdateWidget(CategoryCard c) {
-    readImageCategoryStorage(widget.category.path, setCard);
-    super.didUpdateWidget(c);
-  }
-
-  @override
   void dispose() {
     super.dispose();
   }
@@ -140,12 +134,14 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
+                      tooltip: "Edit",
                       color: constants.mainBackColor,
                       icon: const Icon(Icons.mode_edit_outline_rounded),
                       onPressed: () => widget.moveToEditCatPage(
                           widget.categoryName, context),
                     ),
                     IconButton(
+                      tooltip: "Remove",
                       color: Colors.redAccent,
                       icon: const Icon(Icons.delete_outline_rounded),
                       onPressed: () => onDelete(

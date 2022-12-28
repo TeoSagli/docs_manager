@@ -39,7 +39,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         maintainState: isVisibleBackButton,
         visible: isVisibleBackButton,
         child: IconButton(
-          tooltip: "Sign out",
           iconSize: 40,
           icon: const Icon(
             Icons.arrow_back_rounded,
@@ -54,6 +53,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: isLogged()
           ? [
               IconButton(
+                tooltip: "Sign out",
                 onPressed: () {
                   FirebaseAuth.instance.signOut().then(
                         (value) => Navigator.pushNamed(

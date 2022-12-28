@@ -167,7 +167,7 @@ class ContentLoginState extends State<ContentLogin> {
   login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final credential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .signInWithEmailAndPassword(
           email: emailAddress,
           password: password,

@@ -206,7 +206,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     try {
       imageGallery = await picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: constants.imageQuality,
+        imageQuality: constants.imageQuality * 2,
       );
       setState(
         () {

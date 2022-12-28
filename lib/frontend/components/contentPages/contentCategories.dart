@@ -8,6 +8,8 @@ import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/category_card.dart';
 
 class ContentCategories extends StatefulWidget {
+  const ContentCategories({super.key});
+
   @override
   State<ContentCategories> createState() => ContentCategoriesState();
 }
@@ -85,6 +87,7 @@ class ContentCategoriesState extends State<ContentCategories> {
     });
     /*print("Cardlist ${cardsList.toList().toString()} is here");
     print("Orderlist ${itemsList.toList().toString()} is here");*/
+    listenCards.cancel();
   }
 
 //========================================================

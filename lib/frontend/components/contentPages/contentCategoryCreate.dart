@@ -122,7 +122,8 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
   setPhotoFromGallery() async {
     try {
       imageGallery = await picker.pickImage(
-          source: ImageSource.gallery, imageQuality: constants.imageQuality);
+          source: ImageSource.gallery,
+          imageQuality: constants.imageQuality * 2);
       setState(
         () {
           widgetChanging = Image(
@@ -153,6 +154,7 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
             imageGallery!.path, catNameController.text, saveName, 'categories');
         onSuccess(context, '/categories');
         listenLoading.cancel();
+        catNameController.dispose();
       } catch (e) {
         print("Error: $e");
       }

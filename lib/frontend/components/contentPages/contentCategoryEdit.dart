@@ -137,7 +137,8 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
   setPhotoFromGallery() async {
     try {
       imageGallery = await picker.pickImage(
-          source: ImageSource.gallery, imageQuality: constants.imageQuality);
+          source: ImageSource.gallery,
+          imageQuality: constants.imageQuality * 2);
       setState(
         () {
           widgetChanging = Image(
@@ -225,6 +226,7 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
       catModel = c;
     });
     readImageCategoryStorage(catModel.path, setCard);
+    listenPath.cancel();
   }
   //===================================================================================
 }

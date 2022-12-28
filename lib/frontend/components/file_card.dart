@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
@@ -180,7 +178,6 @@ class FileCardState extends State<FileCard> with MyCard {
                                 onPressed: () => widget.moveToEditFilePage(
                                     widget.fileName, context),
                               ),
-                              // TODO
                               IconButton(
                                   color: constants.mainBackColor,
                                   icon: Icon(isFav

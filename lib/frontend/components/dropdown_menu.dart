@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:docs_manager/backend/read_db.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:docs_manager/others/constants.dart' as constants;
 
 class MyDropdown extends StatefulWidget {
   String dropdownValue = "";
