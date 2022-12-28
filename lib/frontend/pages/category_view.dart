@@ -14,12 +14,8 @@ class CategoryViewPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: MyBottomBar(context, 4),
         appBar: MyAppBar('View $catName', true, context),
-        body: Stack(
-          children: [
-            ContentCategoryView(catName),
-            ButtonAdd(context, '/files/create/$catName', Icons.post_add_rounded,
-                "Create a new file in $catName"),
-          ],
-        ));
+        body: ContentCategoryView(catName),
+        floatingActionButton: ButtonAdd(context, '/files/create/$catName',
+            Icons.post_add_rounded, "Create a new file in $catName"));
   }
 }

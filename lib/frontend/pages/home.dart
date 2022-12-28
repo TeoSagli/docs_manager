@@ -14,20 +14,16 @@ class HomePage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar('Homepage', false, context),
       bottomNavigationBar: MyBottomBar(context, 0),
-      body: CustomScrollView(
+      body: const CustomScrollView(
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Stack(
-              children: [
-                const ContentHome(),
-                ButtonAdd(context, '/files/create', Icons.post_add_rounded,
-                    "Create a new file"),
-              ],
-            ),
+            child: ContentHome(),
           ),
         ],
       ),
+      floatingActionButton: ButtonAdd(context, '/files/create',
+          Icons.post_add_rounded, "Create a new file"),
     );
   }
 }

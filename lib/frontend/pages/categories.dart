@@ -18,11 +18,9 @@ class CategoriesPageState extends State<CategoriesPage> {
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar("All categories", false, context),
       bottomNavigationBar: MyBottomBar(context, 2),
-      body: Stack(children: [
-        ContentCategories(),
-        ButtonAdd(context, '/categories/create', Icons.add_to_photos,
-            "Create a new category")
-      ]),
+      body: ContentCategories(),
+      floatingActionButton: ButtonAdd(context, '/categories/create',
+          Icons.add_to_photos, "Create a new category"),
     );
   }
 }

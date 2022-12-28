@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import '../../../backend/delete_db.dart';
@@ -57,28 +58,27 @@ class ContentHomeState extends State<ContentHome> {
               child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                      child: Text(
-                        'Categories',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
+                    const Text(
+                      'Categories',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Outfit',
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                     Expanded(
-                      child: ListView(
-                          padding: EdgeInsets.zero,
-                          primary: false,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: categoriesCardsList),
+                      child: CarouselSlider(
+                        items: categoriesCardsList,
+                        options: CarouselOptions(
+                          viewportFraction: 0.5,
+                          autoPlay: false,
+                          enlargeCenterPage: true,
+                        ),
+                      ),
                     ),
                   ]),
             ),
