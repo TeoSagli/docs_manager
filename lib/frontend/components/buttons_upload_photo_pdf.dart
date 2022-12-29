@@ -18,7 +18,7 @@ class ButtonsUploadPhotoes extends StatelessWidget {
         MyButtonIcon('CAMERA', setPhotoFromCamera, Icons.photo_camera),
         MyButtonIcon('GALLERY', setPhotoFromGallery, Icons.image),
         MyButtonIcon(
-            'PDF - TXT -\nXLS - PPT', setPhotoFromFile, Icons.picture_as_pdf),
+            'PDF', setPhotoFromFile, Icons.picture_as_pdf),
       ],
     );
   }

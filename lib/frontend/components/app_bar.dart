@@ -31,25 +31,23 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       elevation: 2,
-      leading: Visibility(
-        maintainSemantics: isVisibleBackButton,
-        maintainInteractivity: isVisibleBackButton,
-        maintainAnimation: isVisibleBackButton,
-        maintainSize: isVisibleBackButton,
-        maintainState: isVisibleBackButton,
-        visible: isVisibleBackButton,
-        child: IconButton(
-          iconSize: 40,
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.white,
-            size: 30,
-          ),
-          onPressed: () {
-            Navigator.pop(backContext);
-          },
-        ),
-      ),
+      leading: isVisibleBackButton
+          ? IconButton(
+              iconSize: 40,
+              icon: const Icon(
+                Icons.arrow_back_rounded,
+                color: Colors.white,
+                size: 30,
+              ),
+              onPressed: () {
+                Navigator.pop(backContext);
+              },
+            )
+          : IconButton(
+              tooltip: "Home",
+              onPressed: () => Navigator.pushNamed(context, "/"),
+              icon: Image.asset("assets/images/logoTransparentBig.png"),
+            ),
       actions: isLogged()
           ? [
               IconButton(

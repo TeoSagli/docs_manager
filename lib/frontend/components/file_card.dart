@@ -152,21 +152,24 @@ class FileCardState extends State<FileCard> with MyCard {
                               ),
                             ],
                           ),
-                          Row(
+                          Column(
                             children: [
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     4, 4, 0, 0),
-                                child: Text(
-                                  widget.file.subTitle1,
-                                  style: const TextStyle(
-                                    fontFamily: 'Outfit',
-                                    color: Color(0xFF57636C),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
+                                child: widget.file.expiration != ""
+                                    ? const Text("Expires in:")
+                                    : const Text(""),
                               ),
+                              Text(
+                                widget.file.expiration,
+                                style: const TextStyle(
+                                  fontFamily: 'Outfit',
+                                  color: Color(0xFF57636C),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
                             ],
                           ),
                           Row(
