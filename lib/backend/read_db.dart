@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/category_card.dart';
 import 'package:docs_manager/frontend/components/category_overview_card.dart';
@@ -9,7 +10,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:docs_manager/others/constants.dart' as constants;
+import 'package:pdfx/pdfx.dart';
 import 'models/category.dart';
 
 //===================================================================================
@@ -49,18 +51,31 @@ Future<Widget> readImageFileStorage(
   // print("bro $catName");
   final fileRef = storageRef.child("$fileName$i.$ext");
   try {
-    return await fileRef.getData().then((value) => cardImage = Image.memory(
+    return await fileRef.getData().then((value) async {
+      if (ext != 'pdf') {
+        cardImage = Image.memory(
           value!,
           width: MediaQuery.of(context).size.width,
           height:
               isFullHeigth ? null : MediaQuery.of(context).size.height * 0.15,
           fit: BoxFit.cover,
-        ));
+        );
+      } else {
+        cardImage = Image.memory(
+          await imageFromPdfFile(value!),
+          width: MediaQuery.of(context).size.width,
+          height:
+              isFullHeigth ? null : MediaQuery.of(context).size.height * 0.15,
+          fit: BoxFit.cover,
+        );
+      }
+      return cardImage;
+    });
   } on FirebaseException catch (e) {
     // Handle any errors.
     print("Error $e!");
   }
-  return Image.asset("images/test.jpeg");
+  return constants.defaultImg;
 }
 
 //===================================================================================
@@ -90,7 +105,7 @@ Future<Widget> readImageWalletFileStorage(
     // Handle any errors.
     print("Error $e!");
   }
-  return Image.asset("images/test.jpeg");
+  return constants.defaultImg;
 }
 
 //===================================================================================
@@ -114,7 +129,7 @@ Future<Widget> readImageFileStorageEditFiles(int i, String catName,
     // Handle any errors.
     print("Error $e!");
   }
-  return Image.asset("images/test.jpeg");
+  return constants.defaultImg;
 }
 
 //===================================================================================
@@ -437,4 +452,14 @@ userRefDB() {
     return FirebaseAuth.instance.currentUser!.uid;
   }
 }
+
 //===================================================================================
+// Convert file to image bytes
+Future<Uint8List> imageFromPdfFile(Uint8List data) async {
+  PdfDocument document = await PdfDocument.openData(data);
+  PdfPage page = await document.getPage(1);
+  PdfPageImage? pageImage =
+      await page.render(width: page.width, height: page.height);
+  return pageImage!.bytes;
+}
+  //===================================================================================

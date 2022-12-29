@@ -109,14 +109,28 @@ createCategory(name, path) async {
 createDefaultCategories() async {
   var key = userRefDB();
   var userPath = "users/$key";
-  var defCategories = ["Credit Cards", "IDs", "Other Cards", "Pictures"];
+  var defCategories = [
+    "Credit Cards",
+    "IDs",
+    "Other Cards",
+    "Documents",
+    "Pictures"
+  ];
   var defCategoriesPath = [
     "Credit Cards.jpg",
     "IDs.jpg",
     "Other Cards.jpg",
+    "Documents.jpg",
     "Pictures.png"
   ];
-  var colorCategories = [4282682111, 4285132974, 4294945600, 4294922834];
+
+  var colorCategories = [
+    4282682111,
+    4285132974,
+    4294945600,
+    4294922834,
+    4292886779,
+  ];
   var categories = FirebaseDatabase.instance.ref("$userPath/categories");
 
   for (var element in defCategories) {

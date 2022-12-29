@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
 
@@ -13,10 +14,13 @@ import 'package:docs_manager/frontend/components/title_text.dart';
 
 import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pdfx/pdfx.dart';
 
 class ContentFileCreate extends StatefulWidget {
   final String catSelected;
@@ -104,7 +108,8 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                               8, 8, 8, 8),
                                       child: ButtonsUploadPhotoes(
                                           setPhotoFromCamera,
-                                          setPhotoFromGallery),
+                                          setPhotoFromGallery,
+                                          setPhotoFromFile),
                                     ),
                                     DottedBorder(
                                       color: constants.mainBackColor,
@@ -214,6 +219,40 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     }
   }
 
+  //===================================================================================
+// Upload photo from file and catch errors
+  setPhotoFromFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+      allowMultiple: false,
+    );
+
+    if (result != null) {
+      File file = File(result.files.first.path!);
+      Uint8List imageFileBytes = await imageFromPdfFile(file);
+      try {
+        setState(
+          () {
+            previewImgList.add(
+              Image.memory(
+                imageFileBytes,
+                fit: BoxFit.cover,
+                width: 1000.0,
+              ),
+            );
+            nameImgList.add(result.files.first.name);
+            pathImgList.add(result.files.first.path!);
+          },
+        );
+      } catch (e) {
+        onErrorImage(context);
+      }
+    } else {
+      onErrorImage(context);
+    }
+  }
+
 //===================================================================================
 // Upload photo from camera and catch errors
   setPhotoFromCamera() async {
@@ -290,5 +329,16 @@ class ContentFileCreateState extends State<ContentFileCreate> {
       previewImgList.remove(w);
     });
   }
+
+  //===================================================================================
+  // Convert file to image bytes
+  Future<Uint8List> imageFromPdfFile(File pdfFile) async {
+    PdfDocument document = await PdfDocument.openFile(pdfFile.path);
+    PdfPage page = await document.getPage(1);
+    PdfPageImage? pageImage =
+        await page.render(width: page.width, height: page.height);
+    return pageImage!.bytes;
+  }
+
   //===================================================================================
 }

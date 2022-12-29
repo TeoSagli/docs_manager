@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
 import 'package:docs_manager/backend/delete_db.dart';
@@ -14,10 +15,13 @@ import 'package:docs_manager/frontend/components/input_field.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pdfx/pdfx.dart';
 
 class ContentFileEdit extends StatefulWidget {
   final String fileName;
@@ -116,7 +120,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                               8, 8, 8, 8),
                                       child: ButtonsUploadPhotoes(
                                           setPhotoFromCamera,
-                                          setPhotoFromGallery),
+                                          setPhotoFromGallery, {}),
                                     ),
                                     DottedBorder(
                                       color: constants.mainBackColor,
@@ -222,6 +226,40 @@ class ContentFileEditState extends State<ContentFileEdit> {
         },
       );
     } catch (e) {
+      onErrorImage(context);
+    }
+  }
+
+  //===================================================================================
+// Upload photo from file and catch errors
+  setPhotoFromFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'pptx', 'xlsx', 'docx', 'doc', 'xls', 'ppt'],
+      allowMultiple: false,
+    );
+
+    if (result != null) {
+      File file = File(result.files.first.path!);
+      Uint8List imageFileBytes = await imageFromPdfFile(file);
+      try {
+        setState(
+          () {
+            previewImgList.add(
+              Image.memory(
+                imageFileBytes,
+                fit: BoxFit.cover,
+                width: 1000.0,
+              ),
+            );
+            nameImgList.add(result.files.first.name);
+            pathImgList.add(result.files.first.path!);
+          },
+        );
+      } catch (e) {
+        onErrorImage(context);
+      }
+    } else {
       onErrorImage(context);
     }
   }
@@ -344,5 +382,16 @@ class ContentFileEditState extends State<ContentFileEdit> {
       );
     }
   }
+
+  //===================================================================================
+  // Convert file to image bytes
+  Future<Uint8List> imageFromPdfFile(File pdfFile) async {
+    PdfDocument document = await PdfDocument.openFile(pdfFile.path);
+    PdfPage page = await document.getPage(1);
+    PdfPageImage? pageImage =
+        await page.render(width: page.width, height: page.height);
+    return pageImage!.bytes;
+  }
+
   //===================================================================================
 }
