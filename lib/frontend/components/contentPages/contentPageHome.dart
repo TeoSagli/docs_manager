@@ -74,7 +74,7 @@ class ContentHomeState extends State<ContentHome> {
                       child: CarouselSlider(
                         items: categoriesCardsList,
                         options: CarouselOptions(
-                          viewportFraction: 0.5,
+                          viewportFraction: 0.6,
                           autoPlay: false,
                           enlargeCenterPage: true,
                         ),
@@ -137,9 +137,8 @@ class ContentHomeState extends State<ContentHome> {
   ) {
     setState(() {
       fileCardsList = myCards;
+      readFileCards.cancel();
     });
-    /*print("Cardlist ${cardsList.toList().toString()} is here");
-    print("Orderlist ${itemsList.toList().toString()} is here");*/
   }
 
 //===================================================================================
@@ -151,6 +150,7 @@ class ContentHomeState extends State<ContentHome> {
     setState(() {
       itemsList = myOrders;
       categoriesCardsList = myCards;
+      readCategoriesCards.cancel();
     });
   }
 

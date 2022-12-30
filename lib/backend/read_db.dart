@@ -323,7 +323,7 @@ StreamSubscription getCatModelFromCatNameDB(
 retrieveFileDataFromFileNameDB(String fileName, dynamic setFileData) {
   var key = userRefDB();
   var userPath = "users/$key";
-  return FirebaseDatabase.instance
+  FirebaseDatabase.instance
       .ref("$userPath/allFiles/$fileName")
       .onValue
       .listen((event) {

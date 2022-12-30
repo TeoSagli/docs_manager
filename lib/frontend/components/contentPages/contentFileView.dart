@@ -5,7 +5,7 @@ import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/buttons_file_operations.dart';
-import 'package:docs_manager/frontend/components/carouselSlider.dart';
+import 'package:docs_manager/frontend/components/carousel_slider.dart';
 import 'package:docs_manager/frontend/components/file_card.dart';
 import 'package:docs_manager/frontend/components/title_text.dart';
 import 'package:dotted_border/dotted_border.dart';

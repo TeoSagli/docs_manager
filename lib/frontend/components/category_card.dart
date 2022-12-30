@@ -89,25 +89,15 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.categoryName,
-                        style: const TextStyle(
-                          fontFamily: 'Outfit',
-                          color: Color(0xFF101213),
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.3,
                         child: Text(
-                          "${widget.category.nfiles} Elements",
+                          widget.categoryName,
                           style: const TextStyle(
                             fontFamily: 'Outfit',
-                            color: Color(0xFF57636C),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
+                            color: Color(0xFF101213),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),

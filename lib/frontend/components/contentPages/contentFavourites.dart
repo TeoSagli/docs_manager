@@ -71,9 +71,8 @@ class ContentFavouritesState extends State<ContentFavourites> {
   ) {
     setState(() {
       cardsList = myCards;
+      readCards.cancel();
     });
-    /*print("Cardlist ${cardsList.toList().toString()} is here");
-    print("Orderlist ${itemsList.toList().toString()} is here");*/
   }
 
 //===================================================================================

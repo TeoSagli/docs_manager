@@ -40,7 +40,7 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard>
   }
 
   @override
-  void didUpdateWidget(CategoryOverviewCard oldWidget) {
+  void didUpdateWidget(covariant CategoryOverviewCard oldWidget) {
     readImageCategoryStorage(widget.category.path, setCard);
     super.didUpdateWidget(oldWidget);
   }
@@ -77,11 +77,10 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard>
               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  Expanded(
                     child: ClipRRect(
                         borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(0),
@@ -92,15 +91,17 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard>
                         child: cardImage),
                   ),
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(4, 10, 4, 0),
-                    child: Text(
-                      widget.categoryName,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Outfit',
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                    padding: const EdgeInsetsDirectional.all(5),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Text(
+                        widget.categoryName,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),

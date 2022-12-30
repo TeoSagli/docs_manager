@@ -31,15 +31,6 @@ class ContentCategoriesState extends State<ContentCategories> {
   }
 
   @override
-  void didUpdateWidget(covariant ContentCategories oldWidget) {
-    setState(() {
-      listenCards = retrieveCategoriesDB(
-          fulfillCard, moveToCategory, moveToEditCategory, removeCard);
-    });
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void deactivate() {
     listenCards.cancel();
     super.deactivate();
@@ -84,10 +75,8 @@ class ContentCategoriesState extends State<ContentCategories> {
     setState(() {
       itemsList = myOrders;
       cardsList = myCards;
+      listenCards.cancel();
     });
-    /*print("Cardlist ${cardsList.toList().toString()} is here");
-    print("Orderlist ${itemsList.toList().toString()} is here");*/
-    listenCards.cancel();
   }
 
 //========================================================
