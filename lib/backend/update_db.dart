@@ -3,7 +3,7 @@ import 'package:docs_manager/backend/read_db.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 //===================================================================================
-/// Update order value on Firebase Database
+/// Update order value of category [catName] on Firebase Database
 updateOrderDB(int index, String catName) async {
   var key = userRefDB();
   var userPath = "users/$key";
@@ -12,17 +12,17 @@ updateOrderDB(int index, String catName) async {
 }
 
 //===================================================================================
-/// Update nfiles value on Firebase Database
-onUpdateNFiles(String nameCat) {
+/// Update nfiles value of category [catName] on Firebase Database
+onUpdateNFilesDB(String catName) {
   var key = userRefDB();
   var userPath = "users/$key";
   FirebaseDatabase.instance
-      .ref("$userPath/files/$nameCat")
+      .ref("$userPath/files/$catName")
       .onValue
       .listen((event) {
     //load num of files
     FirebaseDatabase.instance
-        .ref("$userPath/categories/$nameCat")
+        .ref("$userPath/categories/$catName")
         .update({
           "nfiles": event.snapshot.children.length,
         })
@@ -32,24 +32,24 @@ onUpdateNFiles(String nameCat) {
 }
 
 //===================================================================================
-/// Update favourite value on Firebase Database
-updateFavouriteDB(String nameCat, String nameFile, bool value) async {
+/// Update favourite value of file [fileName] on Firebase Database
+updateFavouriteDB(String catName, String fileName, bool value) async {
   var key = userRefDB();
   var userPath = "users/$key";
   final dbRef =
-      FirebaseDatabase.instance.ref("$userPath/files/$nameCat/$nameFile");
+      FirebaseDatabase.instance.ref("$userPath/files/$catName/$fileName");
   await dbRef.update({"isFavourite": value});
-  final dbRef2 = FirebaseDatabase.instance.ref("$userPath/allFiles/$nameFile");
+  final dbRef2 = FirebaseDatabase.instance.ref("$userPath/allFiles/$fileName");
   await dbRef2.update({"isFavourite": value});
 }
-//===================================================================================
 
-/// Upload categories for editing to Firebase Database
-updateCategoryDB(String name, CategoryModel cat) async {
+//===================================================================================
+/// Upload category [catName] for editing to Firebase Database
+updateCategoryDB(String catName, CategoryModel cat) async {
   var key = userRefDB();
   var userPath = "users/$key";
   var categories = FirebaseDatabase.instance.ref("$userPath/categories");
-  var newCategory = categories.child(name);
+  var newCategory = categories.child(catName);
 
   await newCategory
       .update({
@@ -58,7 +58,7 @@ updateCategoryDB(String name, CategoryModel cat) async {
         "order": cat.order,
         "colorValue": cat.colorValue,
       })
-      .then((value) => print("Category created!"))
+      .then((value) => print("Category Updated!"))
       .catchError((error) => print("An error occured!"));
 }
 //===================================================================================

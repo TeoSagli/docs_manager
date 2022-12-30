@@ -295,7 +295,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
 // Submit category to db if everything is correct
   onEdit() {
     List<String> listPaths = [];
-    List<String> listExts = [];
+    List<String> listExt = [];
     // else if (!await isCategoryNew(docNameController!.text)) {
     // onErrorCategoryExisting();}
     if (docNameController.text == "" || docNameController.text == " ") {
@@ -312,7 +312,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
           //create save name
           String saveName = "${docNameController.text}$index.$ext";
           listPaths.add(path);
-          listExts.add(ext);
+          listExt.add(ext);
           //load file
           print("Name to save $saveName");
           StreamSubscription listenLoading = loadFileToStorage(
@@ -325,10 +325,14 @@ class ContentFileEditState extends State<ContentFileEdit> {
         deleteFileStorage(
             fileData.extension, fileData.categoryName, widget.fileName);
         deleteFileDB(fileData.categoryName, widget.fileName);
-        createFile((dropdown as MyDropdown).dropdownValue,
-            docNameController.text, _date.text, listPaths, listExts);
+        //update category
+        String catName = (dropdown as MyDropdown).dropdownValue;
+        createFile(catName, docNameController.text, _date.text, listPaths,
+            listExt, "files/$catName");
+        createFile(catName, docNameController.text, _date.text, listPaths,
+            listExt, "allFiles");
 
-        onUpdateNFiles((dropdown as MyDropdown).dropdownValue);
+        onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
         onSuccess(context, '/categories');
       } catch (e) {
         print("Error: $e");

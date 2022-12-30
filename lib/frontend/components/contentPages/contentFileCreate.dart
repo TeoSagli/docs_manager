@@ -308,9 +308,13 @@ class ContentFileCreateState extends State<ContentFileCreate> {
               'files/${(dropdown as MyDropdown).dropdownValue}');
           listenLoading.cancel();
         }
-        createFile((dropdown as MyDropdown).dropdownValue,
-            docNameController.text, _date.text, listPaths, listExt);
-        onUpdateNFiles((dropdown as MyDropdown).dropdownValue);
+        //update category
+        String catName = (dropdown as MyDropdown).dropdownValue;
+        createFile(catName, docNameController.text, _date.text, listPaths,
+            listExt, "files/$catName");
+        createFile(catName, docNameController.text, _date.text, listPaths,
+            listExt, "allFiles");
+        onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
         onSuccess(context, '/categories');
       } catch (e) {
         print("Error: $e");

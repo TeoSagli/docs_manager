@@ -7,7 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/services.dart';
 
 //===================================================================================
-/// Upload images to Firebase Storage
+/// Create file at [fPath] and send to Firebase Storage
 StreamSubscription loadFileToStorage(
     String fPath, String catName, String saveName, String nameRef) {
   var key = userRefDB();
@@ -43,15 +43,15 @@ StreamSubscription loadFileToStorage(
 }
 
 //===================================================================================
-/// Upload images to Firebase Storage
+/// Create file as [fData] and send to Firebase Storage
 StreamSubscription loadFileAssetToStorage(
-    Uint8List data, String catName, String saveName, String nameRef) {
+    Uint8List fData, String catName, String saveName, String nameRef) {
   var key = userRefDB();
   var userPath = "users/$key";
   // Create a reference to the Firebase Storage bucket
   final storageRef = FirebaseStorage.instance.ref("$userPath/$nameRef");
 // Upload file and metadata to the path 'images/mountains.jpg'
-  final uploadTask = storageRef.child(saveName).putData(data);
+  final uploadTask = storageRef.child(saveName).putData(fData);
 // Listen for state changes, errors, and completion of the upload.
   return uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
     switch (taskSnapshot.state) {
@@ -78,12 +78,12 @@ StreamSubscription loadFileAssetToStorage(
 }
 
 //===================================================================================
-/// Upload categories fields to Firebase Database
-createCategory(name, path) async {
+/// Create a new category [catName] and fill the data
+createCategoryDB(String catName, String path) async {
   var key = userRefDB();
   var userPath = "users/$key";
   var categories = FirebaseDatabase.instance.ref("$userPath/categories");
-  var newCategory = categories.child(name);
+  var newCategory = categories.child(catName);
   int length = 0;
 
   await categories
@@ -105,8 +105,8 @@ createCategory(name, path) async {
 }
 
 //===================================================================================
-/// Upload categories fields to Firebase Database
-createDefaultCategories() async {
+/// Create default categories for new user
+createDefaultCategoriesDB() async {
   var key = userRefDB();
   var userPath = "users/$key";
   var defCategories = [
@@ -155,7 +155,7 @@ createDefaultCategories() async {
 }
 
 //===================================================================================
-/// Upload new user to Firebase Database
+/// Crate new user with [uid] in Firebase Database
 createUserDB(String email, String uid) async {
   var newUser = FirebaseDatabase.instance.ref("users/$uid");
 
@@ -168,40 +168,17 @@ createUserDB(String email, String uid) async {
 }
 
 //===================================================================================
-/// Upload file fields to Firebase Database
-createFile(
-    String nameCat, String nameFile, String expiration, path, ext) async {
+/// Create file [fileName] in Firebase Database
+createFile(String catName, String fileName, String expiration, path, ext,
+    String ref) async {
   var key = userRefDB();
   var userPath = "users/$key";
-  var catRef = FirebaseDatabase.instance.ref("$userPath/files/$nameCat");
-  var fileRef = catRef.child(nameFile);
+  var catRef = FirebaseDatabase.instance.ref("$userPath/$ref");
+  var fileRef = catRef.child(fileName);
   await fileRef
       .update({
         "path": path,
-        "categoryName": nameCat,
-        "isFavourite": false,
-        "expiration": expiration,
-        "dateUpload": DateTime.now().toString(),
-        "extension": ext,
-      })
-      .then((value) => print("File created!"))
-      .catchError((error) => print("An error occured!"));
-
-  createListOfAllFile(nameCat, nameFile, expiration, path, ext);
-}
-
-//===================================================================================
-/// Upload all files list to Firebase Database
-createListOfAllFile(
-    String nameCat, String nameFile, String expiration, path, ext) async {
-  var key = userRefDB();
-  var userPath = "users/$key";
-  var catRef = FirebaseDatabase.instance.ref("$userPath/allFiles/");
-  var fileRef = catRef.child(nameFile);
-  await fileRef
-      .update({
-        "path": path,
-        "categoryName": nameCat,
+        "categoryName": catName,
         "isFavourite": false,
         "expiration": expiration,
         "dateUpload": DateTime.now().toString(),
@@ -210,4 +187,5 @@ createListOfAllFile(
       .then((value) => print("File created!"))
       .catchError((error) => print("An error occured!"));
 }
+
 //===================================================================================

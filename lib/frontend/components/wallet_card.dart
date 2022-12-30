@@ -48,8 +48,8 @@ class WalletCardState extends State<WalletCard> with MyCard {
 
   @override
   void initState() {
-    listenColor = getColorCategory(setColor, widget.file.categoryName);
-    readImageWalletFileStorage(
+    listenColor = getColorCategoryDB(setColor, widget.file.categoryName);
+    readImageFileStorage(
             0,
             widget.file.categoryName,
             widget.fileName,

@@ -94,7 +94,7 @@ class ContentWalletState extends State<ContentWallet> {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
         deleteFileStorage(cardToDelete.file.extension,
             cardToDelete.file.categoryName, cardToDelete.fileName);
-        onUpdateNFiles(cardToDelete.file.categoryName);
+        onUpdateNFilesDB(cardToDelete.file.categoryName);
         setState(() {
           cardsList.remove(element);
         });

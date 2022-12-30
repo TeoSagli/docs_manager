@@ -42,7 +42,7 @@ class FileCardState extends State<FileCard> with MyCard {
 
   @override
   void initState() {
-    listenColor = getColorCategory(setColor, widget.file.categoryName);
+    listenColor = getColorCategoryDB(setColor, widget.file.categoryName);
     readImageFileStorage(
             0,
             widget.file.categoryName,

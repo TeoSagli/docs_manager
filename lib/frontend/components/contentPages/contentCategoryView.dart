@@ -22,7 +22,7 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   @override
   void initState() {
     setState(() {
-      readCards = retrieveFilesDB(
+      readCards = retrieveFilesFromCategoryDB(
           widget.catName, fulfillCard, moveToFile, moveToEditFile, removeCard);
     });
     super.initState();
@@ -91,7 +91,7 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
         deleteFileStorage(cardToDelete.file.extension,
             cardToDelete.file.categoryName, cardToDelete.fileName);
 
-        onUpdateNFiles(cardToDelete.file.categoryName);
+        onUpdateNFilesDB(cardToDelete.file.categoryName);
         setState(() {
           cardsList.remove(element);
         });

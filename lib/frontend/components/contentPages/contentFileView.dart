@@ -146,7 +146,7 @@ class ContentFileViewState extends State<ContentFileView> {
       fileData = f;
       buttonList = ButtonsFileOperations(
           widget.fileName, fileData, moveToEditFile, removeCard);
-      listenColor = getColorCategory(setColor, fileData.categoryName);
+      listenColor = getColorCategoryDB(setColor, fileData.categoryName);
     });
     for (int i = 0; i < fileData.path.length; i++) {
       readImageFileStorage(i, fileData.categoryName, widget.fileName,
@@ -165,6 +165,7 @@ class ContentFileViewState extends State<ContentFileView> {
     setState(() {
       catColor = Color(c);
     });
+    listenColor.cancel();
   }
 
   //===================================================================================
@@ -182,7 +183,7 @@ class ContentFileViewState extends State<ContentFileView> {
     deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
     deleteFileStorage(cardToDelete.file.extension,
         cardToDelete.file.categoryName, cardToDelete.fileName);
-    onUpdateNFiles(cardToDelete.file.categoryName);
+    onUpdateNFilesDB(cardToDelete.file.categoryName);
   }
   //========================================================
 }

@@ -16,7 +16,6 @@ class ContentRegisterState extends State<ContentRegister> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String emailAddress;
   late String password;
-  //late String nickname;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -68,27 +67,6 @@ class ContentRegisterState extends State<ContentRegister> {
                   ),
                 ),
               ),
-              /*    Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.tight(
-                      Size(MediaQuery.of(context).size.width * 0.8, 50)),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your nickname',
-                      icon: Icon(Icons.app_registration_rounded),
-                    ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      } else {
-                        nickname = value;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),*/
               MyButton("Register", register),
             ],
           ),
@@ -107,7 +85,7 @@ class ContentRegisterState extends State<ContentRegister> {
         )
             .then((value) {
           createUserDB(emailAddress, value.user!.uid);
-          createDefaultCategories();
+          createDefaultCategoriesDB();
           onRegistrationConfirmed(context);
         }).onError((error, stackTrace) => onErrorFirebase(context, error));
       } on FirebaseAuthException catch (e) {

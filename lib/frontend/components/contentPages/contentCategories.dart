@@ -23,7 +23,7 @@ class ContentCategoriesState extends State<ContentCategories> {
   @override
   void initState() {
     setState(() {
-      listenCards = retrieveCategoryDB(
+      listenCards = retrieveCategoriesDB(
           fulfillCard, moveToCategory, moveToEditCategory, removeCard);
     });
 
@@ -33,7 +33,7 @@ class ContentCategoriesState extends State<ContentCategories> {
   @override
   void didUpdateWidget(covariant ContentCategories oldWidget) {
     setState(() {
-      listenCards = retrieveCategoryDB(
+      listenCards = retrieveCategoriesDB(
           fulfillCard, moveToCategory, moveToEditCategory, removeCard);
     });
     super.didUpdateWidget(oldWidget);

@@ -29,7 +29,7 @@ class ContentHomeState extends State<ContentHome> {
   void initState() {
     setState(() {
       readFileCards = retrieveAllFilesDB(
-          fulfillFileCards, moveToFile, moveToEditFile, removeFileCard);
+          fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, false);
 
       readCategoriesCards =
           retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
@@ -181,7 +181,7 @@ class ContentHomeState extends State<ContentHome> {
         deleteFileStorage(cardToDelete.file.extension,
             cardToDelete.file.categoryName, cardToDelete.fileName);
 
-        onUpdateNFiles(cardToDelete.file.categoryName);
+        onUpdateNFilesDB(cardToDelete.file.categoryName);
         setState(() {
           fileCardsList.remove(element);
         });

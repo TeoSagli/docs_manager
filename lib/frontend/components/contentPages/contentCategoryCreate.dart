@@ -149,7 +149,7 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
       try {
         String ext = imageGallery!.name.toString().split(".")[1];
         String saveName = "${catNameController.text}.$ext";
-        createCategory(catNameController.text, saveName);
+        createCategoryDB(catNameController.text, saveName);
         StreamSubscription listenLoading = loadFileToStorage(
             imageGallery!.path, catNameController.text, saveName, 'categories');
         onSuccess(context, '/categories');

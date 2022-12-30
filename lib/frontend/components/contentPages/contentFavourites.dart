@@ -21,8 +21,8 @@ class ContentFavouritesState extends State<ContentFavourites> {
   void initState() {
     setState(() {
       //readCards = retrieveFilesDB();
-      readCards = retrieveAllFavouriteFilesDB(
-          fulfillCard, moveToFile, moveToEditFile, removeCard);
+      readCards = retrieveAllFilesDB(
+          fulfillCard, moveToFile, moveToEditFile, removeCard, true);
     });
     super.initState();
   }
@@ -93,7 +93,7 @@ class ContentFavouritesState extends State<ContentFavourites> {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
         deleteFileStorage(cardToDelete.file.extension,
             cardToDelete.file.categoryName, cardToDelete.fileName);
-        onUpdateNFiles(cardToDelete.file.categoryName);
+        onUpdateNFilesDB(cardToDelete.file.categoryName);
         setState(() {
           cardsList.remove(element);
         });

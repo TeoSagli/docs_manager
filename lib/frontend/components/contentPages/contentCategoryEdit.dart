@@ -39,7 +39,7 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
     setState(() {
       imageGallery = null;
       catNameController = TextEditingController(text: widget.catName);
-      listenPath = getCatModelFromCatName(setCatModel, widget.catName);
+      listenPath = getCatModelFromCatNameDB(setCatModel, widget.catName);
     });
 
     super.initState();

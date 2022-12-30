@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 //===================================================================================
-/// remove a category on Firebase Database
+/// Delete a category [catName] on Firebase Database
 deleteCategoryDB(String catName) async {
   var key = userRefDB();
   var userPath = "users/$key";
@@ -13,7 +13,7 @@ deleteCategoryDB(String catName) async {
 }
 
 //===================================================================================
-/// remove a category on Firebase Storage
+/// Delete a category [catName] on Firebase Storage
 deleteCategoryStorage(String catPath, String catName) async {
   var key = userRefDB();
   var userPath = "users/$key";
@@ -21,7 +21,7 @@ deleteCategoryStorage(String catPath, String catName) async {
 }
 
 //===================================================================================
-/// remove a file on Firebase Database
+/// Delete a file [fileName] on Firebase Database
 deleteFileDB(String catName, String fileName) async {
   var key = userRefDB();
   var userPath = "users/$key";
@@ -32,14 +32,14 @@ deleteFileDB(String catName, String fileName) async {
 }
 
 //===================================================================================
-/// remove a file on Firebase Storage
-deleteFileStorage(List<Object?> ext, String catName, String fName) async {
+/// Delete a file [fileName] on Firebase Storage
+deleteFileStorage(List<Object?> ext, String catName, String fileName) async {
   var key = userRefDB();
   var userPath = "users/$key";
   for (var element in ext) {
     int i = ext.indexOf(element);
     await FirebaseStorage.instance
-        .ref("$userPath/files/$catName/$fName$i.${element.toString()}")
+        .ref("$userPath/files/$catName/$fileName$i.${element.toString()}")
         .delete();
   }
 }
