@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../backend/models/file.dart';
+import '../../../backend/models/file.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import '../../backend/read_db.dart';
-import '../../backend/update_db.dart';
-import '../../others/alerts.dart';
-import 'abstract/card.dart';
+import '../../../backend/read_db.dart';
+import '../../../backend/update_db.dart';
+import '../../../others/alerts.dart';
+import '../abstract/card.dart';
 
 class WalletCard extends StatefulWidget {
   @override

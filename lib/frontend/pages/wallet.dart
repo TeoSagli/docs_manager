@@ -1,7 +1,7 @@
 import 'package:docs_manager/frontend/components/contentPages/contentWallet.dart';
+import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
-import '../components/app_bar.dart';
-import '../components/bottom_bar.dart';
+import '../components/widgets/app_bar.dart';
 
 class WalletPage extends StatelessWidget {
   const WalletPage({super.key});

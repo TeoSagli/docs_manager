@@ -1,5 +1,5 @@
-import 'package:docs_manager/frontend/components/image_network.dart';
-import 'package:docs_manager/frontend/components/loading_wheel.dart';
+import 'package:docs_manager/frontend/components/widgets/image_network.dart';
+import 'package:docs_manager/frontend/components/widgets/loading_wheel.dart';
 import 'package:flutter/material.dart';
 
 const Color mainBackColor = Color.fromRGBO(75, 57, 239, 1);

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
-import 'package:docs_manager/frontend/components/button_function.dart';
-import 'package:docs_manager/frontend/components/input_field.dart';
-import 'package:docs_manager/frontend/components/title_text.dart';
-import 'package:docs_manager/frontend/components/widget_preview.dart';
+import 'package:docs_manager/frontend/components/widgets/button_function.dart';
+import 'package:docs_manager/frontend/components/widgets/input_field.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text.dart';
+import 'package:docs_manager/frontend/components/widgets/widget_preview.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

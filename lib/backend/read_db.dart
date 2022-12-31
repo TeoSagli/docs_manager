@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:docs_manager/backend/models/file.dart';
-import 'package:docs_manager/frontend/components/category_card.dart';
-import 'package:docs_manager/frontend/components/category_overview_card.dart';
-import 'package:docs_manager/frontend/components/file_card.dart';
-import 'package:docs_manager/frontend/components/wallet_card.dart';
+import 'package:docs_manager/frontend/components/widgets/category_card.dart';
+import 'package:docs_manager/frontend/components/widgets/category_overview_card.dart';
+import 'package:docs_manager/frontend/components/widgets/file_card.dart';
+import 'package:docs_manager/frontend/components/widgets/wallet_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';

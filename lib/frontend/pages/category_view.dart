@@ -1,8 +1,8 @@
 import 'package:docs_manager/frontend/components/contentPages/contentCategoryView.dart';
+import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:docs_manager/frontend/components/button_add.dart';
-import '../components/app_bar.dart';
-import '../components/bottom_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/button_add.dart';
+import '../components/widgets/app_bar.dart';
 
 class CategoryViewPage extends StatelessWidget {
   final String catName;

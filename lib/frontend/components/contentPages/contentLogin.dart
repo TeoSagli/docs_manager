@@ -1,5 +1,5 @@
 import 'package:docs_manager/backend/google_sign_in.dart';
-import 'package:docs_manager/frontend/components/button_function.dart';
+import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';

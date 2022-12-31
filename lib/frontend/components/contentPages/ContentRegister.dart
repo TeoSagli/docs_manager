@@ -1,5 +1,5 @@
 import 'package:docs_manager/backend/create_db.dart';
-import 'package:docs_manager/frontend/components/button_function.dart';
+import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';

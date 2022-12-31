@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:docs_manager/frontend/components/button_icon_function.dart';
+import 'package:docs_manager/frontend/components/widgets/button_icon_function.dart';
 
 class ButtonsUploadPhotoes extends StatelessWidget {
   final dynamic setPhotoFromCamera;
@@ -17,8 +17,7 @@ class ButtonsUploadPhotoes extends StatelessWidget {
       children: [
         MyButtonIcon('CAMERA', setPhotoFromCamera, Icons.photo_camera),
         MyButtonIcon('GALLERY', setPhotoFromGallery, Icons.image),
-        MyButtonIcon(
-            'PDF', setPhotoFromFile, Icons.picture_as_pdf),
+        MyButtonIcon('PDF', setPhotoFromFile, Icons.picture_as_pdf),
       ],
     );
   }

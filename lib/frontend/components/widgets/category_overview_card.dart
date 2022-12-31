@@ -1,7 +1,7 @@
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:flutter/material.dart';
-import 'abstract/card.dart';
+import '../abstract/card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class CategoryOverviewCard extends StatefulWidget {

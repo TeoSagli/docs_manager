@@ -1,6 +1,6 @@
-import 'package:docs_manager/frontend/components/app_bar.dart';
-import 'package:docs_manager/frontend/components/bottom_bar.dart';
-import 'package:docs_manager/frontend/components/button_add.dart';
+import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/button_add.dart';
 import 'package:docs_manager/frontend/components/contentPages/contentPageHome.dart';
 import 'package:flutter/material.dart';
 

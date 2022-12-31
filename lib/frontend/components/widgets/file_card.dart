@@ -5,7 +5,7 @@ import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'abstract/card.dart';
+import '../abstract/card.dart';
 
 class FileCard extends StatefulWidget {
   @override

@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
-import 'package:docs_manager/frontend/components/file_card.dart';
+import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 
 class ContentCategoryView extends StatefulWidget {
   final String catName;

@@ -1,4 +1,4 @@
-import 'package:docs_manager/frontend/components/title_text.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 

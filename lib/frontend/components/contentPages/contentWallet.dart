@@ -6,7 +6,7 @@ import 'package:docs_manager/others/constants.dart' as constants;
 import '../../../backend/delete_db.dart';
 import '../../../backend/read_db.dart';
 import '../../../backend/update_db.dart';
-import '../file_card.dart';
+import '../widgets/file_card.dart';
 
 class ContentWallet extends StatefulWidget {
   const ContentWallet({super.key});

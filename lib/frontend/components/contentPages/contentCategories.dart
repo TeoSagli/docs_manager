@@ -5,7 +5,7 @@ import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 
-import 'package:docs_manager/frontend/components/category_card.dart';
+import 'package:docs_manager/frontend/components/widgets/category_card.dart';
 
 class ContentCategories extends StatefulWidget {
   const ContentCategories({super.key});

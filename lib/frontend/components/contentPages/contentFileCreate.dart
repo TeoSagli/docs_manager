@@ -4,13 +4,13 @@ import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
 
 import 'package:docs_manager/backend/update_db.dart';
-import 'package:docs_manager/frontend/components/button_function.dart';
-import 'package:docs_manager/frontend/components/buttons_upload_photo_pdf.dart';
-import 'package:docs_manager/frontend/components/carousel_slider.dart';
+import 'package:docs_manager/frontend/components/widgets/button_function.dart';
+import 'package:docs_manager/frontend/components/widgets/buttons_upload_photo_pdf.dart';
+import 'package:docs_manager/frontend/components/widgets/carousel_slider.dart';
+import 'package:docs_manager/frontend/components/widgets/dropdown_menu.dart';
 
-import 'package:docs_manager/frontend/components/dropdown_menu.dart';
-import 'package:docs_manager/frontend/components/input_field.dart';
-import 'package:docs_manager/frontend/components/title_text.dart';
+import 'package:docs_manager/frontend/components/widgets/input_field.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text.dart';
 
 import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';

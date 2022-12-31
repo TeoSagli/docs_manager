@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../backend/delete_db.dart';
 import '../../../backend/read_db.dart';
 import '../../../backend/update_db.dart';
-import '../file_card.dart';
+import '../widgets/file_card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class ContentHome extends StatefulWidget {
