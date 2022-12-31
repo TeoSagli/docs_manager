@@ -22,6 +22,35 @@ class ContentRegisterState extends State<ContentRegister> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: const Text(
+            "Register an account!",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 20),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: const Text(
+              "Choose an email and a password",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+        Image.asset('assets/images/Registration.png',
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.width * 0.5),
         Form(
           key: _formKey,
           child: Column(

@@ -1,9 +1,11 @@
 import 'package:docs_manager/backend/google_sign_in.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:firebase_auth/firebase_auth.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -89,6 +91,35 @@ class ContentLoginState extends State<ContentLogin> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: const Text(
+            "Login to DocuManager!",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 20),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: const Text(
+              "The simple documents & cards manager",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+        Image.asset('assets/images/Login.png',
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.width * 0.5),
         Form(
           key: _formKey,
           child: Column(
@@ -134,22 +165,31 @@ class ContentLoginState extends State<ContentLogin> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: MyButton("Login", login),
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        child: MyButton("Register", moveToRegisterPage),
+              MyButton("Login", login),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 20, 10),
+                  child: TextButton(
+                      onPressed: () => moveToRegisterPage(),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(130, 40)),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            side: const BorderSide(
+                              color: constants.mainBackColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
-                    ],
-                  )
-                ],
+                      child: const TitleText(
+                          "Register -->", constants.mainBackColor)),
+                ),
               ),
             ],
           ),
