@@ -31,19 +31,17 @@ class ContentFileViewState extends State<ContentFileView> {
       dateUpload: "",
       extension: [],
       expiration: "");
-  late StreamSubscription listenFileData;
+
   late StreamSubscription listenColor;
   Color catColor = Colors.black;
   @override
   void initState() {
-    listenFileData =
-        retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
+    retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     super.initState();
   }
 
   @override
   void dispose() {
-    listenFileData.cancel();
     listenColor.cancel();
     super.dispose();
   }
@@ -157,7 +155,6 @@ class ContentFileViewState extends State<ContentFileView> {
         }),
       );
     }
-    listenFileData.cancel();
   }
 
   //===================================================================================

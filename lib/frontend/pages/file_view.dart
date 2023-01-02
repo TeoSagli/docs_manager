@@ -1,6 +1,5 @@
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/contentPages/contentFileView.dart';
-import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class FileViewPage extends StatelessWidget {
@@ -10,7 +9,6 @@ class FileViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: MyBottomBar(context, 4),
         appBar: MyAppBar('View file $fileName', true, context),
         body: CustomScrollView(
           slivers: [

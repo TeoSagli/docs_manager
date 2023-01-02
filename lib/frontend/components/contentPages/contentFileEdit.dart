@@ -40,7 +40,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
   List<String> nameImgList = [];
   List<String> pathImgList = [];
   Widget dropdown = constants.emptyBox;
-  late StreamSubscription listenFileData;
   FileModel fileData = FileModel(
       path: [],
       categoryName: "",
@@ -53,15 +52,13 @@ class ContentFileEditState extends State<ContentFileEdit> {
   void initState() {
     setState(() {
       docNameController = TextEditingController(text: widget.fileName);
-      listenFileData =
-          retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
+      retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    listenFileData.cancel();
     docNameController.dispose();
     textController2.dispose();
     _date.dispose();

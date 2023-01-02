@@ -30,35 +30,67 @@ class _MyBottomBarState extends State<MyBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
-          activeIcon: Icon(Icons.home),
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 5),
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(constants.borderBottom),
+              topLeft: Radius.circular(constants.borderBottom),
+              bottomRight: Radius.circular(constants.borderBottom),
+              bottomLeft: Radius.circular(constants.borderBottom)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black38,
+              spreadRadius: 0,
+              blurRadius: 1,
+            ),
+          ],
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.account_balance_wallet_outlined),
-          label: 'Wallet',
-          activeIcon: Icon(Icons.account_balance_wallet_rounded),
+        child: ClipRRect(
+          clipBehavior: Clip.antiAlias,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(constants.borderBottom),
+            topRight: Radius.circular(constants.borderBottom),
+            bottomRight: Radius.circular(constants.borderBottom),
+            bottomLeft: Radius.circular(constants.borderBottom),
+          ),
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                label: 'Home',
+                activeIcon: Icon(Icons.home),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_balance_wallet_outlined),
+                label: 'Wallet',
+                activeIcon: Icon(Icons.account_balance_wallet_rounded),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.category_outlined),
+                label: 'Categories',
+                activeIcon: Icon(Icons.category),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_outline_rounded),
+                label: 'Favourites',
+                activeIcon: Icon(Icons.favorite),
+              ),
+            ],
+            currentIndex: widget.activeIndex,
+            selectedItemColor: constants.mainBackColor,
+            unselectedItemColor: Colors.grey,
+            showUnselectedLabels: true,
+            onTap: _onItemTapped,
+            elevation: 20,
+            type: BottomNavigationBarType.shifting,
+            iconSize: 30,
+            selectedFontSize: 15,
+            unselectedFontSize: 13,
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.category_outlined),
-          label: 'Categories',
-          activeIcon: Icon(Icons.category),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_outline_rounded),
-          label: 'Favourites',
-          activeIcon: Icon(Icons.favorite),
-        ),
-      ],
-      currentIndex: widget.activeIndex < 4 ? widget.activeIndex : 0,
-      selectedItemColor:
-          widget.activeIndex < 4 ? constants.mainBackColor : Colors.grey,
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      onTap: _onItemTapped,
+      ),
     );
   }
 }
