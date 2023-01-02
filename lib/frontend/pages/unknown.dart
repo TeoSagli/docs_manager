@@ -13,7 +13,7 @@ class UnknownPage extends StatelessWidget {
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Center(child: Text("Error :404 Page not found!")),
+            child: Center(child: Text("Error 404: Page not found!")),
           )
         ],
       ),

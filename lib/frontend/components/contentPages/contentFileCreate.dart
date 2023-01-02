@@ -140,8 +140,12 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                                     ),
                                                   ),
                                                 )
-                                              : MyCarousel(previewImgList,
-                                                  removeImage, true)),
+                                              : MyCarousel(
+                                                  previewImgList,
+                                                  removeImage,
+                                                  true,
+                                                  moveToOpenFile: null,
+                                                )),
                                     ),
                                   ],
                                 ),
@@ -343,6 +347,5 @@ class ContentFileCreateState extends State<ContentFileCreate> {
         await page.render(width: page.width, height: page.height);
     return pageImage!.bytes;
   }
-
   //===================================================================================
 }

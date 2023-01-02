@@ -39,6 +39,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
   List<Image> previewImgList = [];
   List<String> nameImgList = [];
   List<String> pathImgList = [];
+  List<String> extList = [];
   Widget dropdown = constants.emptyBox;
   FileModel fileData = FileModel(
       path: [],
@@ -149,7 +150,13 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                                   ),
                                                 )
                                               : MyCarousel(previewImgList,
-                                                  removeImage, true)),
+                                                  removeImage, true,
+                                                  extensions: extList,
+                                                  moveToOpenFile:
+                                                      moveToOpenFile,
+                                                  catName:
+                                                      fileData.categoryName,
+                                                  fileName: widget.fileName)),
                                     ),
                                   ],
                                 ),
@@ -363,6 +370,9 @@ class ContentFileEditState extends State<ContentFileEdit> {
     Widget img = constants.defaultImg;
     setState(() {
       fileData = f;
+      for (var element in f.extension) {
+        extList.add(element as String);
+      }
       _date = TextEditingController(text: f.expiration);
 
       dropdown = MyDropdown(fileData.categoryName);
@@ -375,7 +385,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     });
     for (int i = 0; i < fileData.path.length; i++) {
       readImageFileStorage(i, fileData.categoryName, widget.fileName,
-              fileData.extension.elementAt(i) as String, img, context, true)
+              extList[i], img, context, true)
           .then(
         (value) => setState(() {
           previewImgList.add(value as Image);
@@ -394,5 +404,12 @@ class ContentFileEditState extends State<ContentFileEdit> {
     return pageImage!.bytes;
   }
 
+  //===================================================================================
+  moveToOpenFile(String fileName, String catName, int pdfIndex) {
+    Navigator.pushNamed(
+      context,
+      '/files/$catName/$fileName/$pdfIndex',
+    );
+  }
   //===================================================================================
 }

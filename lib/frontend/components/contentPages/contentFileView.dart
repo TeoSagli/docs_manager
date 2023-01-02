@@ -22,6 +22,7 @@ class ContentFileView extends StatefulWidget {
 
 class ContentFileViewState extends State<ContentFileView> {
   List<Image> previewImgList = [];
+  List<String> extList = [];
   Widget buttonList = constants.emptyBox;
   FileModel fileData = FileModel(
       path: [],
@@ -64,9 +65,16 @@ class ContentFileViewState extends State<ContentFileView> {
                   5,
                 ],
                 child: SizedBox(
-                    height: 200.0,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: MyCarousel(previewImgList, removeImage, false)),
+                  height: 200.0,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: previewImgList == []
+                      ? constants.loadingWheel2
+                      : MyCarousel(previewImgList, removeImage, false,
+                          moveToOpenFile: moveToOpenFile,
+                          extensions: extList,
+                          catName: fileData.categoryName,
+                          fileName: widget.fileName),
+                ),
               ),
             ],
           ),
@@ -142,13 +150,16 @@ class ContentFileViewState extends State<ContentFileView> {
     Widget img = constants.defaultImg;
     setState(() {
       fileData = f;
+      for (var element in f.extension) {
+        extList.add(element as String);
+      }
       buttonList = ButtonsFileOperations(
           widget.fileName, fileData, moveToEditFile, removeCard);
       listenColor = getColorCategoryDB(setColor, fileData.categoryName);
     });
     for (int i = 0; i < fileData.path.length; i++) {
       readImageFileStorage(i, fileData.categoryName, widget.fileName,
-              fileData.extension.elementAt(i) as String, img, context, true)
+              extList[i], img, context, true)
           .then(
         (value) => setState(() {
           previewImgList.add(value as Image);
@@ -182,5 +193,13 @@ class ContentFileViewState extends State<ContentFileView> {
         cardToDelete.file.categoryName, cardToDelete.fileName);
     onUpdateNFilesDB(cardToDelete.file.categoryName);
   }
+
   //========================================================
+  moveToOpenFile(String fileName, String catName, int pdfIndex) {
+    Navigator.pushNamed(
+      context,
+      '/files/$catName/$fileName/$pdfIndex',
+    );
+  }
+  //===================================================================================
 }

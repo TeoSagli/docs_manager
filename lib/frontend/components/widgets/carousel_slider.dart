@@ -1,12 +1,22 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class MyCarousel extends StatefulWidget {
   final List<Image> imgList;
+  final List<String>? extensions;
   final dynamic removeImg;
+  final dynamic moveToOpenFile;
   final bool showRemove;
-  const MyCarousel(this.imgList, this.removeImg, this.showRemove, {super.key});
+  final String? fileName;
+  final String? catName;
+  const MyCarousel(this.imgList, this.removeImg, this.showRemove,
+      {this.extensions,
+      this.moveToOpenFile,
+      this.catName,
+      this.fileName,
+      super.key});
 
   @override
   State<StatefulWidget> createState() => MyCarouselState();
@@ -65,13 +75,31 @@ class MyCarouselState extends State<MyCarousel> {
                             ),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
-                            child: Text(
-                              'No. ${widget.imgList.indexOf(item) + 1} image',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'No. ${widget.imgList.indexOf(item)} image',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                widget.moveToOpenFile != null &&
+                                        widget.extensions!.elementAt(
+                                                widget.imgList.indexOf(item)) ==
+                                            'pdf'
+                                    ? IconButton(
+                                        color: constants.mainBackColor,
+                                        onPressed: () => widget.moveToOpenFile(
+                                            widget.fileName,
+                                            widget.catName,
+                                            widget.imgList.indexOf(item)),
+                                        icon: const Icon(
+                                            Icons.open_in_new_rounded),
+                                      )
+                                    : constants.emptyBox,
+                              ],
                             ),
                           ),
                         ),

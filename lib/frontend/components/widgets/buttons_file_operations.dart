@@ -61,11 +61,6 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
               ),
               IconButton(
                 color: constants.mainBackColor,
-                icon: const Icon(Icons.download),
-                onPressed: () => {},
-              ),
-              IconButton(
-                color: constants.mainBackColor,
                 icon: const Icon(Icons.add_to_drive_rounded),
                 onPressed: () async {
                   var drive = GoogleDrive();

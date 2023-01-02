@@ -1,5 +1,6 @@
 import 'package:docs_manager/frontend/pages/file_edit.dart';
 import 'package:docs_manager/frontend/pages/login.dart';
+import 'package:docs_manager/frontend/pages/view_pdf.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'frontend/pages/categories.dart';
@@ -138,7 +139,20 @@ class MyApp extends StatelessWidget {
                   default:
                     break;
                 }
-                break;
+            }
+            break;
+          case 4:
+            //=============PATH FORMAT: /first/second/third/fourth=======
+            switch (uri.pathSegments.first) {
+              case 'files':
+                {
+                  var fileName = uri.pathSegments[1];
+                  var catName = uri.pathSegments[2];
+                  var pdfIndex = uri.pathSegments[3];
+                  return MaterialPageRoute(
+                      builder: (context) =>
+                          PdfShow(fileName, catName, pdfIndex));
+                }
             }
             break;
           default:

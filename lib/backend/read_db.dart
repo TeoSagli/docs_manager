@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/widgets/category_card.dart';
 import 'package:docs_manager/frontend/components/widgets/category_overview_card.dart';
@@ -71,6 +72,28 @@ Future<Widget> readImageFileStorage(
     print("Error $e!");
   }
   return constants.defaultImg;
+}
+//===================================================================================
+/// Read file PDF from Firebase Storage
+
+readFileFromNameStorage(
+  String i,
+  String catName,
+  String fileName,
+  dynamic setFile,
+) async {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  final storageRef = FirebaseStorage.instance.ref("$userPath/files/$catName");
+  final fileRef = storageRef.child("$fileName$i.pdf");
+  try {
+    Uint8List data = (await fileRef.getData())!;
+    setFile(data);
+  } on FirebaseException catch (e) {
+    // Handle any errors.
+    print("Error $e!");
+  }
+  return File("");
 }
 
 //===================================================================================
