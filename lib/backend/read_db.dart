@@ -187,6 +187,7 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
       .listen((event) {
     int cardListSize = event.snapshot.children.length;
 
+    List<FileCard> tempCards = List.empty(growable: true);
     List<Widget> cards = List.generate(cardListSize, (index) => Container());
 
     for (var f in event.snapshot.children) {
@@ -198,11 +199,19 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
       //el.key nome di file
       final cardName = f.key.toString();
 
-      //insert card in order
-      cards.add(
+      tempCards.add(
         FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
       );
     }
+    if (!isFavPage) {
+      tempCards.sort((a, b) {
+        DateTime adate = DateTime.parse(a.file.dateUpload);
+        DateTime bdate = DateTime.parse(b.file.dateUpload);
+        return adate.compareTo(bdate);
+      });
+    }
+
+    cards.addAll(tempCards);
     fulfillCard(cards);
   });
 }

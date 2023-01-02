@@ -108,7 +108,7 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_icons:
-  image_path: "images/logo.png"
+  image_path: "images/AppIcon.png"
   android: true
   ios: true
   remove_alpha_ios: true
