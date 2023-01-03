@@ -42,7 +42,7 @@ class StatePdfShow extends State<PdfShow> {
                         controller: PdfController(document: doc),
                       ),
                     )
-                  : constants.emptyBox)
+                  : constants.loadingWheel)
         ],
       ),
     );
