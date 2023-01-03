@@ -39,7 +39,14 @@ class ContentWalletState extends State<ContentWallet> {
     return Stack(
       children: [
         cardsList.isEmpty
-            ? constants.emptyPage
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  child: Image.asset('assets/images/Wallet_empty.png',
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.width * 0.5),
+                ),
+              )
             : SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Wrap(

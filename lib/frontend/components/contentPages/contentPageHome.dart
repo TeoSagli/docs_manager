@@ -60,14 +60,32 @@ class ContentHomeState extends State<ContentHome> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text(
-                      'Categories',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Outfit',
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 7,
+                              color: Color(0x2F1D2429),
+                              offset: Offset(0, 3),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Text(
+                          'Categories',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
                       ),
                     ),
                     Expanded(
@@ -84,25 +102,57 @@ class ContentHomeState extends State<ContentHome> {
             ),
           ),
         ]),
-        const Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-          child: Text(
-            'Recent Files',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Outfit',
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.normal,
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                  blurRadius: 7,
+                  color: Color(0x2F1D2429),
+                  offset: Offset(0, 3),
+                )
+              ],
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: const Text(
+              'Recent Files',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Outfit',
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
         ),
         Stack(
           children: [
             fileCardsList.isEmpty
-                ? const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                    child: constants.emptyPage)
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        child: Image.asset('assets/images/No_docs.png',
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            height: MediaQuery.of(context).size.width * 0.5),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: const Text(
+                          "No documents yet!",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 : SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Wrap(

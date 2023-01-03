@@ -210,7 +210,7 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
         return adate.compareTo(bdate);
       });
     }
-
+    cards.clear();
     cards.addAll(tempCards);
     fulfillCard(cards);
   });
@@ -260,7 +260,7 @@ StreamSubscription retrieveAllExpirationFilesDB(dynamic fulfillCard,
 
     List<Widget> cards =
         List.generate(tempCards.length, (index) => Container());
-
+    cards.clear();
     cards.addAll(tempCards);
 
     fulfillCard(cards);
