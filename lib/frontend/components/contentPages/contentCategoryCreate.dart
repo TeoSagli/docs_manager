@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
+import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/components/widgets/input_field.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
@@ -22,12 +23,19 @@ class ContentCategoryCreate extends StatefulWidget {
 class ContentCategoryCreateState extends State<ContentCategoryCreate> {
   final ImagePicker picker = ImagePicker();
   bool hasUploaded = false;
+  bool doesExist = false;
   XFile? imageGallery;
   late TextEditingController catNameController;
   Widget widgetChanging = constants.defaultImg;
   @override
   void initState() {
-    catNameController = TextEditingController();
+    setState(() {
+      catNameController = TextEditingController();
+      catNameController.addListener(() {
+        checkElementExistDB(catNameController.text, "categories", setBool);
+      });
+    });
+
     super.initState();
   }
 
@@ -141,10 +149,10 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
 //===================================================================================
 // Submit category to db if everything is correct
   onSubmit() {
-    // else if (!await isCategoryNew(textController1!.text)) {
-    // onErrorCategoryExisting();}
     if (catNameController.text == "" || catNameController.text == " ") {
       onErrorText(context);
+    } else if (doesExist) {
+      onErrorElementExisting(context, "Category");
     } else if (imageGallery != null) {
       try {
         String ext = imageGallery!.name.toString().split(".")[1];
@@ -161,6 +169,14 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
     } else {
       onErrorImage(context);
     }
+  }
+
+  //===================================================================================
+  // set if category exists
+  setBool(bool b) {
+    setState(() {
+      doesExist = b;
+    });
   }
 
   //===================================================================================

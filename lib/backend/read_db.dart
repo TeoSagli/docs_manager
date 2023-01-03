@@ -386,4 +386,18 @@ Future<Uint8List> imageFromPdfFile(Uint8List data) async {
       await page.render(width: page.width, height: page.height);
   return pageImage!.bytes;
 }
+
+//===================================================================================
+checkElementExistDB(String elName, String ref, dynamic setExist) {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  FirebaseDatabase.instance.ref("$userPath/$ref").onValue.listen((event) {
+    List<String> list = [];
+    for (var el in event.snapshot.children) {
+      list.add(el.key.toString());
+    }
+    print("Elem name: $elName - Ref: $ref - Bool: ${list.contains(elName)}");
+    setExist(list.contains(elName));
+  });
+}
 //===================================================================================

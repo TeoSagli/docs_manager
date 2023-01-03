@@ -28,6 +28,7 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
   final ImagePicker picker = ImagePicker();
   bool hasUploaded = false;
   bool isAlreadyUpdated = true;
+  bool doesExist = false;
   XFile? imageGallery;
   late StreamSubscription listenPath;
   late TextEditingController catNameController;
@@ -38,7 +39,10 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
   void initState() {
     setState(() {
       imageGallery = null;
-      catNameController = TextEditingController(text: widget.catName);
+      catNameController = TextEditingController();
+      catNameController.addListener(() {
+        checkElementExistDB(catNameController.text, "categories", setBool);
+      });
       listenPath = getCatModelFromCatNameDB(setCatModel, widget.catName);
     });
 
@@ -158,10 +162,12 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
 //===================================================================================
 // Edit category to db if everything is correct
   onEdit() {
-    // else if (!await isCategoryNew(textController1!.text)) {
-    // onErrorCategoryExisting();}
+    checkElementExistDB(catNameController.text, "category", setBool);
+
     if (catNameController.text == "" || catNameController.text == " ") {
       onErrorText(context);
+    } else if (doesExist) {
+      onErrorElementExisting(context, "Category");
     } else if (imageGallery != null && !isAlreadyUpdated) {
       try {
         //delete old file version
@@ -197,6 +203,14 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
     } else {
       onErrorImage(context);
     }
+  }
+
+  //===================================================================================
+  // set if category exists
+  setBool(bool b) {
+    setState(() {
+      doesExist = b;
+    });
   }
 
   //===================================================================================

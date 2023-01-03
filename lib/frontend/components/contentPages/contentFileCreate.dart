@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
+import 'package:docs_manager/backend/read_db.dart';
 
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
@@ -32,6 +33,7 @@ class ContentFileCreate extends StatefulWidget {
 
 class ContentFileCreateState extends State<ContentFileCreate> {
   final ImagePicker picker = ImagePicker();
+  bool doesExist = false;
   TextEditingController docNameController = TextEditingController();
   TextEditingController textController2 = TextEditingController();
   final TextEditingController _date = TextEditingController();
@@ -42,6 +44,9 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   @override
   void initState() {
     setState(() {
+      docNameController.addListener(() {
+        checkElementExistDB(docNameController.text, "allFiles", setBool);
+      });
       dropdown = MyDropdown(widget.catSelected);
     });
     previewImgList = [];
@@ -287,12 +292,14 @@ class ContentFileCreateState extends State<ContentFileCreate> {
 //===================================================================================
 // Submit category to db if everything is correct
   onSubmit() {
+    checkElementExistDB(docNameController.text, "allFiles", setBool);
+
     List<String> listPaths = [];
     List<String> listExt = [];
-    // else if (!await isCategoryNew(docNameController!.text)) {
-    // onErrorCategoryExisting();}
     if (docNameController.text == "" || docNameController.text == " ") {
       onErrorText(context);
+    } else if (doesExist) {
+      onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {
         for (var element in previewImgList) {
@@ -326,6 +333,14 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     } else {
       onErrorImage(context);
     }
+  }
+
+  //===================================================================================
+  // set if file exists
+  setBool(bool b) {
+    setState(() {
+      doesExist = b;
+    });
   }
 
   //===================================================================================

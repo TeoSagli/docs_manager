@@ -37,13 +37,31 @@ onErrorText(context) {
 }
 
 //========================================================
-///Alert error category already exixsting
-onErrorCategoryExisting(context) {
+///Alert error element already existing
+onErrorElementExisting(context, String elName) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
       title: const Text('Something went wrong!'),
-      content: const Text('Category already existing!'),
+      content: Text('$elName already existing!'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
+
+//========================================================
+///Alert error category already existing
+onErrorFileExisting(context) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Something went wrong!'),
+      content: const Text('File already existing!'),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, 'OK'),

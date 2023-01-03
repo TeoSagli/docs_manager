@@ -36,6 +36,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
   late TextEditingController docNameController;
   TextEditingController textController2 = TextEditingController();
   TextEditingController _date = TextEditingController();
+  bool doesExist = false;
   List<Image> previewImgList = [];
   List<String> nameImgList = [];
   List<String> pathImgList = [];
@@ -52,6 +53,9 @@ class ContentFileEditState extends State<ContentFileEdit> {
   @override
   void initState() {
     setState(() {
+      docNameController.addListener(() {
+        checkElementExistDB(docNameController.text, "allFiles", setBool);
+      });
       docNameController = TextEditingController(text: widget.fileName);
       retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     });
@@ -304,6 +308,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
     // onErrorCategoryExisting();}
     if (docNameController.text == "" || docNameController.text == " ") {
       onErrorText(context);
+    } else if (doesExist) {
+      onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {
         for (var element in previewImgList) {
@@ -344,6 +350,14 @@ class ContentFileEditState extends State<ContentFileEdit> {
     } else {
       onErrorImage(context);
     }
+  }
+
+  //===================================================================================
+  // set if file exists
+  setBool(bool b) {
+    setState(() {
+      doesExist = b;
+    });
   }
 
 //===================================================================================
