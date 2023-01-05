@@ -388,6 +388,7 @@ Future<Uint8List> imageFromPdfFile(Uint8List data) async {
 }
 
 //===================================================================================
+/// Read [elName] and check if element exixts in db
 checkElementExistDB(String elName, String ref, dynamic setExist) {
   var key = userRefDB();
   var userPath = "users/$key";
@@ -396,7 +397,7 @@ checkElementExistDB(String elName, String ref, dynamic setExist) {
     for (var el in event.snapshot.children) {
       list.add(el.key.toString());
     }
-    print("Elem name: $elName - Ref: $ref - Bool: ${list.contains(elName)}");
+    // print("Elem name: $elName - Ref: $ref - Bool: ${list.contains(elName)}");
     setExist(list.contains(elName));
   });
 }

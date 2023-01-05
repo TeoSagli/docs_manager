@@ -37,7 +37,26 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   @override
   Widget build(BuildContext context) {
     return cardsList.isEmpty
-        ? constants.emptyPage
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/No_docs.png',
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.width * 0.5),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: const Text(
+                  "No documents yet!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          )
         : SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Wrap(

@@ -21,14 +21,6 @@ const Widget loadingWheel2 = SizedBox(
   child: MyLoadingWheel(),
 );
 
-const Widget emptyPage = Align(
-  alignment: Alignment.center,
-  child: Text(
-    "No elements yet!",
-    style: TextStyle(color: mainBackColor, fontSize: 20),
-  ),
-);
-
 const emptyBox = SizedBox.shrink();
 
 const imageQuality = 25;

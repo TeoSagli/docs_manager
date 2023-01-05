@@ -158,12 +158,16 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                               Padding(
                                 padding: const EdgeInsets.all(30.0),
                                 child: TextField(
+                                  autofocus: false,
+                                  obscureText: false,
                                   controller: _date,
                                   decoration: const InputDecoration(
                                       icon: Icon(Icons.calendar_today_rounded),
                                       labelText: "(Optional) Expiration"),
                                   onTap: (() async {
                                     DateTime? pickeddate = await showDatePicker(
+                                        initialEntryMode:
+                                            DatePickerEntryMode.calendarOnly,
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime.now(),
