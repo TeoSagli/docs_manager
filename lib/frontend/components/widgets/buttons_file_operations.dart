@@ -63,15 +63,15 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
                 color: constants.mainBackColor,
                 icon: const Icon(Icons.add_to_drive_rounded),
                 onPressed: () async {
-                  var drive = GoogleDrive();
-                  /*    GoogleDrive googleDrive = GoogleDrive();
-                  googleDrive.uploadFileToGoogleDrive();*/
+                  var drive = GoogleManager();
                   FilePickerResult? result =
                       await FilePicker.platform.pickFiles();
 
                   if (result != null) {
                     File file = File(result.files.single.path!);
-                    await drive.upload(file, "my test file");
+                    String alertMessage;
+                    alertMessage = await drive.upload(file, "prova");
+                    onGeneric(context, alertMessage);
                   } else {
                     // User canceled the picker
                   }

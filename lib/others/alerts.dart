@@ -219,4 +219,20 @@ onErrorGeneric(context, e) {
     ),
   );
 }
+
 //========================================================
+///Alert success submit
+onGeneric(context, message) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}

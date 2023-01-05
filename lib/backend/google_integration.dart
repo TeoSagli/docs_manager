@@ -1,81 +1,69 @@
+import 'dart:async';
+import 'dart:convert' show json;
 import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:http/http.dart' as http;
 
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+const _scopes = [
+  'https://www.googleapis.com/auth/drive.file',
+  'https://www.googleapis.com/auth/drive',
+  'https://www.googleapis.com/auth/drive.appdata',
+  'https://www.googleapis.com/auth/drive.scripts'
+];
 
-const _clientId =
-    "952808555359-g3fdg8tfclave8mdq5mcoiiolh2p44tc.apps.googleusercontent.com";
-const _clientSecret = "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";
-const _scopes = ['https://www.googleapis.com/auth/drive.file'];
+class GoogleAuthClient extends http.BaseClient {
+  final Map<String, String> _headers;
+  final _client = http.Client();
 
-class SecureStorage {
-  final storage = const FlutterSecureStorage();
+  GoogleAuthClient(this._headers);
 
-  //Save Credentials
-  Future saveCredentials(AccessToken token, String refreshToken) async {
-    print(token.expiry.toIso8601String());
-    await storage.write(key: "type", value: token.type);
-    await storage.write(key: "data", value: token.data);
-    await storage.write(key: "expiry", value: token.expiry.toString());
-    await storage.write(key: "refreshToken", value: refreshToken);
-  }
-
-  //Get Saved Credentials
-  Future<Map<String, String>?> getCredentials() async {
-    var result = await storage.readAll();
-    if (result.isEmpty) return null;
-    return result;
-  }
-
-  //Clear Saved Credentials
-  Future clear() {
-    return storage.deleteAll();
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    request.headers.addAll(_headers);
+    return _client.send(request);
   }
 }
 
-class GoogleDrive {
-  final storage = SecureStorage();
-  //Get Authenticated Http Client
-  Future<http.Client> getHttpClient() async {
-    //Get Credentials
-    var credentials = await storage.getCredentials();
-    if (credentials == null) {
-      //Needs user authentication
-      var authClient = await clientViaUserConsent(
-          ClientId(_clientId, _clientSecret), _scopes, (url) {
-        //Open Url in Browser
-        launchUrlString(url);
-        // _launchInWebViewOrVC(toLaunch);
-      });
-      //Save Credentials
-      await storage.saveCredentials(authClient.credentials.accessToken,
-          authClient.credentials.refreshToken!);
-      return authClient;
-    } else {
-      print(credentials["expiry"]);
-      //Already authenticated
-      return authenticatedClient(
-          http.Client(),
-          AccessCredentials(
-              AccessToken(credentials["type"]!, credentials["data"]!,
-                  DateTime.tryParse(credentials["expiry"]!)!),
-              credentials["refreshToken"],
-              _scopes));
-    }
+class GoogleManager {
+  GoogleSignInAccount? _currentUser;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    //clientId: _clientId,
+    scopes: _scopes,
+  );
+
+  Future _handleSignIn() async {
+    _currentUser = await _googleSignIn.signIn();
   }
 
-  //Upload File
-  Future upload(File file, String fileName) async {
-    var client = await getHttpClient();
+  Future<String> upload(File file, String fileName) async {
+    var headers = await _currentUser?.authHeaders;
+    if (headers == null) {
+      try {
+        await _handleSignIn();
+      } catch (error) {
+        if (kDebugMode) print(error);
+        return "Error!";
+      }
+
+      headers = await _currentUser?.authHeaders;
+      if (headers == null) return "Error!";
+    }
+
+    final client = GoogleAuthClient(headers);
+
     var drive = ga.DriveApi(client);
-    print("Uploading file");
     var response = await drive.files.create(ga.File()..name = fileName,
         uploadMedia: ga.Media(file.openRead(), file.lengthSync()));
 
-    print("Result ${response.toJson()}");
+    if (kDebugMode) {
+      print("Result ${response.toJson()}");
+    }
+    return "Success!";
   }
 }
