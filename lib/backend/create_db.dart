@@ -117,10 +117,10 @@ createDefaultCategoriesDB() async {
     "Pictures"
   ];
   var defCategoriesPath = [
-    "Credit Cards.jpg",
-    "IDs.jpg",
-    "Other Cards.jpg",
-    "Documents.jpg",
+    "Credit Cards.png",
+    "IDs.png",
+    "Other Cards.png",
+    "Documents.png",
     "Pictures.png"
   ];
 

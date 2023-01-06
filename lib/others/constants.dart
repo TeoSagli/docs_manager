@@ -26,3 +26,11 @@ const emptyBox = SizedBox.shrink();
 const imageQuality = 25;
 
 const borderBottom = 15.0;
+
+const immutableCats = [
+  "Credit Cards",
+  "IDs",
+  "Other Cards",
+  "Documents",
+  "Pictures"
+];

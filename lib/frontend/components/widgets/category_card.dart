@@ -20,6 +20,7 @@ class CategoryCard extends StatefulWidget {
 }
 
 class CategoryCardState extends State<CategoryCard> with MyCard {
+  final hCard = 80.0;
   Widget cardImage = constants.loadingWheel2;
   @override
   onExitHover() {
@@ -76,7 +77,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                   padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 0, 8),
                   child: Container(
                     width: 4,
-                    height: 90,
+                    height: hCard,
                     decoration: BoxDecoration(
                       color: Color(widget.category.colorValue),
                       borderRadius: BorderRadius.circular(4),
@@ -122,22 +123,25 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      tooltip: "Edit",
-                      color: constants.mainBackColor,
-                      icon: const Icon(Icons.mode_edit_outline_rounded),
-                      onPressed: () => widget.moveToEditCatPage(
-                          widget.categoryName, context),
-                    ),
-                    IconButton(
-                      tooltip: "Remove",
-                      color: Colors.redAccent,
-                      icon: const Icon(Icons.delete_outline_rounded),
-                      onPressed: () => onDelete(
-                          context, widget.removeCard, widget, "/categories"),
-                    ),
-                  ],
+                  children: !constants.immutableCats
+                          .contains(widget.categoryName)
+                      ? [
+                          IconButton(
+                            tooltip: "Edit",
+                            color: constants.mainBackColor,
+                            icon: const Icon(Icons.mode_edit_outline_rounded),
+                            onPressed: () => widget.moveToEditCatPage(
+                                widget.categoryName, context),
+                          ),
+                          IconButton(
+                            tooltip: "Remove",
+                            color: Colors.redAccent,
+                            icon: const Icon(Icons.delete_outline_rounded),
+                            onPressed: () => onDelete(context,
+                                widget.removeCard, widget, "/categories"),
+                          ),
+                        ]
+                      : [],
                 ),
               ],
             ),
@@ -151,8 +155,8 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
     setState(() {
       cardImage = Image.memory(
         file,
-        width: MediaQuery.of(context).size.width * 0.4,
-        height: 100,
+        width: double.infinity,
+        height: hCard,
         fit: BoxFit.scaleDown,
       );
     });

@@ -41,17 +41,20 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/images/No_docs.png',
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.width * 0.5),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: const Text(
-                  "No documents yet!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 18,
+              Image.asset('assets/images/${widget.catName}.png',
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.width * 0.6),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: const Text(
+                    "No documents yet!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
