@@ -4,6 +4,7 @@ import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/widgets/category_card.dart';
 import 'package:docs_manager/frontend/components/widgets/category_overview_card.dart';
 import 'package:docs_manager/frontend/components/widgets/file_card.dart';
+import 'package:docs_manager/frontend/components/widgets/list_card.dart';
 import 'package:docs_manager/frontend/components/widgets/wallet_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -188,8 +189,11 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
     int cardListSize = event.snapshot.children.length;
 
     List<FileCard> tempCards = List.empty(growable: true);
-    List<Widget> cards = List.generate(cardListSize, (index) => Container());
-
+    List<ListCard> temp2Cards = List.empty(growable: true);
+    List<Widget> gridCards =
+        List.generate(cardListSize, (index) => Container());
+    List<Widget> listCards =
+        List.generate(cardListSize, (index) => Container());
     for (var f in event.snapshot.children) {
       //el.value contenuto di category{path:..., nfiles:...}
       final data = Map<String, dynamic>.from(f.value as Map<Object?, Object?>);
@@ -202,6 +206,9 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
       tempCards.add(
         FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
       );
+      temp2Cards.add(
+        ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+      );
     }
     if (!isFavPage) {
       tempCards.sort((a, b) {
@@ -209,10 +216,17 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
         DateTime bdate = DateTime.parse(b.file.dateUpload);
         return adate.compareTo(bdate);
       });
+      temp2Cards.sort((a, b) {
+        DateTime adate = DateTime.parse(a.file.dateUpload);
+        DateTime bdate = DateTime.parse(b.file.dateUpload);
+        return adate.compareTo(bdate);
+      });
     }
-    cards.clear();
-    cards.addAll(tempCards);
-    fulfillCard(cards);
+    gridCards.clear();
+    gridCards.addAll(tempCards);
+    listCards.clear();
+    listCards.addAll(temp2Cards);
+    fulfillCard(gridCards, listCards);
   });
 }
 

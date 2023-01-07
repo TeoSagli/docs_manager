@@ -24,6 +24,7 @@ class FileCard extends StatefulWidget {
 class FileCardState extends State<FileCard> with MyCard {
   Widget cardImage = constants.loadingWheel;
   late StreamSubscription listenColor;
+  late StreamSubscription readImg;
   late bool isFav;
   Color catColor = Colors.grey;
   @override
@@ -51,15 +52,23 @@ class FileCardState extends State<FileCard> with MyCard {
             cardImage,
             context,
             false)
-        .then(
-      (value) => setState(() {
-        cardImage = value;
-      }),
-    );
+        .then((value) {
+      if (mounted) {
+        setState(() {
+          cardImage = value;
+        });
+      }
+    });
     setState(() {
       isFav = widget.file.isFavourite;
     });
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    listenColor.cancel();
+    super.deactivate();
   }
 
   @override

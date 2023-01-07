@@ -18,12 +18,14 @@ class ContentHome extends StatefulWidget {
 
 class ContentHomeState extends State<ContentHome> {
   late StreamSubscription readFileCards;
+  List<Widget> fileCardsGrid = [constants.emptyBox];
   List<Widget> fileCardsList = [constants.emptyBox];
 
   late StreamSubscription readCategoriesCards;
   List<Container> categoriesCardsList = [];
   List<int> itemsList = [];
   int length = 0;
+  bool isGridView = true;
 
   @override
   void initState() {
@@ -42,6 +44,13 @@ class ContentHomeState extends State<ContentHome> {
     readFileCards.cancel();
     readCategoriesCards.cancel();
     super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    readFileCards.cancel();
+    readCategoriesCards.cancel();
+    super.dispose();
   }
 
   @override
@@ -129,46 +138,95 @@ class ContentHomeState extends State<ContentHome> {
             ),
           ),
         ),
-        Stack(
-          children: [
-            fileCardsList.isEmpty
-                ? Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                        child: Image.asset('assets/images/No_docs.png',
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: MediaQuery.of(context).size.width * 0.5),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: const Text(
-                          "No documents yet!",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Wrap(
-                        spacing: 8,
-                        runSpacing: 3,
-                        alignment: WrapAlignment.spaceEvenly,
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        direction: Axis.horizontal,
-                        runAlignment: WrapAlignment.start,
-                        verticalDirection: VerticalDirection.down,
-                        children: fileCardsList),
-                  ),
-          ],
+        Padding(
+          padding: const EdgeInsetsDirectional.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                "View mode:",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              IconButton(
+                splashRadius: 20.0,
+                iconSize: 30,
+                onPressed: () => changeViewMode1(),
+                icon: const Icon(Icons.grid_view_rounded),
+                color: isGridView
+                    ? constants.mainBackColor
+                    : constants.mainBackColor.withOpacity(0.5),
+              ),
+              IconButton(
+                splashRadius: 20.0,
+                iconSize: 30,
+                onPressed: () => changeViewMode2(),
+                icon: const Icon(Icons.view_list_rounded),
+                color: isGridView
+                    ? constants.mainBackColor.withOpacity(0.5)
+                    : constants.mainBackColor,
+              )
+            ],
+          ),
         ),
+        fileCardsGrid.isEmpty
+            ? Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    child: Image.asset('assets/images/No_docs.png',
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.width * 0.5),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: const Text(
+                      "No documents yet!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Wrap(
+                    spacing: 8,
+                    runSpacing: 3,
+                    alignment: WrapAlignment.spaceEvenly,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    direction: Axis.horizontal,
+                    runAlignment: WrapAlignment.start,
+                    verticalDirection: VerticalDirection.down,
+                    children: isGridView ? fileCardsGrid : fileCardsList),
+              ),
       ],
     );
+  }
+
+  //===================================================================================
+// Grid view visualization 1
+  changeViewMode1() {
+    setState(() {
+      isGridView = true;
+    });
+  }
+
+  //===================================================================================
+// Grid view visualization 2
+  changeViewMode2() {
+    setState(() {
+      isGridView = false;
+    });
   }
 
   //===================================================================================
@@ -183,10 +241,12 @@ class ContentHomeState extends State<ContentHome> {
 //========================================================
 //Fill file card
   fulfillFileCards(
-    List<Widget> myCards,
+    List<Widget> myCardsGrid,
+    List<Widget> myCardsList,
   ) {
     setState(() {
-      fileCardsList = myCards;
+      fileCardsGrid = myCardsGrid;
+      fileCardsList = myCardsList;
       readFileCards.cancel();
     });
   }
@@ -225,7 +285,7 @@ class ContentHomeState extends State<ContentHome> {
   //========================================================
 //Move router to Category View page
   removeFileCard(FileCard cardToDelete) {
-    for (var element in fileCardsList) {
+    for (var element in fileCardsGrid) {
       if (element == cardToDelete) {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
         deleteFileStorage(cardToDelete.file.extension,
@@ -233,7 +293,8 @@ class ContentHomeState extends State<ContentHome> {
 
         onUpdateNFilesDB(cardToDelete.file.categoryName);
         setState(() {
-          fileCardsList.remove(element);
+          fileCardsGrid.remove(element);
+          fileCardsList.removeAt(fileCardsGrid.indexOf(element));
         });
         break;
       }

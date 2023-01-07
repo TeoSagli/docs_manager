@@ -15,8 +15,9 @@ class ContentFavourites extends StatefulWidget {
 
 class ContentFavouritesState extends State<ContentFavourites> {
   late StreamSubscription readCards;
-  List<Widget> cardsList = [];
-
+  List<Widget> fileCardsGrid = [constants.emptyBox];
+  List<Widget> fileCardsList = [constants.emptyBox];
+  bool isGridView = true;
   @override
   void initState() {
     setState(() {
@@ -37,7 +38,7 @@ class ContentFavouritesState extends State<ContentFavourites> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        cardsList.isEmpty
+        fileCardsGrid.isEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,20 +59,74 @@ class ContentFavouritesState extends State<ContentFavourites> {
                   ),
                 ],
               )
-            : SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Wrap(
-                    spacing: 8,
-                    runSpacing: 12,
-                    alignment: WrapAlignment.spaceEvenly,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    direction: Axis.horizontal,
-                    runAlignment: WrapAlignment.start,
-                    verticalDirection: VerticalDirection.down,
-                    children: cardsList),
-              ),
+            : Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "View mode:",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Outfit',
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      IconButton(
+                        splashRadius: 20.0,
+                        iconSize: 30,
+                        onPressed: () => changeViewMode1(),
+                        icon: const Icon(Icons.grid_view_rounded),
+                        color: isGridView
+                            ? constants.mainBackColor
+                            : constants.mainBackColor.withOpacity(0.5),
+                      ),
+                      IconButton(
+                        splashRadius: 20.0,
+                        iconSize: 30,
+                        onPressed: () => changeViewMode2(),
+                        icon: const Icon(Icons.view_list_rounded),
+                        color: isGridView
+                            ? constants.mainBackColor.withOpacity(0.5)
+                            : constants.mainBackColor,
+                      )
+                    ],
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Wrap(
+                        spacing: 8,
+                        runSpacing: 12,
+                        alignment: WrapAlignment.spaceEvenly,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        direction: Axis.horizontal,
+                        runAlignment: WrapAlignment.start,
+                        verticalDirection: VerticalDirection.down,
+                        children: isGridView ? fileCardsGrid : fileCardsList),
+                  ),
+                ],
+              )
       ],
     );
+  }
+
+  //===================================================================================
+// Grid view visualization 1
+  changeViewMode1() {
+    setState(() {
+      isGridView = true;
+    });
+  }
+
+  //===================================================================================
+// Grid view visualization 2
+  changeViewMode2() {
+    setState(() {
+      isGridView = false;
+    });
   }
 
 //===================================================================================
@@ -86,10 +141,13 @@ class ContentFavouritesState extends State<ContentFavourites> {
 //========================================================
 //Fill file card
   fulfillCard(
-    List<Widget> myCards,
+    List<Widget> myCardsGrid,
+    List<Widget> myCardsList,
   ) {
     setState(() {
-      cardsList = myCards;
+      fileCardsGrid = myCardsGrid;
+      fileCardsList = myCardsList;
+      readCards.cancel();
     });
   }
 
@@ -105,14 +163,15 @@ class ContentFavouritesState extends State<ContentFavourites> {
 //========================================================
 //Move router to Category View page
   removeCard(FileCard cardToDelete) {
-    for (var element in cardsList) {
+    for (var element in fileCardsGrid) {
       if (element == cardToDelete) {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
         deleteFileStorage(cardToDelete.file.extension,
             cardToDelete.file.categoryName, cardToDelete.fileName);
         onUpdateNFilesDB(cardToDelete.file.categoryName);
         setState(() {
-          cardsList.remove(element);
+          fileCardsGrid.remove(element);
+          fileCardsList.removeAt(fileCardsGrid.indexOf(element));
         });
         break;
       }
