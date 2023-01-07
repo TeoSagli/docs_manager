@@ -36,11 +36,12 @@ deleteFileDB(String catName, String fileName) async {
 deleteFileStorage(List<Object?> ext, String catName, String fileName) async {
   var key = userRefDB();
   var userPath = "users/$key";
+  var refInstance = FirebaseStorage.instance.ref("$userPath/files/$catName/");
+  int i = 0;
   for (var element in ext) {
-    int i = ext.indexOf(element);
-    await FirebaseStorage.instance
-        .ref("$userPath/files/$catName/$fileName$i.${element.toString()}")
-        .delete();
+    String fileExt = element as String;
+    refInstance.child("$fileName$i.$fileExt").delete();
+    i++;
   }
 }
 //===================================================================================

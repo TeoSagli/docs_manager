@@ -24,6 +24,7 @@ class MyCarousel extends StatefulWidget {
 
 class MyCarouselState extends State<MyCarousel> {
   List<Widget> imageSliders = [constants.emptyBox];
+  int currImgIndex = 0;
   @override
   void initState() {
     showCarousel();
@@ -52,77 +53,75 @@ class MyCarouselState extends State<MyCarousel> {
     setState(() {
       widget.imgList.isEmpty
           ? imageSliders = [constants.loadingWheel2]
-          : imageSliders = widget.imgList
-              .map((item) => Container(
-                    margin: const EdgeInsets.all(5.0),
-                    child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5.0)),
-                        child: Stack(
-                          children: <Widget>[
-                            item,
-                            Positioned(
-                              bottom: 0.0,
-                              left: 0.0,
-                              right: 0.0,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color.fromARGB(200, 0, 0, 0),
-                                      Color.fromARGB(0, 0, 0, 0)
-                                    ],
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                  ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 20.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'No. ${widget.imgList.indexOf(item)} image',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    widget.moveToOpenFile != null &&
-                                            widget.extensions!.elementAt(widget
-                                                    .imgList
-                                                    .indexOf(item)) ==
-                                                'pdf'
-                                        ? IconButton(
-                                            color: constants.mainBackColor,
-                                            onPressed: () =>
-                                                widget.moveToOpenFile(
-                                                    widget.fileName,
-                                                    widget.catName,
-                                                    widget.imgList
-                                                        .indexOf(item)),
-                                            icon: const Icon(
-                                                Icons.open_in_new_rounded),
-                                          )
-                                        : constants.emptyBox,
-                                  ],
+          : imageSliders = widget.imgList.map((item) {
+              currImgIndex = widget.imgList.indexOf(item);
+              return Container(
+                margin: const EdgeInsets.all(5.0),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  child: Stack(
+                    children: <Widget>[
+                      widget.imgList.elementAt(currImgIndex),
+                      Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color.fromARGB(200, 0, 0, 0),
+                                Color.fromARGB(0, 0, 0, 0)
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'No. $currImgIndex image',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                            widget.showRemove == true
-                                ? Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: IconButton(
-                                      color: Colors.redAccent,
-                                      icon: const Icon(Icons.delete_rounded),
-                                      onPressed: () => widget.removeImg(item),
-                                    ),
-                                  )
-                                : constants.emptyBox
-                          ],
-                        )),
-                  ))
-              .toList();
+                              widget.moveToOpenFile != null &&
+                                      widget.extensions!
+                                              .elementAt(currImgIndex) ==
+                                          'pdf'
+                                  ? IconButton(
+                                      color: constants.mainBackColor,
+                                      onPressed: () => widget.moveToOpenFile(
+                                          widget.fileName,
+                                          widget.catName,
+                                          currImgIndex),
+                                      icon:
+                                          const Icon(Icons.open_in_new_rounded),
+                                    )
+                                  : constants.emptyBox,
+                            ],
+                          ),
+                        ),
+                      ),
+                      widget.showRemove == true
+                          ? Align(
+                              alignment: Alignment.bottomRight,
+                              child: IconButton(
+                                color: Colors.redAccent,
+                                icon: const Icon(Icons.delete_rounded),
+                                onPressed: () => widget.removeImg(item),
+                              ),
+                            )
+                          : constants.emptyBox
+                    ],
+                  ),
+                ),
+              );
+            }).toList();
     });
   }
 }

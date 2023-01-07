@@ -40,9 +40,6 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
     setState(() {
       imageGallery = null;
       catNameController = TextEditingController();
-      catNameController.addListener(() {
-        checkElementExistDB(catNameController.text, "categories", setBool);
-      });
       listenPath = getCatModelFromCatNameDB(setCatModel, widget.catName);
     });
 
@@ -166,7 +163,7 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
 
     if (catNameController.text == "" || catNameController.text == " ") {
       onErrorText(context);
-    } else if (doesExist) {
+    } else if (doesExist && catNameController.text != widget.catName) {
       onErrorElementExisting(context, "Category");
     } else if (imageGallery != null && !isAlreadyUpdated) {
       try {
@@ -186,6 +183,9 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
           catModel.path = saveName;
         });
         updateCategoryDB(catNameController.text, catModel);
+        setState(() {
+          catNameController.removeListener(() => checkElementExistDB);
+        });
         onSuccess(context, '/categories');
       } catch (e) {
         print("Error: $e");
@@ -196,6 +196,9 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
           deleteCategoryDB(widget.catName);
           updateCategoryDB(catNameController.text, catModel);
         }
+        setState(() {
+          catNameController.removeListener(() => checkElementExistDB);
+        });
         onSuccess(context, '/categories');
       } catch (e) {
         print("Error: $e");
@@ -241,6 +244,9 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
     });
     readImageCategoryStorage(catModel.path, setCard);
     listenPath.cancel();
+    catNameController.addListener(() {
+      checkElementExistDB(catNameController.text, "categories", setBool);
+    });
   }
   //===================================================================================
 }

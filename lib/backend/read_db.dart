@@ -352,13 +352,15 @@ StreamSubscription getCatModelFromCatNameDB(
 
 //===================================================================================
 /// Read file [fileName] data
-retrieveFileDataFromFileNameDB(String fileName, dynamic setFileData) {
+StreamSubscription retrieveFileDataFromFileNameDB(
+    String fileName, dynamic setFileData) {
   var key = userRefDB();
   var userPath = "users/$key";
-  FirebaseDatabase.instance
+  return FirebaseDatabase.instance
       .ref("$userPath/allFiles/$fileName")
       .onValue
       .listen((event) {
+    print("Reading value $fileName=============>>>>>${event.snapshot.value}");
     final data = Map<String, dynamic>.from(
         event.snapshot.value as Map<Object?, Object?>);
 

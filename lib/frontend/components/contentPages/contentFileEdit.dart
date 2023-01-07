@@ -42,6 +42,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
   List<String> pathImgList = [];
   List<String> extList = [];
   Widget dropdown = constants.emptyBox;
+  late StreamSubscription s;
   FileModel fileData = FileModel(
       path: [],
       categoryName: "",
@@ -53,11 +54,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
   @override
   void initState() {
     setState(() {
-      docNameController.addListener(() {
-        checkElementExistDB(docNameController.text, "allFiles", setBool);
-      });
       docNameController = TextEditingController(text: widget.fileName);
-      retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
+      s = retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     });
     super.initState();
   }
@@ -67,6 +65,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     docNameController.dispose();
     textController2.dispose();
     _date.dispose();
+    s.cancel();
     super.dispose();
   }
 
@@ -122,7 +121,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                               8, 8, 8, 8),
                                       child: ButtonsUploadPhotoes(
                                           setPhotoFromCamera,
-                                          setPhotoFromGallery, {}),
+                                          setPhotoFromGallery,
+                                          setPhotoFromFile),
                                     ),
                                     DottedBorder(
                                       color: constants.mainBackColor,
@@ -132,35 +132,33 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                         5,
                                       ],
                                       child: SizedBox(
-                                          height: 200.0,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.9,
-                                          child: previewImgList.isEmpty
-                                              ? SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.9,
-                                                  child: const Center(
-                                                    child: Text(
-                                                      "Images preview",
-                                                      style: TextStyle(
-                                                          color: constants
-                                                              .mainBackColor,
-                                                          fontSize: 16.0),
-                                                    ),
+                                        height: 200.0,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        child: previewImgList.isEmpty
+                                            ? SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.9,
+                                                child: const Center(
+                                                  child: Text(
+                                                    "Images preview",
+                                                    style: TextStyle(
+                                                        color: constants
+                                                            .mainBackColor,
+                                                        fontSize: 16.0),
                                                   ),
-                                                )
-                                              : MyCarousel(previewImgList,
-                                                  removeImage, true,
-                                                  extensions: extList,
-                                                  moveToOpenFile:
-                                                      moveToOpenFile,
-                                                  catName:
-                                                      fileData.categoryName,
-                                                  fileName: widget.fileName)),
+                                                ),
+                                              )
+                                            : MyCarousel(
+                                                previewImgList,
+                                                removeImage,
+                                                true,
+                                                extensions: extList,
+                                              ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -231,6 +229,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
           );
           nameImgList.add(imageGallery.name);
           pathImgList.add(imageGallery.path);
+          extList.add(imageGallery.name.split(".")[1]);
         },
       );
     } catch (e) {
@@ -243,14 +242,15 @@ class ContentFileEditState extends State<ContentFileEdit> {
   setPhotoFromFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'pptx', 'xlsx', 'docx', 'doc', 'xls', 'ppt'],
+      allowedExtensions: ['pdf'],
       allowMultiple: false,
     );
 
     if (result != null) {
-      File file = File(result.files.first.path!);
-      Uint8List imageFileBytes = await imageFromPdfFile(file);
       try {
+        File file = File(result.files.first.path!);
+        Uint8List imageFileBytes = await imageFromPdfFile(file);
+
         setState(
           () {
             previewImgList.add(
@@ -262,6 +262,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
             );
             nameImgList.add(result.files.first.name);
             pathImgList.add(result.files.first.path!);
+            extList.add("pdf");
           },
         );
       } catch (e) {
@@ -292,6 +293,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
           );
           nameImgList.add(imageCamera.name);
           pathImgList.add(imageCamera.path);
+          extList.add(imageCamera.name.split(".")[1]);
         },
       );
     } catch (e) {
@@ -308,7 +310,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     // onErrorCategoryExisting();}
     if (docNameController.text == "" || docNameController.text == " ") {
       onErrorText(context);
-    } else if (doesExist) {
+    } else if (doesExist && docNameController.text != widget.fileName) {
       onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {
@@ -324,7 +326,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
           listPaths.add(path);
           listExt.add(ext);
           //load file
-          print("Name to save $saveName");
           StreamSubscription listenLoading = loadFileToStorage(
               path,
               docNameController.text,
@@ -332,17 +333,23 @@ class ContentFileEditState extends State<ContentFileEdit> {
               'files/${(dropdown as MyDropdown).dropdownValue}');
           listenLoading.cancel();
         }
+
+        //delet old version
         deleteFileStorage(
             fileData.extension, fileData.categoryName, widget.fileName);
         deleteFileDB(fileData.categoryName, widget.fileName);
-        //update category
+        //update new version
         String catName = (dropdown as MyDropdown).dropdownValue;
-        createFile(catName, docNameController.text, _date.text, listPaths,
-            listExt, "files/$catName");
-        createFile(catName, docNameController.text, _date.text, listPaths,
-            listExt, "allFiles");
-
+        String fileName = docNameController.text;
+        String expDate = _date.text.isEmpty ? "" : _date.text;
+        createFile(
+            catName, fileName, expDate, listPaths, listExt, "files/$catName");
+        createFile(catName, fileName, expDate, listPaths, listExt, "allFiles");
         onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
+        s.cancel();
+        setState(() {
+          docNameController.removeListener(() => checkElementExistDB);
+        });
         onSuccess(context, '/categories');
       } catch (e) {
         print("Error: $e");
@@ -396,8 +403,11 @@ class ContentFileEditState extends State<ContentFileEdit> {
       for (var element in f.extension) {
         nameImgList.add(element as String);
       }
+      docNameController.addListener(() {
+        checkElementExistDB(docNameController.text, "allFiles", setBool);
+      });
     });
-    for (int i = 0; i < fileData.path.length; i++) {
+    for (int i = 0; i < extList.length; i++) {
       readImageFileStorage(i, fileData.categoryName, widget.fileName,
               extList[i], img, context, true)
           .then(
@@ -418,12 +428,5 @@ class ContentFileEditState extends State<ContentFileEdit> {
     return pageImage!.bytes;
   }
 
-  //===================================================================================
-  moveToOpenFile(String fileName, String catName, int pdfIndex) {
-    Navigator.pushNamed(
-      context,
-      '/files/$catName/$fileName/$pdfIndex',
-    );
-  }
   //===================================================================================
 }

@@ -20,11 +20,6 @@ class FileModel {
 
 //Method converting a Json(Map<String, dynamic>) to a File
   factory FileModel.fromRTDB(Map<String, dynamic> data) {
-    /*  return File(
-        path: data['path'],
-        categoryName: data['categoryName'],
-        subTitle1: data['subTitle1'],
-        icon: data['icon']);*/
     return FileModel(
       path: data['path'],
       categoryName: data['categoryName'],
