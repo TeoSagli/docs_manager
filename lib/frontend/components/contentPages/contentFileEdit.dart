@@ -350,7 +350,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
         setState(() {
           docNameController.removeListener(() => checkElementExistDB);
         });
-        onSuccess(context, '/categories');
+        onSuccess(context, '/');
       } catch (e) {
         print("Error: $e");
       }

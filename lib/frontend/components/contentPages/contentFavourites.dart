@@ -1,6 +1,7 @@
 import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
+import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -17,7 +18,7 @@ class ContentFavouritesState extends State<ContentFavourites> {
   late StreamSubscription readCards;
   List<Widget> fileCardsGrid = [constants.emptyBox];
   List<Widget> fileCardsList = [constants.emptyBox];
-  bool isGridView = true;
+  int currMode = 0;
   @override
   void initState() {
     setState(() {
@@ -36,100 +37,69 @@ class ContentFavouritesState extends State<ContentFavourites> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        fileCardsGrid.isEmpty
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset('assets/images/No_fav.png',
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.width * 0.5),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: const Text(
-                      "No favourites yet!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 18,
-                      ),
-                    ),
+    return fileCardsGrid.isEmpty
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/No_fav.png',
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.width * 0.5),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: const Text(
+                  "No documents yet!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 18,
                   ),
-                ],
-              )
-            : Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "View mode:",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      IconButton(
-                        splashRadius: 20.0,
-                        iconSize: 30,
-                        onPressed: () => changeViewMode1(),
-                        icon: const Icon(Icons.grid_view_rounded),
-                        color: isGridView
-                            ? constants.mainBackColor
-                            : constants.mainBackColor.withOpacity(0.5),
-                      ),
-                      IconButton(
-                        splashRadius: 20.0,
-                        iconSize: 30,
-                        onPressed: () => changeViewMode2(),
-                        icon: const Icon(Icons.view_list_rounded),
-                        color: isGridView
-                            ? constants.mainBackColor.withOpacity(0.5)
-                            : constants.mainBackColor,
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Wrap(
-                        spacing: 8,
-                        runSpacing: 12,
-                        alignment: WrapAlignment.spaceEvenly,
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        direction: Axis.horizontal,
-                        runAlignment: WrapAlignment.start,
-                        verticalDirection: VerticalDirection.down,
-                        children: isGridView ? fileCardsGrid : fileCardsList),
-                  ),
-                ],
-              )
-      ],
-    );
+                ),
+              ),
+            ],
+          )
+        : SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                ViewMode(changeViewMode, currMode),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 3,
+                  alignment: WrapAlignment.spaceEvenly,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  direction: Axis.horizontal,
+                  runAlignment: WrapAlignment.start,
+                  verticalDirection: VerticalDirection.down,
+                  children: changeCardsView(currMode),
+                )
+              ],
+            ),
+          );
   }
 
   //===================================================================================
-// Grid view visualization 1
-  changeViewMode1() {
+  /// Grid view visualization to [modeToSet]
+  changeViewMode(int modeToSet) {
     setState(() {
-      isGridView = true;
+      currMode = modeToSet;
     });
   }
 
   //===================================================================================
-// Grid view visualization 2
-  changeViewMode2() {
-    setState(() {
-      isGridView = false;
-    });
+  /// Change cards data structure
+  List<Widget> changeCardsView(int modeToSet) {
+    switch (modeToSet) {
+      case 0:
+        return fileCardsGrid;
+      case 1:
+        return fileCardsList;
+      default:
+        return fileCardsGrid;
+    }
   }
 
-//===================================================================================
+  //===================================================================================
 // Move to file page
   moveToFile(id, context) {
     Navigator.pushNamed(

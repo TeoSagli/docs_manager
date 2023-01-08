@@ -8,6 +8,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: MyAppBar('Register', true, context),
       body: const CustomScrollView(
         slivers: [

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:flutter/material.dart';
 
 import '../../../backend/delete_db.dart';
@@ -25,7 +26,7 @@ class ContentHomeState extends State<ContentHome> {
   List<Container> categoriesCardsList = [];
   List<int> itemsList = [];
   int length = 0;
-  bool isGridView = true;
+  int currMode = 0;
 
   @override
   void initState() {
@@ -138,45 +139,10 @@ class ContentHomeState extends State<ContentHome> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsetsDirectional.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "View mode:",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Outfit',
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              IconButton(
-                splashRadius: 20.0,
-                iconSize: 30,
-                onPressed: () => changeViewMode1(),
-                icon: const Icon(Icons.grid_view_rounded),
-                color: isGridView
-                    ? constants.mainBackColor
-                    : constants.mainBackColor.withOpacity(0.5),
-              ),
-              IconButton(
-                splashRadius: 20.0,
-                iconSize: 30,
-                onPressed: () => changeViewMode2(),
-                icon: const Icon(Icons.view_list_rounded),
-                color: isGridView
-                    ? constants.mainBackColor.withOpacity(0.5)
-                    : constants.mainBackColor,
-              )
-            ],
-          ),
-        ),
         fileCardsGrid.isEmpty
             ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
@@ -199,38 +165,49 @@ class ContentHomeState extends State<ContentHome> {
               )
             : SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Wrap(
-                    spacing: 8,
-                    runSpacing: 3,
-                    alignment: WrapAlignment.spaceEvenly,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    direction: Axis.horizontal,
-                    runAlignment: WrapAlignment.start,
-                    verticalDirection: VerticalDirection.down,
-                    children: isGridView ? fileCardsGrid : fileCardsList),
+                child: Column(
+                  children: [
+                    ViewMode(changeViewMode, currMode),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 3,
+                      alignment: WrapAlignment.spaceEvenly,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      direction: Axis.horizontal,
+                      runAlignment: WrapAlignment.start,
+                      verticalDirection: VerticalDirection.down,
+                      children: changeCardsView(currMode),
+                    )
+                  ],
+                ),
               ),
       ],
     );
   }
 
   //===================================================================================
-// Grid view visualization 1
-  changeViewMode1() {
+  /// Grid view visualization to [modeToSet]
+  changeViewMode(int modeToSet) {
     setState(() {
-      isGridView = true;
+      currMode = modeToSet;
     });
   }
 
   //===================================================================================
-// Grid view visualization 2
-  changeViewMode2() {
-    setState(() {
-      isGridView = false;
-    });
+  /// Change cards data structure
+  List<Widget> changeCardsView(int modeToSet) {
+    switch (modeToSet) {
+      case 0:
+        return fileCardsGrid;
+      case 1:
+        return fileCardsList;
+      default:
+        return fileCardsGrid;
+    }
   }
 
   //===================================================================================
-// Move to file page
+  /// Move to file page
   moveToFile(fileName, context) {
     Navigator.pushNamed(
       context,
@@ -239,7 +216,7 @@ class ContentHomeState extends State<ContentHome> {
   }
 
 //========================================================
-//Fill file card
+  ///Fill files card
   fulfillFileCards(
     List<Widget> myCardsGrid,
     List<Widget> myCardsList,
@@ -252,7 +229,7 @@ class ContentHomeState extends State<ContentHome> {
   }
 
 //===================================================================================
-//Fill file card
+  ///Fill categories card
   fulfillCategoriesCards(
     List<Container> myCards,
     List<int> myOrders,
@@ -265,7 +242,7 @@ class ContentHomeState extends State<ContentHome> {
   }
 
 //===================================================================================
-//Move router to Category View page
+  ///Move router to File Edit page
   moveToEditFile(fileName, context) {
     Navigator.pushNamed(
       context,
@@ -274,7 +251,7 @@ class ContentHomeState extends State<ContentHome> {
   }
 
 //========================================================
-//Move router to Category View page
+  ///Move router to Category View page
   moveToCategory(catName, context) {
     Navigator.pushNamed(
       context,
@@ -283,7 +260,7 @@ class ContentHomeState extends State<ContentHome> {
   }
 
   //========================================================
-//Move router to Category View page
+  ///Remove card from list
   removeFileCard(FileCard cardToDelete) {
     for (var element in fileCardsGrid) {
       if (element == cardToDelete) {
@@ -301,3 +278,4 @@ class ContentHomeState extends State<ContentHome> {
     }
   }
 }
+  //========================================================

@@ -1,3 +1,4 @@
+import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'dart:async';
@@ -17,7 +18,9 @@ class ContentCategoryView extends StatefulWidget {
 
 class ContentCategoryViewState extends State<ContentCategoryView> {
   late StreamSubscription readCards;
-  List<Widget> cardsList = [constants.emptyBox];
+  List<Widget> fileCardsGrid = [constants.emptyBox];
+  List<Widget> fileCardsList = [constants.emptyBox];
+  int currMode = 0;
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
 
   @override
   Widget build(BuildContext context) {
-    return cardsList.isEmpty
+    return fileCardsGrid.isEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,16 +65,40 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
           )
         : SingleChildScrollView(
             scrollDirection: Axis.vertical,
-            child: Wrap(
-                spacing: 8,
-                runSpacing: 12,
-                alignment: WrapAlignment.spaceEvenly,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                direction: Axis.horizontal,
-                runAlignment: WrapAlignment.start,
-                verticalDirection: VerticalDirection.down,
-                children: cardsList),
+            child: Column(children: [
+              ViewMode(changeViewMode, currMode),
+              Wrap(
+                  spacing: 8,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.spaceEvenly,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  direction: Axis.horizontal,
+                  runAlignment: WrapAlignment.start,
+                  verticalDirection: VerticalDirection.down,
+                  children: changeCardsView(currMode)),
+            ]),
           );
+  }
+
+  //===================================================================================
+  /// Grid view visualization to [modeToSet]
+  changeViewMode(int modeToSet) {
+    setState(() {
+      currMode = modeToSet;
+    });
+  }
+
+  //===================================================================================
+  /// Change cards data structure
+  List<Widget> changeCardsView(int modeToSet) {
+    switch (modeToSet) {
+      case 0:
+        return fileCardsGrid;
+      case 1:
+        return fileCardsList;
+      default:
+        return fileCardsGrid;
+    }
   }
 
   //===================================================================================
@@ -87,9 +114,11 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
 //Fill file card
   fulfillCard(
     List<Widget> myCards,
+    List<Widget> myCardsList,
   ) {
     setState(() {
-      cardsList = myCards;
+      fileCardsGrid = myCards;
+      fileCardsList = myCardsList;
     });
     /*print("Cardlist ${cardsList.toList().toString()} is here");
     print("Orderlist ${itemsList.toList().toString()} is here");*/
@@ -107,7 +136,7 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   //========================================================
 //Move router to Category View page
   removeCard(FileCard cardToDelete) {
-    for (var element in cardsList) {
+    for (var element in fileCardsGrid) {
       if (element == cardToDelete) {
         deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
         deleteFileStorage(cardToDelete.file.extension,
@@ -115,7 +144,8 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
 
         onUpdateNFilesDB(cardToDelete.file.categoryName);
         setState(() {
-          cardsList.remove(element);
+          fileCardsGrid.remove(element);
+          fileCardsList.removeAt(fileCardsGrid.indexOf(element));
         });
         break;
       }

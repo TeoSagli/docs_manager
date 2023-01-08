@@ -330,7 +330,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
         createFile(catName, docNameController.text, _date.text, listPaths,
             listExt, "allFiles");
         onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
-        onSuccess(context, '/categories');
+        onSuccess(context, '/');
       } catch (e) {
         print("Error: $e");
       }

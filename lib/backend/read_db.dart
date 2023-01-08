@@ -295,7 +295,9 @@ StreamSubscription retrieveFilesFromCategoryDB(
       .ref("$userPath/files/$catName")
       .onValue
       .listen((event) {
-    List<Widget> cards =
+    List<Widget> cardsGrid =
+        List.generate(event.snapshot.children.length, (index) => Container());
+    List<Widget> cardsList =
         List.generate(event.snapshot.children.length, (index) => Container());
     for (var el in event.snapshot.children) {
       //el.value contenuto di category{path:..., nfiles:...}
@@ -306,11 +308,14 @@ StreamSubscription retrieveFilesFromCategoryDB(
       final cardName = el.key.toString();
 
       //insert card in order
-      cards.add(
+      cardsGrid.add(
         FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
       );
+      cardsList.add(
+        ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+      );
     }
-    fulfillCard(cards);
+    fulfillCard(cardsGrid, cardsList);
   });
 }
 
@@ -374,7 +379,6 @@ StreamSubscription retrieveFileDataFromFileNameDB(
       .ref("$userPath/allFiles/$fileName")
       .onValue
       .listen((event) {
-    print("Reading value $fileName=============>>>>>${event.snapshot.value}");
     final data = Map<String, dynamic>.from(
         event.snapshot.value as Map<Object?, Object?>);
 
