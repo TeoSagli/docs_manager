@@ -148,21 +148,23 @@ class ContentFileViewState extends State<ContentFileView> {
   // set preview list from DB
   setFileData(FileModel f) async {
     Widget img = constants.defaultImg;
-    setState(() {
-      fileData = f;
-      for (var element in f.extension) {
-        extList.add(element as String);
-      }
-      buttonList = ButtonsFileOperations(
-          widget.fileName, fileData, moveToEditFile, removeCard);
-      listenColor = getColorCategoryDB(setColor, fileData.categoryName);
-    });
-    for (int i = 0; i < extList.length; i++) {
-      Image value = (await readImageFileStorage(i, fileData.categoryName,
-          widget.fileName, extList[i], img, context, true) as Image);
+    if (mounted) {
       setState(() {
-        previewImgList.add(value);
+        fileData = f;
+        for (var element in f.extension) {
+          extList.add(element as String);
+        }
+        buttonList = ButtonsFileOperations(
+            widget.fileName, fileData, moveToEditFile, removeCard);
+        listenColor = getColorCategoryDB(setColor, fileData.categoryName);
       });
+      for (int i = 0; i < extList.length; i++) {
+        Image value = (await readImageFileStorage(i, fileData.categoryName,
+            widget.fileName, extList[i], img, context, true) as Image);
+        setState(() {
+          previewImgList.add(value);
+        });
+      }
     }
   }
 

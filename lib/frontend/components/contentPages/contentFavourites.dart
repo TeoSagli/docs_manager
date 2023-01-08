@@ -21,11 +21,13 @@ class ContentFavouritesState extends State<ContentFavourites> {
   int currMode = 0;
   @override
   void initState() {
-    setState(() {
-      //readCards = retrieveFilesDB();
-      readCards = retrieveAllFilesDB(
-          fulfillCard, moveToFile, moveToEditFile, removeCard, true);
-    });
+    if (mounted) {
+      setState(() {
+        //readCards = retrieveFilesDB();
+        readCards = retrieveAllFilesDB(
+            fulfillCard, moveToFile, moveToEditFile, removeCard, true);
+      });
+    }
     super.initState();
   }
 
@@ -81,9 +83,11 @@ class ContentFavouritesState extends State<ContentFavourites> {
   //===================================================================================
   /// Grid view visualization to [modeToSet]
   changeViewMode(int modeToSet) {
-    setState(() {
-      currMode = modeToSet;
-    });
+    if (mounted) {
+      setState(() {
+        currMode = modeToSet;
+      });
+    }
   }
 
   //===================================================================================
@@ -114,11 +118,12 @@ class ContentFavouritesState extends State<ContentFavourites> {
     List<Widget> myCardsGrid,
     List<Widget> myCardsList,
   ) {
-    setState(() {
-      fileCardsGrid = myCardsGrid;
-      fileCardsList = myCardsList;
-      readCards.cancel();
-    });
+    if (mounted) {
+      setState(() {
+        fileCardsGrid = myCardsGrid;
+        fileCardsList = myCardsList;
+      });
+    }
   }
 
 //===================================================================================
@@ -139,10 +144,12 @@ class ContentFavouritesState extends State<ContentFavourites> {
         deleteFileStorage(cardToDelete.file.extension,
             cardToDelete.file.categoryName, cardToDelete.fileName);
         onUpdateNFilesDB(cardToDelete.file.categoryName);
-        setState(() {
-          fileCardsGrid.remove(element);
-          fileCardsList.removeAt(fileCardsGrid.indexOf(element));
-        });
+        if (mounted) {
+          setState(() {
+            fileCardsGrid.remove(element);
+            fileCardsList.removeAt(fileCardsGrid.indexOf(element));
+          });
+        }
         break;
       }
     }
