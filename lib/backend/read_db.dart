@@ -188,8 +188,8 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
       .listen((event) {
     int cardListSize = event.snapshot.children.length;
 
-    List<FileCard> tempCards = List.empty(growable: true);
-    List<ListCard> temp2Cards = List.empty(growable: true);
+    List<FileCard> gridView = List.empty(growable: true);
+    List<ListCard> listView = List.empty(growable: true);
     List<Widget> gridCards =
         List.generate(cardListSize, (index) => Container());
     List<Widget> listCards =
@@ -203,29 +203,29 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
       //el.key nome di file
       final cardName = f.key.toString();
 
-      tempCards.add(
+      gridView.add(
         FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
       );
-      temp2Cards.add(
+      listView.add(
         ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
       );
     }
     if (!isFavPage) {
-      tempCards.sort((a, b) {
+      gridView.sort((a, b) {
         DateTime adate = DateTime.parse(a.file.dateUpload);
         DateTime bdate = DateTime.parse(b.file.dateUpload);
         return adate.compareTo(bdate);
       });
-      temp2Cards.sort((a, b) {
+      listView.sort((a, b) {
         DateTime adate = DateTime.parse(a.file.dateUpload);
         DateTime bdate = DateTime.parse(b.file.dateUpload);
         return adate.compareTo(bdate);
       });
     }
     gridCards.clear();
-    gridCards.addAll(tempCards);
+    gridCards.addAll(gridView);
     listCards.clear();
-    listCards.addAll(temp2Cards);
+    listCards.addAll(listView);
     fulfillCard(gridCards, listCards);
   });
 }

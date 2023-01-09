@@ -46,7 +46,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           : IconButton(
               tooltip: "Home",
               onPressed: () => Navigator.pushNamed(context, "/"),
-              icon: Image.asset("assets/images/logoTransparentBig.png"),
+              icon: Image.asset("assets/images/LogoTransparentBig.png"),
             ),
       actions: isLogged()
           ? [

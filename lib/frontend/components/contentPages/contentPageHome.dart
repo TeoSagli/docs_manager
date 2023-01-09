@@ -261,20 +261,25 @@ class ContentHomeState extends State<ContentHome> {
 
   //========================================================
   ///Remove card from list
-  removeFileCard(FileCard cardToDelete) {
-    for (var element in fileCardsGrid) {
-      if (element == cardToDelete) {
-        deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-        deleteFileStorage(cardToDelete.file.extension,
-            cardToDelete.file.categoryName, cardToDelete.fileName);
+  removeFileCard(cardToDelete) {
+    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    deleteFileStorage(cardToDelete.file.extension,
+        cardToDelete.file.categoryName, cardToDelete.fileName);
 
-        onUpdateNFilesDB(cardToDelete.file.categoryName);
+    onUpdateNFilesDB(cardToDelete.file.categoryName);
+    switch (currMode) {
+      case 0:
         setState(() {
-          fileCardsGrid.remove(element);
-          fileCardsList.removeAt(fileCardsGrid.indexOf(element));
+          fileCardsList.removeAt(fileCardsGrid.indexOf(cardToDelete));
+          fileCardsGrid.remove(cardToDelete);
         });
         break;
-      }
+      case 1:
+        setState(() {
+          fileCardsGrid.removeAt(fileCardsList.indexOf(cardToDelete));
+          fileCardsList.remove(cardToDelete);
+        });
+        break;
     }
   }
 }

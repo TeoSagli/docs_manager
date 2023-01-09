@@ -22,6 +22,7 @@ import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pdfx/pdfx.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ContentFileCreate extends StatefulWidget {
   final String catSelected;
@@ -35,8 +36,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   final ImagePicker picker = ImagePicker();
   bool doesExist = false;
   TextEditingController docNameController = TextEditingController();
-  TextEditingController textController2 = TextEditingController();
-  final TextEditingController _date = TextEditingController();
+  String dateText = "";
   List<Image> previewImgList = [];
   List<String> nameImgList = [];
   List<String> pathImgList = [];
@@ -56,8 +56,6 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   @override
   void dispose() {
     docNameController.dispose();
-    textController2.dispose();
-    _date.dispose();
     super.dispose();
   }
 
@@ -155,34 +153,39 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(30.0),
-                                child: TextField(
-                                  autofocus: false,
-                                  obscureText: false,
-                                  controller: _date,
-                                  decoration: const InputDecoration(
-                                      icon: Icon(Icons.calendar_today_rounded),
-                                      labelText: "(Optional) Expiration"),
-                                  onTap: (() async {
-                                    DateTime? pickeddate = await showDatePicker(
-                                        initialEntryMode:
-                                            DatePickerEntryMode.calendarOnly,
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime(
-                                            DateTime.now().year + 100));
-
-                                    if (pickeddate != null) {
-                                      setState(() {
-                                        _date.text = DateFormat('yyyy-MM-dd')
-                                            .format(pickeddate);
-                                      });
-                                    }
-                                  }),
-                                ),
-                              )
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                    child: OutlinedButton(
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                5, 0, 10, 0),
+                                            child: Icon(
+                                              Icons.calendar_today_rounded,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                            dateText == ""
+                                                ? "(Optional) Document expiration date"
+                                                : dateText,
+                                          ),
+                                        ],
+                                      ),
+                                      onPressed: () => openCalendar(context,
+                                          onDateSelected, onDateUnselected),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                           dropdown,
@@ -203,6 +206,24 @@ class ContentFileCreateState extends State<ContentFileCreate> {
         ),
       ],
     );
+  }
+
+//===================================================================================
+// User makes selection from calendar
+  onDateSelected(DateTime value, context) {
+    setState(() {
+      dateText = DateFormat('yyyy-MM-dd').format(value);
+    });
+    onDateConfirmed(dateText, context);
+  }
+
+//===================================================================================
+// User makes selection from calendar
+  onDateUnselected(context) {
+    setState(() {
+      dateText = "";
+    });
+    onDateUnconfirmed(context);
   }
 
   //===================================================================================
@@ -325,9 +346,9 @@ class ContentFileCreateState extends State<ContentFileCreate> {
         }
         //update category
         String catName = (dropdown as MyDropdown).dropdownValue;
-        createFile(catName, docNameController.text, _date.text, listPaths,
+        createFile(catName, docNameController.text, dateText, listPaths,
             listExt, "files/$catName");
-        createFile(catName, docNameController.text, _date.text, listPaths,
+        createFile(catName, docNameController.text, dateText, listPaths,
             listExt, "allFiles");
         onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
         onSuccess(context, '/');

@@ -8,7 +8,7 @@ class InputField extends StatefulWidget {
   ///
   ///1-set the controller.
   ///
-  ///2-set if it has a title limit of 20 characters.
+  ///2-set if it has a title limit of 30 characters.
   ///
 
   InputField(this.tc, this.isTitle, {super.key});

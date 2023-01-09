@@ -34,13 +34,13 @@ class ContentFileEdit extends StatefulWidget {
 class ContentFileEditState extends State<ContentFileEdit> {
   final ImagePicker picker = ImagePicker();
   late TextEditingController docNameController;
-  TextEditingController textController2 = TextEditingController();
-  TextEditingController _date = TextEditingController();
+
   bool doesExist = false;
   List<Image> previewImgList = [];
   List<String> nameImgList = [];
   List<String> pathImgList = [];
   List<String> extList = [];
+  String dateText = "";
   Widget dropdown = constants.emptyBox;
   late StreamSubscription s;
   FileModel fileData = FileModel(
@@ -63,8 +63,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
   @override
   void dispose() {
     docNameController.dispose();
-    textController2.dispose();
-    _date.dispose();
     s.cancel();
     super.dispose();
   }
@@ -163,30 +161,39 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: TextField(
-                                  controller: _date,
-                                  decoration: const InputDecoration(
-                                      icon: Icon(Icons.calendar_today_rounded),
-                                      labelText: "(Optional) Expiration"),
-                                  onTap: (() async {
-                                    DateTime? pickeddate = await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime(
-                                            DateTime.now().year + 100));
-
-                                    if (pickeddate != null) {
-                                      setState(() {
-                                        _date.text = DateFormat('yyyy-MM-dd')
-                                            .format(pickeddate);
-                                      });
-                                    }
-                                  }),
-                                ),
-                              )
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                    child: OutlinedButton(
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                5, 0, 10, 0),
+                                            child: Icon(
+                                              Icons.calendar_today_rounded,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                            dateText == ""
+                                                ? "(Optional) Document expiration date"
+                                                : dateText,
+                                          ),
+                                        ],
+                                      ),
+                                      onPressed: () => openCalendar(context,
+                                          onDateSelected, onDateUnselected),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                           dropdown,
@@ -207,6 +214,24 @@ class ContentFileEditState extends State<ContentFileEdit> {
         ),
       ],
     );
+  }
+
+//===================================================================================
+// User makes selection from calendar
+  onDateSelected(DateTime value, context) {
+    setState(() {
+      dateText = DateFormat('yyyy-MM-dd').format(value);
+    });
+    onDateConfirmed(dateText, context);
+  }
+
+//===================================================================================
+// User makes selection from calendar
+  onDateUnselected(context) {
+    setState(() {
+      dateText = "";
+    });
+    onDateUnconfirmed(context);
   }
 
   //===================================================================================
@@ -341,7 +366,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
         //update new version
         String catName = (dropdown as MyDropdown).dropdownValue;
         String fileName = docNameController.text;
-        String expDate = _date.text.isEmpty ? "" : _date.text;
+        String expDate = dateText;
         createFile(
             catName, fileName, expDate, listPaths, listExt, "files/$catName");
         createFile(catName, fileName, expDate, listPaths, listExt, "allFiles");
@@ -394,8 +419,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
       for (var element in f.extension) {
         extList.add(element as String);
       }
-      _date = TextEditingController(text: f.expiration);
-
+      dateText = f.expiration;
       dropdown = MyDropdown(fileData.categoryName);
       for (var element in f.path) {
         pathImgList.add(element as String);

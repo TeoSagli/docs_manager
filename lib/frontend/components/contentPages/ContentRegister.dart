@@ -115,7 +115,7 @@ class ContentRegisterState extends State<ContentRegister> {
             .then((value) {
           createUserDB(emailAddress, value.user!.uid);
           createDefaultCategoriesDB();
-          onRegistrationConfirmed(context);
+          onRegistrationConfirmed(context, '/');
         }).onError((error, stackTrace) => onErrorFirebase(context, error));
       } on FirebaseAuthException catch (e) {
         onErrorFirebase(context, e);

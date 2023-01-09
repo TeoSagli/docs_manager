@@ -25,7 +25,7 @@ class ContentFavouritesState extends State<ContentFavourites> {
       setState(() {
         //readCards = retrieveFilesDB();
         readCards = retrieveAllFilesDB(
-            fulfillCard, moveToFile, moveToEditFile, removeCard, true);
+            fulfillCard, moveToFile, moveToEditFile, removeFileCard, true);
       });
     }
     super.initState();
@@ -137,21 +137,25 @@ class ContentFavouritesState extends State<ContentFavourites> {
 
 //========================================================
 //Move router to Category View page
-  removeCard(FileCard cardToDelete) {
-    for (var element in fileCardsGrid) {
-      if (element == cardToDelete) {
-        deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-        deleteFileStorage(cardToDelete.file.extension,
-            cardToDelete.file.categoryName, cardToDelete.fileName);
-        onUpdateNFilesDB(cardToDelete.file.categoryName);
-        if (mounted) {
-          setState(() {
-            fileCardsGrid.remove(element);
-            fileCardsList.removeAt(fileCardsGrid.indexOf(element));
-          });
-        }
+  removeFileCard(cardToDelete) {
+    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    deleteFileStorage(cardToDelete.file.extension,
+        cardToDelete.file.categoryName, cardToDelete.fileName);
+
+    onUpdateNFilesDB(cardToDelete.file.categoryName);
+    switch (currMode) {
+      case 0:
+        setState(() {
+          fileCardsList.removeAt(fileCardsGrid.indexOf(cardToDelete));
+          fileCardsGrid.remove(cardToDelete);
+        });
         break;
-      }
+      case 1:
+        setState(() {
+          fileCardsGrid.removeAt(fileCardsList.indexOf(cardToDelete));
+          fileCardsList.remove(cardToDelete);
+        });
+        break;
     }
   }
 }

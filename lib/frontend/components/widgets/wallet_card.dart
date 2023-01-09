@@ -58,9 +58,13 @@ class WalletCardState extends State<WalletCard> with MyCard {
             context,
             false)
         .then(
-      (value) => setState(() {
-        cardImage = value;
-      }),
+      (value) {
+        if (mounted) {
+          setState(() {
+            cardImage = value;
+          });
+        }
+      },
     );
     setState(() {
       isFav = widget.file.isFavourite;
@@ -260,8 +264,10 @@ class WalletCardState extends State<WalletCard> with MyCard {
   }
 
   setColor(int c) {
-    setState(() {
-      catColor = Color(c);
-    });
+    if (mounted) {
+      setState(() {
+        catColor = Color(c);
+      });
+    }
   }
 }

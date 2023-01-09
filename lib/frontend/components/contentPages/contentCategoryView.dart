@@ -25,8 +25,8 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   @override
   void initState() {
     setState(() {
-      readCards = retrieveFilesFromCategoryDB(
-          widget.catName, fulfillCard, moveToFile, moveToEditFile, removeCard);
+      readCards = retrieveFilesFromCategoryDB(widget.catName, fulfillCard,
+          moveToFile, moveToEditFile, removeFileCard);
     });
     super.initState();
   }
@@ -135,21 +135,27 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
 
   //========================================================
 //Move router to Category View page
-  removeCard(FileCard cardToDelete) {
-    for (var element in fileCardsGrid) {
-      if (element == cardToDelete) {
-        deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-        deleteFileStorage(cardToDelete.file.extension,
-            cardToDelete.file.categoryName, cardToDelete.fileName);
+  removeFileCard(FileCard cardToDelete) {
+    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    deleteFileStorage(cardToDelete.file.extension,
+        cardToDelete.file.categoryName, cardToDelete.fileName);
 
-        onUpdateNFilesDB(cardToDelete.file.categoryName);
+    onUpdateNFilesDB(cardToDelete.file.categoryName);
+    switch (currMode) {
+      case 0:
         setState(() {
-          fileCardsGrid.remove(element);
-          fileCardsList.removeAt(fileCardsGrid.indexOf(element));
+          fileCardsList.removeAt(fileCardsGrid.indexOf(cardToDelete));
+          fileCardsGrid.remove(cardToDelete);
         });
         break;
-      }
+      case 1:
+        setState(() {
+          fileCardsGrid.removeAt(fileCardsList.indexOf(cardToDelete));
+          fileCardsList.remove(cardToDelete);
+        });
+        break;
     }
   }
+
   //========================================================
 }

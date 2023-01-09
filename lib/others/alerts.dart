@@ -1,91 +1,130 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:docs_manager/others/constants.dart' as constants;
 
 //========================================================
-///Alert error during image upload
-onErrorImage(context) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Something went wrong!'),
-      content: const Text('Upload an image for your category!'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
-        ),
-      ],
+///Alert structure
+mySnackbarTemplate(context, textToShow) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      padding: const EdgeInsetsDirectional.all(20),
+      duration: const Duration(milliseconds: constants.alertDurAnimation),
+      content: Text(textToShow),
     ),
   );
+}
+
+///Alert if pushNamed
+myAlertPushNamed(context, path, textToShow) {
+  mySnackbarTemplate(context, textToShow);
+  Navigator.pushNamed(context, path);
+}
+
+///Alert if pop
+myAlertPop(context, textToShow) {
+  mySnackbarTemplate(context, textToShow);
+}
+
+//========================================================
+
+///Alert error during image upload
+onErrorImage(context) {
+  myAlertPop(context, "Something went wrong: a document is required!");
 }
 
 //========================================================
 ///Alert error during text fill
 onErrorText(context) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Something went wrong!'),
-      content: const Text('Text cannot be empty!'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
+  myAlertPop(context, "Something went wrong: text cannot be empty!");
 }
 
 //========================================================
 ///Alert error element already existing
 onErrorElementExisting(context, String elName) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Something went wrong!'),
-      content: Text('$elName already existing!'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
+  myAlertPop(context, "Something went wrong: $elName already existing!");
 }
 
 //========================================================
 ///Alert error category already existing
 onErrorFileExisting(context) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Something went wrong!'),
-      content: const Text('File already existing!'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
+  myAlertPop(context, "Something went wrong: File already existing!");
 }
 
 //========================================================
 ///Alert success submit
 onSuccess(context, path) {
+  myAlertPushNamed(context, path, 'Operation confirmed!');
+}
+
+//========================================================
+///Alert login confirmed
+onLoginConfirmed(context, path) {
+  myAlertPushNamed(
+      context, path, 'Login Confirmed. Welcome back in DocuManager!');
+}
+
+//========================================================
+///Alert registration confirmed
+onRegistrationConfirmed(context, path) {
+  myAlertPushNamed(
+      context, path, 'Registration Confirmed. Welcome in DocuManager!');
+}
+
+//========================================================
+///Alert error firebase
+onErrorFirebase(context, e) {
+  myAlertPop(context, "Something went wrong: ${e.message.toString()}");
+}
+
+//========================================================
+///Alert error generic
+onErrorGeneric(context, e) {
+  myAlertPop(context, "Something went wrong: ${e.toString()}");
+}
+
+//========================================================
+///Alert success submit
+onGeneric(context, message) {
+  myAlertPop(context, message);
+}
+
+//===================================================================================
+/// Alert date submitted
+onDateConfirmed(dateText, context) {
+  myAlertPop(context, 'Selection Confirmed: $dateText');
+  Navigator.pop(context);
+}
+
+//===================================================================================
+/// Alert date input cleared
+onDateUnconfirmed(context) {
+  myAlertPop(context, 'Input cleared');
+  Navigator.pop(context);
+}
+
+//===================================================================================
+/// Open calendar view
+openCalendar(context, onDateSelected, onDateUnselected) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Success!'),
-      content: const Text('Subit ended successfully!'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, path),
-          child: const Text('OK'),
-        ),
-      ],
+      title: const Text('Pick an expiration date'),
+      content: SizedBox(
+          height: MediaQuery.of(context).size.width * 0.9,
+          width: MediaQuery.of(context).size.width * 0.6,
+          child: SfDateRangePicker(
+            view: DateRangePickerView.decade,
+            selectionMode: DateRangePickerSelectionMode.single,
+            showActionButtons: true,
+            cancelText: 'CANCEL',
+            confirmText: 'OK',
+            onSubmit: (value) {
+              if (value != null) {
+                onDateSelected(value as DateTime, context);
+              }
+            },
+            onCancel: () => onDateUnselected(context),
+          )),
     ),
   );
 }
@@ -121,7 +160,7 @@ onDelete(context, deleteCategory, card, path) {
 
 //========================================================
 ///Alert delete file
-onDeleteFile(context, deleteCategory, card) {
+onDeleteFile(context, deleteFile, card) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -135,7 +174,7 @@ onDeleteFile(context, deleteCategory, card) {
         ),
         TextButton(
           onPressed: () {
-            deleteCategory(card);
+            deleteFile(card);
             Navigator.pop(context);
           },
           child: const Text(
@@ -147,92 +186,5 @@ onDeleteFile(context, deleteCategory, card) {
     ),
   );
 }
+//===================================================================================
 
-//========================================================
-///Alert login confirmed
-onLoginConfirmed(context) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Login confirmed'),
-      content: const Text("Account successfully login"),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, '/'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
-
-//========================================================
-///Alert registration confirmed
-onRegistrationConfirmed(context) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Registration confirmed'),
-      content: const Text("Account successfully registered"),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, '/'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
-
-//========================================================
-///Alert error firebase
-onErrorFirebase(context, e) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('A problem occurred!'),
-      content: Text(e.message.toString()),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
-
-//========================================================
-///Alert error generic
-onErrorGeneric(context, e) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('A problem occurred!'),
-      content: Text(e.toString()),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
-
-//========================================================
-///Alert success submit
-onGeneric(context, message) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}

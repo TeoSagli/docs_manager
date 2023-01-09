@@ -153,7 +153,7 @@ class ContentLoginState extends State<ContentLogin> {
         )
             .then((value) {
           value.user!.reload();
-          onLoginConfirmed(context);
+          onLoginConfirmed(context, '/');
         }).onError((error, stackTrace) => onErrorFirebase(context, error));
       } on FirebaseAuthException catch (e) {
         onErrorFirebase(context, e);

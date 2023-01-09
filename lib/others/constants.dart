@@ -34,3 +34,7 @@ const immutableCats = [
   "Documents",
   "Pictures"
 ];
+
+const alertDurAnimation = 3000;
+
+const alertTextAlignment = TextAlign.left;
