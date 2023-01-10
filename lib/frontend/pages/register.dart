@@ -1,5 +1,5 @@
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
-import 'package:docs_manager/frontend/components/contentPages/contentRegister.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_register.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {

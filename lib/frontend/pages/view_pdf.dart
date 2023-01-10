@@ -1,4 +1,4 @@
-import 'package:docs_manager/frontend/components/contentPages/contentPdfShow.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_pdf_show.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 

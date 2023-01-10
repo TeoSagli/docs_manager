@@ -57,6 +57,7 @@ dependencies:
   advance_pdf_viewer: ^2.0.1
   flutter_spinkit: ^5.1.0
   syncfusion_flutter_datepicker: ^20.4.42
+  test: ^1.21.4
 
 dev_dependencies:
   flutter_test:

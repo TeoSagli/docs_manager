@@ -1,5 +1,5 @@
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
-import 'package:docs_manager/frontend/components/contentPages/contentFavourites.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_favourites.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 

@@ -1,5 +1,5 @@
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
-import 'package:docs_manager/frontend/components/contentPages/contentCategoryCreate.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_category_create.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCreatePage extends StatefulWidget {

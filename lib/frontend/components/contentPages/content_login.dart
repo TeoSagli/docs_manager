@@ -146,12 +146,7 @@ class ContentLoginState extends State<ContentLogin> {
   login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-          email: emailAddress,
-          password: password,
-        )
-            .then((value) {
+        await signIn(emailAddress, password).then((value) {
           value.user!.reload();
           onLoginConfirmed(context, '/');
         }).onError((error, stackTrace) => onErrorFirebase(context, error));
@@ -163,9 +158,19 @@ class ContentLoginState extends State<ContentLogin> {
     }
   }
 
+//========================================================
+  ///Sign in with firebase
+  signIn(email, password) {
+    return FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
+
   //========================================================
   ///Login on button pressed
   moveToRegisterPage() {
     Navigator.pushNamed(context, "/register");
   }
+  //========================================================
 }

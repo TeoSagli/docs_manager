@@ -1,4 +1,4 @@
-import 'package:docs_manager/frontend/components/contentPages/contentCategories.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_categories.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
