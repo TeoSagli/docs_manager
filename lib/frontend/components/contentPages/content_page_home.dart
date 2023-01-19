@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:flutter/material.dart';
 
 import '../../../backend/delete_db.dart';
@@ -70,34 +71,7 @@ class ContentHomeState extends State<ContentHome> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 7,
-                              color: Color(0x2F1D2429),
-                              offset: Offset(0, 3),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Text(
-                          'Categories',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Outfit',
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                    ),
+                    const TitleText2('Categories'),
                     Expanded(
                       child: CarouselSlider(
                         items: categoriesCardsList,
@@ -112,33 +86,7 @@ class ContentHomeState extends State<ContentHome> {
             ),
           ),
         ]),
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: const [
-                BoxShadow(
-                  blurRadius: 7,
-                  color: Color(0x2F1D2429),
-                  offset: Offset(0, 3),
-                )
-              ],
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: const Text(
-              'Recent Files',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Outfit',
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ),
-        ),
+        const TitleText2('Recent Files'),
         fileCardsGrid.isEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,

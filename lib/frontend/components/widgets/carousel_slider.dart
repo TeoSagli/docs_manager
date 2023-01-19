@@ -44,6 +44,7 @@ class MyCarouselState extends State<MyCarousel> {
         autoPlay: false,
         aspectRatio: 2.0,
         enlargeCenterPage: true,
+        enableInfiniteScroll: false,
       ),
       items: imageSliders,
     );

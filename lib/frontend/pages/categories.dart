@@ -16,7 +16,7 @@ class CategoriesPageState extends State<CategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar("All categories", false, context),
+      appBar: MyAppBar("Categories", false, context),
       bottomNavigationBar: MyBottomBar(context, 2),
       body: const ContentCategories(),
       floatingActionButton: ButtonAdd(context, '/categories/create',

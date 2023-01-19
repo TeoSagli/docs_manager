@@ -22,7 +22,6 @@ import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pdfx/pdfx.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ContentFileCreate extends StatefulWidget {
   final String catSelected;

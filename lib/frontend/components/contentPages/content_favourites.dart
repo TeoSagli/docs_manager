@@ -3,6 +3,7 @@ import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:docs_manager/frontend/components/widgets/file_card.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -64,6 +65,7 @@ class ContentFavouritesState extends State<ContentFavourites> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
+                const TitleText2("Your favourite docs will be here"),
                 ViewMode(changeViewMode, currMode),
                 Wrap(
                   spacing: 8,

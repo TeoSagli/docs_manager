@@ -9,14 +9,17 @@ class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: MyAppBar("Wallet", false, context),
-        bottomNavigationBar: MyBottomBar(context, 1),
-        body: SafeArea(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: const ContentWallet(),
-          ),
-        ));
+      resizeToAvoidBottomInset: false,
+      appBar: MyAppBar('Wallet', false, context),
+      bottomNavigationBar: MyBottomBar(context, 1),
+      body: const CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: ContentWallet(),
+          )
+        ],
+      ),
+    );
   }
 }

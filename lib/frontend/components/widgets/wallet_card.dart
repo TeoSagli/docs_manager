@@ -1,13 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../backend/models/file.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import '../../../backend/read_db.dart';
-import '../../../backend/update_db.dart';
-import '../../../others/alerts.dart';
 import '../abstract/card.dart';
 
 class WalletCard extends StatefulWidget {
@@ -56,7 +56,7 @@ class WalletCardState extends State<WalletCard> with MyCard {
             widget.file.extension.elementAt(0) as String,
             cardImage,
             context,
-            false)
+            true)
         .then(
       (value) {
         if (mounted) {
@@ -74,191 +74,68 @@ class WalletCardState extends State<WalletCard> with MyCard {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              blurRadius: 4,
-              color: Color(0x2B202529),
-              offset: Offset(0, 2),
-            )
-          ],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: MouseRegion(
-          onEnter: ((event) => onHover()),
-          onExit: ((event) => onExitHover()),
-          child: GestureDetector(
-            onTap: () => widget.function(widget.fileName, context),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.45,
-              decoration: BoxDecoration(
-                color: cardColor,
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 3,
-                    color: Color(0x25000000),
-                    offset: Offset(0, 2),
-                  )
+    return GestureDetector(
+      onTap: () => widget.function(widget.fileName, context),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(1, 1, 1, 1),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+              child: /*DottedBorder(
+                color: constants.mainBackColor,
+                strokeWidth: 1,
+                dashPattern: const [
+                  5,
+                  5,
                 ],
-                borderRadius: BorderRadius.circular(12),
+                child: */
+                  SizedBox(
+                height: 200,
+                width: MediaQuery.of(context).size.width,
+                child: Flex(
+                  direction: Axis.vertical,
+                  children: [
+                    Expanded(
+                      child: cardImage,
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                8, 4, 0, 4),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.file.subTitle1,
-                                  style: const TextStyle(
-                                    fontFamily: 'Outfit',
-                                    color: Color(0xFF57636C),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0, 4, 0, 0),
-                                  child: Text(
-                                    widget.fileName,
-                                    style: const TextStyle(
-                                      fontFamily: 'Outfit',
-                                      color: Color(0xFF101213),
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 4, 0, 0),
-                                  child: Text(
-                                    '#495242',
-                                    style: TextStyle(
-                                      fontFamily: 'Outfit',
-                                      color: Color(0xFF57636C),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              0, 10, 10, 0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: cardImage,
-                          ),
-                        ),
-                      ],
+              //    ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(5, 5, 15, 15),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: constants.mainBackColor,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 7,
+                      color: Color(0x2F1D2429),
+                      offset: Offset(0, 3),
+                    )
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                  child: Text(
+                    DateFormat('yyyy-MM-dd').format(widget.expiration),
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: const Color(0xFFF1F4F8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                            child: Icon(
-                              Icons.access_time_rounded,
-                              color: Color(0xFF57636C),
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 0, 0),
-                                child: Text(
-                                  DateFormat('yyyy-MM-dd')
-                                      .format(widget.expiration),
-                                  style: const TextStyle(
-                                    fontFamily: 'Outfit',
-                                    color: Color(0xFF57636C),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 0, 0),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      color: constants.mainBackColor,
-                                      icon: const Icon(
-                                          Icons.mode_edit_outline_rounded),
-                                      onPressed: () =>
-                                          widget.moveToEditFilePage(
-                                              widget.fileName, context),
-                                    ),
-                                    IconButton(
-                                        color: constants.mainBackColor,
-                                        icon: Icon(isFav
-                                            ? Icons.favorite_rounded
-                                            : Icons.favorite_border_rounded),
-                                        onPressed: () {
-                                          setState(() {
-                                            isFav = !isFav;
-                                          });
-                                          updateFavouriteDB(
-                                              widget.file.categoryName,
-                                              widget.fileName,
-                                              isFav);
-                                        }),
-                                    IconButton(
-                                      color: Colors.redAccent,
-                                      icon: const Icon(Icons.delete_rounded),
-                                      onPressed: () => onDeleteFile(
-                                          context, widget.removeCard, widget),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

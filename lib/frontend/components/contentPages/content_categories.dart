@@ -1,3 +1,4 @@
+import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -38,31 +39,38 @@ class ContentCategoriesState extends State<ContentCategories> {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView(
-      padding: EdgeInsets.zero,
-      primary: false,
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      onReorder: (int oldIndex, int newIndex) {
-        if (oldIndex < newIndex) {
-          newIndex -= 1;
-        }
-        final Container card = cardsList.removeAt(oldIndex);
-        final int item = itemsList.removeAt(oldIndex);
-        setState(() {
-          itemsList.insert(newIndex, item);
-          cardsList.insert(newIndex, card);
-        });
-        for (int element in itemsList) {
-          updateOrderDB(
-              element,
-              (cardsList.elementAt(element).child! as CategoryCard)
-                  .categoryName);
-        }
+    return Column(
+      children: [
+        const TitleText2("Group here your documents"),
+        Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+            child: ReorderableListView(
+              padding: EdgeInsets.zero,
+              primary: false,
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              onReorder: (int oldIndex, int newIndex) {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final Container card = cardsList.removeAt(oldIndex);
+                final int item = itemsList.removeAt(oldIndex);
+                setState(() {
+                  itemsList.insert(newIndex, item);
+                  cardsList.insert(newIndex, card);
+                });
+                for (int element in itemsList) {
+                  updateOrderDB(
+                      element,
+                      (cardsList.elementAt(element).child! as CategoryCard)
+                          .categoryName);
+                }
 
-        //   print("Items refreshing: $itemsList");
-      },
-      children: cardsList.isEmpty ? [] : cardsList,
+                //   print("Items refreshing: $itemsList");
+              },
+              children: cardsList.isEmpty ? [] : cardsList,
+            )),
+      ],
     );
   }
 

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
@@ -35,6 +37,12 @@ class ContentWalletState extends State<ContentWallet> {
   }
 
   @override
+  void dispose() {
+    readCards.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -47,17 +55,41 @@ class ContentWalletState extends State<ContentWallet> {
                       height: MediaQuery.of(context).size.width * 0.5),
                 ),
               )
-            : SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Wrap(
-                    spacing: 8,
-                    runSpacing: 12,
-                    alignment: WrapAlignment.spaceEvenly,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    direction: Axis.horizontal,
-                    runAlignment: WrapAlignment.start,
-                    verticalDirection: VerticalDirection.down,
-                    children: cardsList),
+            : Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const TitleText2('Expiring documents will be here'),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: CarouselSlider(
+                              items: cardsList,
+                              options: CarouselOptions(
+                                height: 250,
+                                viewportFraction: 0.35,
+                                autoPlay: false,
+                                enlargeCenterPage: true,
+                                scrollDirection: Axis.vertical,
+                                enableInfiniteScroll: false,
+                                initialPage: cardsList.length ~/ 2,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
       ],
     );
@@ -79,6 +111,7 @@ class ContentWalletState extends State<ContentWallet> {
   ) {
     setState(() {
       cardsList = myCards;
+      readCards.cancel();
     });
     /*print("Cardlist ${cardsList.toList().toString()} is here");
     print("Orderlist ${itemsList.toList().toString()} is here");*/
