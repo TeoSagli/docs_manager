@@ -109,53 +109,41 @@ createCategoryDB(String catName, String path) async {
 createDefaultCategoriesDB() async {
   var key = userRefDB();
   var userPath = "users/$key";
-  var defCategories = [
-    "Credit Cards",
-    "IDs",
-    "Other Cards",
-    "Documents",
-    "Pictures"
-  ];
-  var defCategoriesPath = [
-    "Credit Cards.png",
-    "IDs.png",
-    "Other Cards.png",
-    "Documents.png",
-    "Pictures.png"
+  List<Map<String, dynamic>> defCats = [
+    {"name": "Credit Cards", "path": "Credit Cards.png", "col": 4282682111},
+    {"name": "IDs", "path": "IDs.png", "col": 4285132974},
+    {"name": "Other Cards", "path": "Other Cards.png", "col": 4294945600},
+    {"name": "Documents", "path": "Documents.png", "col": 4294922834},
+    {"name": "Pictures", "path": "Pictures.png", "col": 4292886779}
   ];
 
-  var colorCategories = [
-    4282682111,
-    4285132974,
-    4294945600,
-    4294922834,
-    4292886779,
-  ];
   var categories = FirebaseDatabase.instance.ref("$userPath/categories");
 
-  for (var element in defCategories) {
-    var newCategory = categories.child(element);
-    var i = defCategories.indexOf(element);
-    var bytes = (await rootBundle.load('assets/images/${defCategoriesPath[i]}'))
+  for (Map<String, dynamic> defCat in defCats) {
+    var newCategory = categories.child(defCat['name']);
+    var i = defCats.indexOf(defCat);
+    var bytes = (await rootBundle.load('assets/images/${defCat['path']}'))
         .buffer
         .asUint8List();
     StreamSubscription s = loadFileAssetToStorage(
-        bytes, defCategories[i], defCategoriesPath[i], 'categories');
+        bytes, defCat['name'], defCat['path'], 'categories');
     await newCategory
         .update({
-          "path": defCategoriesPath[i],
+          "path": defCat['path'],
           "nfiles": 0,
           "order": i,
-          "colorValue": colorCategories[i],
+          "colorValue": defCat['col'],
         })
         .then((value) => print("Category default created!"))
         .catchError((error) => print("An error occured!"));
     s.cancel();
   }
 }
+//===================================================================================
+/// Convert ele from Json
 
 //===================================================================================
-/// Crate new user with [uid] in Firebase Database
+/// Create new user with [uid] in Firebase Database
 createUserDB(String email, String uid) async {
   var newUser = FirebaseDatabase.instance.ref("users/$uid");
 
