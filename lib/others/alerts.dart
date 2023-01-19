@@ -66,8 +66,8 @@ onLoginConfirmed(context, path) {
 //========================================================
 ///Alert registration confirmed
 onRegistrationConfirmed(context, path) {
-  myAlertPushNamed(
-      context, path, 'Registration Confirmed. Welcome in DocuManager!');
+  myAlertPushNamed(context, path,
+      'Registration Confirmed. Login with your credentials now!');
 }
 
 //========================================================
@@ -183,6 +183,18 @@ onDeleteFile(context, deleteFile, card) {
           ),
         ),
       ],
+    ),
+  );
+}
+
+//========================================================
+///Loading status
+onLoad(context) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => const AlertDialog(
+      title: Text('Processing'),
+      content: constants.loadingWheel,
     ),
   );
 }

@@ -1,4 +1,5 @@
 import 'package:docs_manager/backend/create_db.dart';
+import 'package:docs_manager/backend/models/user.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:email_validator/email_validator.dart';
@@ -14,23 +15,33 @@ class ContentRegister extends StatefulWidget {
 
 class ContentRegisterState extends State<ContentRegister> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String emailAddress;
-  late String password;
+  late UserCredsModel um1;
+  @override
+  void initState() {
+    setState(() {
+      um1 = UserCredsModel("", "");
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          child: const Text(
-            "Register an account!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: const Text(
+              "Register an account!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
             ),
           ),
         ),
@@ -66,7 +77,7 @@ class ContentRegisterState extends State<ContentRegister> {
                   ),
                   validator: (String? value) {
                     if (EmailValidator.validate(value!)) {
-                      emailAddress = value;
+                      um1.setEmail(value);
                       return null;
                     } else {
                       return "Please enter a valid email";
@@ -89,7 +100,7 @@ class ContentRegisterState extends State<ContentRegister> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       } else {
-                        password = value;
+                        um1.setPassword(value);
                       }
                       return null;
                     },
@@ -104,23 +115,32 @@ class ContentRegisterState extends State<ContentRegister> {
     );
   }
 
-  register() async {
+  //========================================================
+  ///Login operations
+  register() {
     if (_formKey.currentState!.validate()) {
       try {
         FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-          email: emailAddress,
-          password: password,
+          email: um1.email,
+          password: um1.password,
         )
             .then((value) {
-          createUserDB(emailAddress, value.user!.uid);
+          createUserDB(um1.email, value.user!.uid);
           createDefaultCategoriesDB();
-          onRegistrationConfirmed(context, '/');
+          onLoad(context);
+          Future.delayed(
+              const Duration(seconds: 5),
+              () => FirebaseAuth.instance
+                  .signOut()
+                  .then((value) => onRegistrationConfirmed(context, '/')));
         }).onError((error, stackTrace) => onErrorFirebase(context, error));
       } on FirebaseAuthException catch (e) {
         onErrorFirebase(context, e);
+        print("QUIiii $e");
       } catch (e) {
         onErrorGeneric(context, e);
+        print("QUIsfgsi $e");
       }
     }
   }

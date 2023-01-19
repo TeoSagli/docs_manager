@@ -1,3 +1,4 @@
+import 'package:docs_manager/backend/models/user.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
 import 'package:docs_manager/others/alerts.dart';
@@ -15,11 +16,13 @@ class ContentLogin extends StatefulWidget {
 
 class ContentLoginState extends State<ContentLogin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String emailAddress;
-  late String password;
+  late UserCredsModel um1;
 
   @override
   void initState() {
+    setState(() {
+      um1 = UserCredsModel("", "");
+    });
     super.initState();
   }
 
@@ -30,18 +33,21 @@ class ContentLoginState extends State<ContentLogin> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          child: const Text(
-            "Login to DocuManager!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: const Text(
+              "Login to DocuManager!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
             ),
           ),
         ),
@@ -78,7 +84,7 @@ class ContentLoginState extends State<ContentLogin> {
                   ),
                   validator: (String? value) {
                     if (EmailValidator.validate(value!)) {
-                      emailAddress = value;
+                      um1.setEmail(value);
                       return null;
                     } else {
                       return "Please enter a valid email";
@@ -101,14 +107,14 @@ class ContentLoginState extends State<ContentLogin> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       } else {
-                        password = value;
+                        um1.setPassword(value);
                       }
                       return null;
                     },
                   ),
                 ),
               ),
-              MyButton("Login", login),
+              MyButton("Login", loginOps),
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
@@ -143,19 +149,26 @@ class ContentLoginState extends State<ContentLogin> {
 
 //========================================================
   ///Login on button pressed
-  login() async {
+  Future<bool> login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await signIn(emailAddress, password).then((value) {
-          value.user!.reload();
-          onLoginConfirmed(context, '/');
-        }).onError((error, stackTrace) => onErrorFirebase(context, error));
+        await signIn(um1.email, um1.password);
+        return true;
       } on FirebaseAuthException catch (e) {
         onErrorFirebase(context, e);
       } catch (e) {
         onErrorGeneric(context, e);
       }
     }
+    return false;
+  }
+
+//========================================================
+  ///Login operations
+  loginOps() {
+    login().then((value) {
+      if (value) onLoginConfirmed(context, '/');
+    });
   }
 
 //========================================================
