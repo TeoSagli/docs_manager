@@ -2,7 +2,6 @@ import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
-import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';

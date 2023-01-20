@@ -1,5 +1,6 @@
 import 'package:docs_manager/frontend/components/contentPages/content_pdf_show.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class PdfShow extends StatelessWidget {
@@ -13,6 +14,7 @@ class PdfShow extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar('View pdf N° $fIndex', true, context),
+      drawer: const MyDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverFillRemaining(

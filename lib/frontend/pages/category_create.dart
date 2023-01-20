@@ -1,5 +1,6 @@
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_category_create.dart';
+import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCreatePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class CategoryCreateWidgetState extends State<CategoryCreatePage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: MyAppBar('Category creation', true, context),
+        drawer: const MyDrawer(),
         body: const CustomScrollView(
           slivers: [
             SliverFillRemaining(

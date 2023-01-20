@@ -1,5 +1,6 @@
 import 'package:docs_manager/frontend/components/contentPages/content_wallet.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import '../components/widgets/app_bar.dart';
 
@@ -12,6 +13,7 @@ class WalletPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar('Wallet', false, context),
       bottomNavigationBar: MyBottomBar(context, 1),
+      drawer: const MyDrawer(),
       body: const CustomScrollView(
         slivers: [
           SliverFillRemaining(

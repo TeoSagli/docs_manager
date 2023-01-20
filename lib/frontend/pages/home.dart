@@ -2,6 +2,7 @@ import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/button_add.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_page_home.dart';
+import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,6 +14,7 @@ class HomePage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar('Homepage', false, context),
       bottomNavigationBar: MyBottomBar(context, 0),
+      drawer: const MyDrawer(),
       body: const CustomScrollView(
         slivers: [
           SliverFillRemaining(

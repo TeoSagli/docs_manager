@@ -1,6 +1,6 @@
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_category_edit.dart';
-import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class CategoryEditPage extends StatelessWidget {
@@ -12,6 +12,7 @@ class CategoryEditPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: MyAppBar('View category $catName', true, context),
+        drawer: const MyDrawer(),
         body: CustomScrollView(
           slivers: [
             SliverFillRemaining(

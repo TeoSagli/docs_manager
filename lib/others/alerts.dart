@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -196,6 +197,47 @@ onLoad(context) {
       title: Text('Processing'),
       content: constants.loadingWheel,
     ),
+  );
+}
+
+//========================================================
+///Load app settings
+onSettings(context) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+        title: const Text('Settings'),
+        content: constants.emptyBox,
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Back',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ]),
+  );
+}
+
+//========================================================
+///Load user information
+onAccountStatus(context) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+        title: const Text('Profile information'),
+        content:
+            Text("Logged in as ${FirebaseAuth.instance.currentUser!.email!}"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Back',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ]),
   );
 }
 //===================================================================================
