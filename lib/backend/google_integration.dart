@@ -12,6 +12,7 @@ import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:http/http.dart' as http;
 import "package:googleapis_auth/auth_io.dart";
 import 'package:googleapis/calendar/v3.dart';
+import 'package:test/expect.dart';
 
 const _scopes = [
   'https://www.googleapis.com/auth/drive.file',
@@ -62,7 +63,7 @@ class GoogleManager {
         await _handleSignIn();
       } catch (error) {
         if (kDebugMode) print(error);
-        return AlertMessage(false, error.toString());
+        return AlertMessage(false, "Login error!");
       }
       headers = await _currentUser?.authHeaders;
       if (headers == null) return AlertMessage(false, "Login error!");
@@ -80,8 +81,6 @@ class GoogleManager {
       start.dateTime = expirationDate;
       event.start = start;
 
-      print(event.start);
-
       EventDateTime end = EventDateTime();
       end.timeZone = DateTime.now().timeZoneName; //Setting start time
       end.dateTime = expirationDate;
@@ -89,6 +88,24 @@ class GoogleManager {
 
       var calendar = CalendarApi(client);
       String calendarId = "primary";
+
+      var exists = false;
+
+      Events events = await calendar.events.list(calendarId);
+      List<Event>? eventsList = events.items;
+
+      if (eventsList != null) {
+        for (var i = 0; i < eventsList.length; i++) {
+          if (eventsList[i].summary == "Expiration of $fileName" &&
+              eventsList[i].status != "cancelled") {
+            exists = true;
+            break;
+          }
+        }
+      }
+
+      if (exists) return AlertMessage(false, "Event already created!");
+
       calendar.events.insert(event, calendarId).then((value) {
         if (value.status == "confirmed") {
           if (kDebugMode) {
@@ -117,7 +134,7 @@ class GoogleManager {
         await _handleSignIn();
       } catch (error) {
         if (kDebugMode) print(error);
-        return AlertMessage(false, error.toString());
+        return AlertMessage(false, "Login error!");
       }
 
       headers = await _currentUser?.authHeaders;
