@@ -242,3 +242,21 @@ onAccountStatus(context) {
 }
 //===================================================================================
 
+
+//========================================================
+///Alert error generic
+onSuccessGeneric(context, message) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Success!'),
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}

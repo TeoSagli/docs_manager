@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/models/file.dart';
+import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:file_picker/file_picker.dart';
@@ -22,6 +25,7 @@ class ButtonsFileOperations extends StatefulWidget {
 
 class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
   late bool isFav;
+
   @override
   void initState() {
     setState(() {
@@ -60,23 +64,19 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
                     widget.moveToEditFilePage(widget.fileName, context),
               ),
               IconButton(
-                color: constants.mainBackColor,
-                icon: const Icon(Icons.add_to_drive_rounded),
-                onPressed: () async {
-                  var drive = GoogleManager();
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
+                  color: constants.mainBackColor,
+                  icon: const Icon(Icons.add_to_drive_rounded),
+                  onPressed: () async {
+                    var drive = GoogleManager();
 
-                  if (result != null) {
-                    File file = File(result.files.single.path!);
-                    String alertMessage;
-                    alertMessage = await drive.upload(file, "prova");
-                    onGeneric(context, alertMessage);
-                  } else {
-                    // User canceled the picker
-                  }
-                },
-              ),
+                    AlertMessage alertMessage =
+                        await drive.upload(widget.file, widget.fileName);
+                    if (alertMessage.success) {
+                      onSuccessGeneric(context, alertMessage.message);
+                    } else {
+                      onErrorGeneric(context, alertMessage.message);
+                    }
+                  }),
               IconButton(
                   color: constants.mainBackColor,
                   icon: Icon(isFav

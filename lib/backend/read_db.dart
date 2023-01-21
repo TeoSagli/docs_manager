@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/widgets/category_card.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'package:pdfx/pdfx.dart';
 import 'models/category.dart';
+import 'package:path_provider/path_provider.dart';
 
 //===================================================================================
 /// Read category [catName] images from Firebase Storage
@@ -95,6 +97,33 @@ readFileFromNameStorage(
     print("Error $e!");
   }
   return File("");
+}
+//===================================================================================
+/// Read file PDF from Firebase Storage
+
+Future<File> readGenericFileFromNameStorage(
+  String i,
+  String catName,
+  String extension,
+  String fileName,
+) async {
+  var key = userRefDB();
+  var userPath = "users/$key";
+  Reference storageRef =
+      FirebaseStorage.instance.ref("$userPath/files/$catName");
+  Reference fileRef = storageRef.child("$fileName$i.$extension");
+  try {
+    Uint8List data = (await fileRef.getData())!;
+    final tempDir = await getTemporaryDirectory();
+    File file = await File('${tempDir.path}/image.png').create();
+    file.writeAsBytesSync(data);
+
+    return file;
+  } on FirebaseException catch (e) {
+    // Handle any errors.
+    print("Error $e!");
+    return File("");
+  }
 }
 
 //===================================================================================
