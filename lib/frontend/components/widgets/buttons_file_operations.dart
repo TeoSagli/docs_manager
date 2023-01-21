@@ -77,6 +77,23 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
                       onErrorGeneric(context, alertMessage.message);
                     }
                   }),
+              widget.file.expiration != ""
+                  ? IconButton(
+                      color: constants.mainBackColor,
+                      icon: const Icon(Icons.edit_calendar),
+                      onPressed: () async {
+                        var calendar = GoogleManager();
+
+                        AlertMessage alertMessage =
+                            await calendar.addCalendarExpiration(widget.file,
+                                widget.fileName, widget.file.expiration);
+                        if (alertMessage.success) {
+                          onSuccessGeneric(context, alertMessage.message);
+                        } else {
+                          onErrorGeneric(context, alertMessage.message);
+                        }
+                      })
+                  : constants.emptyBox,
               IconButton(
                   color: constants.mainBackColor,
                   icon: Icon(isFav
