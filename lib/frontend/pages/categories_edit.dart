@@ -11,7 +11,7 @@ class CategoryEditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: MyAppBar('View category $catName', true, context),
+        appBar: MyAppBar('View category $catName', true, context, true),
         drawer: const MyDrawer(),
         body: CustomScrollView(
           slivers: [

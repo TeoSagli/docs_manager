@@ -10,7 +10,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('Login', false, context),
+      appBar: MyAppBar('Login', false, context, false),
       drawer: const MyDrawer(),
       body: const CustomScrollView(
         slivers: [

@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('Homepage', false, context),
+      appBar: MyAppBar('Homepage', false, context, true),
       bottomNavigationBar: MyBottomBar(context, 0),
       drawer: const MyDrawer(),
       body: const CustomScrollView(

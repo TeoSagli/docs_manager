@@ -1,6 +1,6 @@
 class UserCredsModel {
-  String password;
-  String email;
+  String password = "";
+  String email = "";
 
   UserCredsModel(
     this.email,

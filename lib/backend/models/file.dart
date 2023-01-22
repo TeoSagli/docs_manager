@@ -1,17 +1,15 @@
 //===========================================================
 //Model of File
 class FileModel {
-  final List<Object?> path;
-  final List<Object?> extension;
-  final String categoryName;
-  final String subTitle1;
-  final String dateUpload;
-  final String expiration;
+  List<Object?> path = [];
+  List<Object?> extension = [];
+  String categoryName = "";
+  String dateUpload = "";
+  String expiration = "";
   bool isFavourite;
   FileModel({
     required this.path,
     required this.categoryName,
-    required this.subTitle1,
     required this.isFavourite,
     required this.dateUpload,
     required this.extension,
@@ -23,7 +21,6 @@ class FileModel {
     return FileModel(
       path: data['path'],
       categoryName: data['categoryName'],
-      subTitle1: '216 Members',
       isFavourite: data['isFavourite'],
       dateUpload: data['dateUpload'],
       extension: data['extension'],

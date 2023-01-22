@@ -10,7 +10,7 @@ class FileViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar('View file $fileName', true, context),
+        appBar: MyAppBar('View file $fileName', true, context, true),
         drawer: const MyDrawer(),
         body: CustomScrollView(
           slivers: [

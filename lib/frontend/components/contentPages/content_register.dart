@@ -1,4 +1,5 @@
 import 'package:docs_manager/backend/create_db.dart';
+import 'package:docs_manager/backend/handlers/handleRegistration.dart';
 import 'package:docs_manager/backend/models/user.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/others/alerts.dart';
@@ -16,10 +17,13 @@ class ContentRegister extends StatefulWidget {
 class ContentRegisterState extends State<ContentRegister> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UserCredsModel um1;
+  late HandleRegistration hr;
+
   @override
   void initState() {
     setState(() {
       um1 = UserCredsModel("", "");
+      hr = HandleRegistration(um1);
     });
     super.initState();
   }
@@ -107,7 +111,8 @@ class ContentRegisterState extends State<ContentRegister> {
                   ),
                 ),
               ),
-              MyButton("Register", register),
+              MyButton("Register",
+                  {if (_formKey.currentState!.validate()) registerOps}),
             ],
           ),
         ),
@@ -116,32 +121,12 @@ class ContentRegisterState extends State<ContentRegister> {
   }
 
   //========================================================
-  ///Login operations
-  register() {
-    if (_formKey.currentState!.validate()) {
-      try {
-        FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-          email: um1.email,
-          password: um1.password,
-        )
-            .then((value) {
-          createUserDB(um1.email, value.user!.uid);
-          createDefaultCategoriesDB();
-          onLoad(context);
-          Future.delayed(
-              const Duration(seconds: 5),
-              () => FirebaseAuth.instance
-                  .signOut()
-                  .then((value) => onRegistrationConfirmed(context, '/')));
-        }).onError((error, stackTrace) => onErrorFirebase(context, error));
-      } on FirebaseAuthException catch (e) {
-        onErrorFirebase(context, e);
-        print("QUIiii $e");
-      } catch (e) {
-        onErrorGeneric(context, e);
-        print("QUIsfgsi $e");
-      }
-    }
+  ///register operations
+  ///
+  registerOps() {
+    setState(() {
+      hr = HandleRegistration(um1);
+    });
+    hr.register(context);
   }
 }

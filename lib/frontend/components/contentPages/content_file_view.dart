@@ -27,7 +27,6 @@ class ContentFileViewState extends State<ContentFileView> {
   FileModel fileData = FileModel(
       path: [],
       categoryName: "",
-      subTitle1: "",
       isFavourite: false,
       dateUpload: "",
       extension: [],
@@ -154,13 +153,20 @@ class ContentFileViewState extends State<ContentFileView> {
         for (var element in f.extension) {
           extList.add(element as String);
         }
-        buttonList = ButtonsFileOperations(
-            widget.fileName, fileData, moveToEditFile, removeCard);
+        buttonList = ButtonsFileOperations(widget.fileName, fileData,
+            moveToEditFile, removeCard, updateFavouriteDB);
         listenColor = getColorCategoryDB(setColor, fileData.categoryName);
       });
       for (int i = 0; i < extList.length; i++) {
-        Image value = (await readImageFileStorage(i, fileData.categoryName,
-            widget.fileName, extList[i], img, context, true) as Image);
+        Image value = (await readImageFileStorage(
+            i,
+            fileData.categoryName,
+            widget.fileName,
+            extList[i],
+            img,
+            context,
+            true,
+            setImage) as Image);
         setState(() {
           previewImgList.add(value);
         });
@@ -202,4 +208,10 @@ class ContentFileViewState extends State<ContentFileView> {
     );
   }
   //===================================================================================
+
+  setImage(value) {
+    setState(() {
+      previewImgList.add(value as Image);
+    });
+  }
 }

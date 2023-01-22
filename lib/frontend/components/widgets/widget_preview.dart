@@ -4,8 +4,6 @@ import 'package:docs_manager/others/constants.dart' as constants;
 class DocumentPreview extends StatelessWidget {
   final dynamic removeImage;
   final Image loadedImage;
-  final String? pathImage;
-  final String? nameImage;
   final double cardSize;
 
   /// A preview image card with remove button:
@@ -16,10 +14,8 @@ class DocumentPreview extends StatelessWidget {
   ///
   /// 3-remove image method
   ///
-  /// 4-path image
-  ///
   const DocumentPreview(this.loadedImage, this.cardSize, this.removeImage,
-      {this.pathImage, this.nameImage, super.key});
+      {super.key});
 
   @override
   Widget build(BuildContext context) {

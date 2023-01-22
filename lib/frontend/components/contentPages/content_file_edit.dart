@@ -46,7 +46,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
   FileModel fileData = FileModel(
       path: [],
       categoryName: "",
-      subTitle1: "",
       isFavourite: false,
       dateUpload: "",
       extension: [],
@@ -420,7 +419,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
         extList.add(element as String);
       }
       dateText = f.expiration;
-      dropdown = MyDropdown(fileData.categoryName);
+      dropdown = MyDropdown(fileData.categoryName, retrieveCategoriesNamesDB);
       for (var element in f.path) {
         pathImgList.add(element as String);
       }
@@ -433,7 +432,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     });
     for (int i = 0; i < extList.length; i++) {
       readImageFileStorage(i, fileData.categoryName, widget.fileName,
-              extList[i], img, context, true)
+              extList[i], img, context, true, setImage)
           .then(
         (value) => setState(() {
           previewImgList.add(value as Image);
@@ -452,5 +451,10 @@ class ContentFileEditState extends State<ContentFileEdit> {
     return pageImage!.bytes;
   }
 
+  setImage(value) {
+    setState(() {
+      previewImgList.add(value as Image);
+    });
+  }
   //===================================================================================
 }

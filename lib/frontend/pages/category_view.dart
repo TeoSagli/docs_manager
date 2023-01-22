@@ -12,7 +12,7 @@ class CategoryViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: MyAppBar('View $catName', true, context),
+        appBar: MyAppBar('View $catName', true, context, true),
         drawer: const MyDrawer(),
         body: ContentCategoryView(catName),
         floatingActionButton: ButtonAdd(context, '/files/create/$catName',

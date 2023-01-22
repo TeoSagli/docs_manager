@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:docs_manager/backend/models/file.dart';
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/category_card.dart';
 import 'package:docs_manager/frontend/components/widgets/category_overview_card.dart';
 import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 import 'package:docs_manager/frontend/components/widgets/list_card.dart';
 import 'package:docs_manager/frontend/components/widgets/wallet_card.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -39,20 +41,21 @@ readImageCategoryStorage(String catName, dynamic setCard) async {
 
 //===================================================================================
 /// Read file image at index i of file [fileName] from Firebase Storage
-Future<Widget> readImageFileStorage(
+readImageFileStorage(
     int i,
     String catName,
     String fileName,
     String ext,
     Widget cardImage,
     BuildContext context,
-    bool isFullHeigth) async {
+    bool isFullHeigth,
+    dynamic setImage) async {
   var key = userRefDB();
   var userPath = "users/$key";
   final storageRef = FirebaseStorage.instance.ref("$userPath/files/$catName");
   final fileRef = storageRef.child("$fileName$i.$ext");
   try {
-    return await fileRef.getData().then((value) async {
+    fileRef.getData().then((value) async {
       if (ext != 'pdf') {
         cardImage = Image.memory(
           value!,
@@ -68,13 +71,15 @@ Future<Widget> readImageFileStorage(
           fit: BoxFit.cover,
         );
       }
-      return cardImage;
+      setImage(cardImage);
     });
   } on FirebaseException catch (e) {
     // Handle any errors.
+    setImage(constants.defaultImg);
     print("Error $e!");
+  } catch (e) {
+    setImage(constants.defaultImg);
   }
-  return constants.defaultImg;
 }
 //===================================================================================
 /// Read file PDF from Firebase Storage
@@ -152,8 +157,14 @@ StreamSubscription retrieveCategoriesDB(dynamic fulfillCard,
           cardCat.order,
           Container(
             key: Key(cardCat.order.toString()),
-            child: CategoryCard(cardName, cardCat, moveToCategory,
-                moveToEditCategory, removeCard),
+            child: CategoryCard(
+                cardName,
+                cardCat,
+                moveToCategory,
+                moveToEditCategory,
+                removeCard,
+                readImageCategoryStorage,
+                onDelete),
           ));
       // TO FIX====================================
       orders.insert(cardCat.order, cardCat.order);
@@ -192,7 +203,8 @@ StreamSubscription retrieveCategoryOverviewDB(
           cardCat.order,
           Container(
             key: Key(cardCat.order.toString()),
-            child: CategoryOverviewCard(cardName, cardCat, moveToCategory),
+            child: CategoryOverviewCard(
+                cardName, cardCat, moveToCategory, readImageCategoryStorage),
           ));
       // TO FIX====================================
       orders.insert(cardCat.order, cardCat.order);
@@ -233,10 +245,20 @@ StreamSubscription retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
       final cardName = f.key.toString();
 
       gridView.add(
-        FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+        FileCard(
+            cardName,
+            cardFile,
+            moveToFile,
+            moveToEditFile,
+            removeCard,
+            readImageFileStorage,
+            getColorCategoryDB,
+            updateFavouriteDB,
+            onDeleteFile),
       );
       listView.add(
-        ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+        ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard,
+            updateFavouriteDB, onDeleteFile),
       );
     }
     if (!isFavPage) {
@@ -287,7 +309,7 @@ StreamSubscription retrieveAllExpirationFilesDB(dynamic fulfillCard,
         //insert card in order
         tempCards.add(
           WalletCard(cardName, cardFile.expiration, cardFile, moveToFile,
-              moveToEditFile, removeCard),
+              readImageFileStorage),
         );
 
         //   orders.insert(cardCat.order, cardCat.order);
@@ -338,10 +360,20 @@ StreamSubscription retrieveFilesFromCategoryDB(
 
       //insert card in order
       cardsGrid.add(
-        FileCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+        FileCard(
+            cardName,
+            cardFile,
+            moveToFile,
+            moveToEditFile,
+            removeCard,
+            readImageFileStorage,
+            getColorCategoryDB,
+            updateFavouriteDB,
+            onDeleteFile),
       );
       cardsList.add(
-        ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard),
+        ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard,
+            updateFavouriteDB, onDeleteFile),
       );
     }
     fulfillCard(cardsGrid, cardsList);

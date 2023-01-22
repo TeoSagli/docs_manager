@@ -1,11 +1,8 @@
-import 'dart:async';
 import 'package:docs_manager/backend/models/file.dart';
-import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import '../abstract/card.dart';
 
 class FileCard extends StatefulWidget {
   @override
@@ -15,50 +12,42 @@ class FileCard extends StatefulWidget {
   final dynamic function;
   final dynamic moveToEditFilePage;
   final dynamic removeCard;
+  final dynamic initCardFromDB;
+  final dynamic initColorFromDB;
+  final dynamic updateFavouriteDB;
+  final dynamic delFunction;
 
-  const FileCard(this.fileName, this.file, this.function,
-      this.moveToEditFilePage, this.removeCard,
+  const FileCard(
+      this.fileName,
+      this.file,
+      this.function,
+      this.moveToEditFilePage,
+      this.removeCard,
+      this.initCardFromDB,
+      this.initColorFromDB,
+      this.updateFavouriteDB,
+      this.delFunction,
       {super.key});
 }
 
-class FileCardState extends State<FileCard> with MyCard {
+class FileCardState extends State<FileCard> {
   Widget cardImage = constants.loadingWheel;
-  late StreamSubscription listenColor;
-  late StreamSubscription readImg;
   late bool isFav;
   Color catColor = Colors.grey;
-  @override
-  onExitHover() {
-    setState(() {
-      cardColor = Colors.white;
-    });
-  }
-
-  @override
-  onHover() {
-    setState(() {
-      cardColor = Colors.white30;
-    });
-  }
 
   @override
   void initState() {
-    listenColor = getColorCategoryDB(setColor, widget.file.categoryName);
-    readImageFileStorage(
-            0,
-            widget.file.categoryName,
-            widget.fileName,
-            widget.file.extension.elementAt(0) as String,
-            cardImage,
-            context,
-            false)
-        .then((value) {
-      if (mounted) {
-        setState(() {
-          cardImage = value;
-        });
-      }
-    });
+    widget.initColorFromDB(setColor, widget.file.categoryName);
+    widget.initCardFromDB(
+        0,
+        widget.file.categoryName,
+        widget.fileName,
+        widget.file.extension.elementAt(0) as String,
+        cardImage,
+        context,
+        false,
+        setImage);
+
     setState(() {
       isFav = widget.file.isFavourite;
     });
@@ -66,30 +55,17 @@ class FileCardState extends State<FileCard> with MyCard {
   }
 
   @override
-  void deactivate() {
-    listenColor.cancel();
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    listenColor.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
       child: MouseRegion(
-        onEnter: ((event) => onHover()),
-        onExit: ((event) => onExitHover()),
         child: GestureDetector(
+          key: const Key("tap-card"),
           onTap: () => widget.function(widget.fileName, context),
           child: Container(
             width: MediaQuery.of(context).size.width * 0.45,
             decoration: BoxDecoration(
-              color: cardColor,
+              color: Colors.white,
               boxShadow: const [
                 BoxShadow(
                   blurRadius: 3,
@@ -184,6 +160,7 @@ class FileCardState extends State<FileCard> with MyCard {
                           Row(
                             children: [
                               IconButton(
+                                key: const Key("tap-move-to-edit"),
                                 color: constants.mainBackColor,
                                 icon:
                                     const Icon(Icons.mode_edit_outline_rounded),
@@ -191,6 +168,7 @@ class FileCardState extends State<FileCard> with MyCard {
                                     widget.fileName, context),
                               ),
                               IconButton(
+                                  key: const Key("tap-set-fav"),
                                   color: constants.mainBackColor,
                                   icon: Icon(isFav
                                       ? Icons.favorite_rounded
@@ -199,13 +177,16 @@ class FileCardState extends State<FileCard> with MyCard {
                                     setState(() {
                                       isFav = !isFav;
                                     });
-                                    updateFavouriteDB(widget.file.categoryName,
-                                        widget.fileName, isFav);
+                                    widget.updateFavouriteDB(
+                                        widget.file.categoryName,
+                                        widget.fileName,
+                                        isFav);
                                   }),
                               IconButton(
+                                key: const Key("tap-del"),
                                 color: Colors.redAccent,
                                 icon: const Icon(Icons.delete_rounded),
-                                onPressed: () => onDeleteFile(
+                                onPressed: () => widget.delFunction(
                                     context, widget.removeCard, widget),
                               ),
                             ],
@@ -226,6 +207,14 @@ class FileCardState extends State<FileCard> with MyCard {
   setColor(int c) {
     setState(() {
       catColor = Color(c);
+    });
+  }
+
+  setImage(value) {
+    setState(() {
+      setState(() {
+        cardImage = value;
+      });
     });
   }
 }

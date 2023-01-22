@@ -1,10 +1,10 @@
 //===========================================================
 //Model of category
 class CategoryModel {
-  String path;
-  int nfiles;
-  final int colorValue;
-  int order;
+  String path = "";
+  int nfiles = 0;
+  int colorValue = 0;
+  int order = 0;
   CategoryModel({
     required this.path,
     required this.nfiles,

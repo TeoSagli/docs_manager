@@ -25,18 +25,21 @@ class MyDrawer extends StatelessWidget {
                     width: 50,
                     height: 50,
                   ),
-                  const Text(
-                    textAlign: TextAlign.center,
-                    'DocuManager',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                  const Expanded(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      'DocuManager',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
+                  )
                 ],
               )),
           ListTile(
             title: TextButton(
+              key: const Key("account"),
               style: ButtonStyle(
                 backgroundColor:
                     const MaterialStatePropertyAll(constants.mainBackColor),
@@ -54,10 +57,14 @@ class MyDrawer extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const [
-                  Icon(Icons.account_circle, color: Colors.white),
-                  Text(
-                    'Account',
-                    style: TextStyle(color: Colors.white),
+                  Expanded(
+                    child: Icon(Icons.account_circle, color: Colors.white),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Account',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -65,6 +72,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             title: TextButton(
+              key: const Key("settings"),
               style: ButtonStyle(
                 backgroundColor:
                     const MaterialStatePropertyAll(constants.mainBackColor),

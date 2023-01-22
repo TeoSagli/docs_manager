@@ -17,7 +17,7 @@ class CategoriesPageState extends State<CategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar("Categories", false, context),
+      appBar: MyAppBar("Categories", false, context, true),
       bottomNavigationBar: MyBottomBar(context, 2),
       drawer: const MyDrawer(),
       body: const ContentCategories(),

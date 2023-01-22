@@ -13,7 +13,7 @@ class PdfShow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('View pdf N° $fIndex', true, context),
+      appBar: MyAppBar('View pdf N° $fIndex', true, context, true),
       drawer: const MyDrawer(),
       body: CustomScrollView(
         slivers: [

@@ -1,11 +1,7 @@
-import 'dart:async';
 import 'package:docs_manager/backend/models/file.dart';
-import 'package:docs_manager/backend/read_db.dart';
-import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import '../abstract/card.dart';
 
 class ListCard extends StatefulWidget {
   @override
@@ -15,34 +11,27 @@ class ListCard extends StatefulWidget {
   final dynamic function;
   final dynamic moveToEditFilePage;
   final dynamic removeCard;
+  final dynamic updateFavouriteDB;
+  final dynamic onDeleteFile;
 
-  const ListCard(this.fileName, this.file, this.function,
-      this.moveToEditFilePage, this.removeCard,
+  const ListCard(
+      this.fileName,
+      this.file,
+      this.function,
+      this.moveToEditFilePage,
+      this.removeCard,
+      this.updateFavouriteDB,
+      this.onDeleteFile,
       {super.key});
 }
 
-class ListCardState extends State<ListCard> with MyCard {
+class ListCardState extends State<ListCard> {
   Widget cardImage = constants.loadingWheel;
-  late StreamSubscription listenColor;
   late bool isFav;
   Color catColor = Colors.grey;
-  @override
-  onExitHover() {
-    setState(() {
-      cardColor = Colors.white;
-    });
-  }
-
-  @override
-  onHover() {
-    setState(() {
-      cardColor = Colors.white30;
-    });
-  }
 
   @override
   void initState() {
-    listenColor = getColorCategoryDB(setColor, widget.file.categoryName);
     setState(() {
       isFav = widget.file.isFavourite;
     });
@@ -50,24 +39,17 @@ class ListCardState extends State<ListCard> with MyCard {
   }
 
   @override
-  void dispose() {
-    listenColor.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 5),
       child: MouseRegion(
-        onEnter: ((event) => onHover()),
-        onExit: ((event) => onExitHover()),
         child: GestureDetector(
+          key: const Key("move-to"),
           onTap: () => widget.function(widget.fileName, context),
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: cardColor,
+              color: Colors.white,
               boxShadow: const [
                 BoxShadow(
                   blurRadius: 3,
@@ -112,12 +94,14 @@ class ListCardState extends State<ListCard> with MyCard {
                     Row(
                       children: [
                         IconButton(
+                          key: const Key("move-to-2"),
                           color: constants.mainBackColor,
                           icon: const Icon(Icons.mode_edit_outline_rounded),
                           onPressed: () => widget.moveToEditFilePage(
                               widget.fileName, context),
                         ),
                         IconButton(
+                            key: const Key("set-fav"),
                             color: constants.mainBackColor,
                             icon: Icon(isFav
                                 ? Icons.favorite_rounded
@@ -126,10 +110,11 @@ class ListCardState extends State<ListCard> with MyCard {
                               setState(() {
                                 isFav = !isFav;
                               });
-                              updateFavouriteDB(widget.file.categoryName,
+                              widget.updateFavouriteDB(widget.file.categoryName,
                                   widget.fileName, isFav);
                             }),
                         IconButton(
+                          key: const Key("tap-del"),
                           color: Colors.redAccent,
                           icon: const Icon(Icons.delete_rounded),
                           onPressed: () =>
@@ -145,11 +130,5 @@ class ListCardState extends State<ListCard> with MyCard {
         ),
       ),
     );
-  }
-
-  setColor(int c) {
-    setState(() {
-      catColor = Color(c);
-    });
   }
 }

@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../backend/models/file.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import '../../../backend/read_db.dart';
-import '../abstract/card.dart';
 
 class WalletCard extends StatefulWidget {
   @override
@@ -16,56 +13,30 @@ class WalletCard extends StatefulWidget {
   final String fileName;
   final FileModel file;
   final dynamic function;
-  final dynamic moveToEditFilePage;
-  final dynamic removeCard;
+  final dynamic initCardFromDB;
   final DateTime expiration;
 
   WalletCard(this.fileName, String expiration, this.file, this.function,
-      this.moveToEditFilePage, this.removeCard,
+      this.initCardFromDB,
       {super.key})
       : expiration = DateTime.parse(expiration);
 }
 
-class WalletCardState extends State<WalletCard> with MyCard {
+class WalletCardState extends State<WalletCard> {
   Widget cardImage = constants.loadingWheel;
-  late StreamSubscription listenColor;
   late bool isFav;
-  Color catColor = Colors.grey;
-
-  @override
-  onExitHover() {
-    setState(() {
-      cardColor = Colors.white;
-    });
-  }
-
-  @override
-  onHover() {
-    setState(() {
-      cardColor = Colors.white30;
-    });
-  }
 
   @override
   void initState() {
-    listenColor = getColorCategoryDB(setColor, widget.file.categoryName);
-    readImageFileStorage(
-            0,
-            widget.file.categoryName,
-            widget.fileName,
-            widget.file.extension.elementAt(0) as String,
-            cardImage,
-            context,
-            true)
-        .then(
-      (value) {
-        if (mounted) {
-          setState(() {
-            cardImage = value;
-          });
-        }
-      },
-    );
+    widget.initCardFromDB(
+        0,
+        widget.file.categoryName,
+        widget.fileName,
+        widget.file.extension.elementAt(0) as String,
+        cardImage,
+        context,
+        true,
+        setImage);
     setState(() {
       isFav = widget.file.isFavourite;
     });
@@ -75,6 +46,7 @@ class WalletCardState extends State<WalletCard> with MyCard {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: const Key("tap-widget"),
       onTap: () => widget.function(widget.fileName, context),
       child: Stack(
         children: [
@@ -140,11 +112,11 @@ class WalletCardState extends State<WalletCard> with MyCard {
     );
   }
 
-  setColor(int c) {
-    if (mounted) {
+  setImage(value) {
+    setState(() {
       setState(() {
-        catColor = Color(c);
+        cardImage = value;
       });
-    }
+    });
   }
 }

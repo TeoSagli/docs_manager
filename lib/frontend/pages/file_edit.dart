@@ -11,7 +11,7 @@ class FileEditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: MyAppBar('Edit file $fileName', true, context),
+        appBar: MyAppBar('Edit file $fileName', true, context, true),
         drawer: const MyDrawer(),
         body: CustomScrollView(
           slivers: [

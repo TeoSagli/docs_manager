@@ -10,7 +10,7 @@ class FileCreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar("File creation", true, context),
+        appBar: MyAppBar("File creation", true, context, true),
         drawer: const MyDrawer(),
         body: CustomScrollView(
           slivers: [

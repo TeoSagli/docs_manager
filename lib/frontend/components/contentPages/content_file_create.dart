@@ -46,7 +46,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
       docNameController.addListener(() {
         checkElementExistDB(docNameController.text, "allFiles", setBool);
       });
-      dropdown = MyDropdown(widget.catSelected);
+      dropdown = MyDropdown(widget.catSelected, retrieveCategoriesNamesDB);
     });
     previewImgList = [];
     super.initState();

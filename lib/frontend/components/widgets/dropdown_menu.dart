@@ -1,16 +1,17 @@
-import 'dart:async';
-import 'package:docs_manager/backend/read_db.dart';
 import 'package:flutter/material.dart';
 
 class MyDropdown extends StatefulWidget {
   String dropdownValue = "";
+  final dynamic initDataFromDB;
 
   ///My custom InputField:
   ///
   ///1-set the value change.
   ///
+  ///2-set the method to cretrieve data form db.
+  ///
 
-  MyDropdown(this.dropdownValue, {super.key});
+  MyDropdown(this.dropdownValue, this.initDataFromDB, {super.key});
 
   @override
   State<StatefulWidget> createState() => MyDropdownState();
@@ -18,22 +19,11 @@ class MyDropdown extends StatefulWidget {
 
 class MyDropdownState extends State<MyDropdown> {
   List<String> categoriesNames = [];
-
-  late StreamSubscription readCategoriesNames;
 //===================================================================================
-// Activate listeners
   @override
   void initState() {
-    readCategoriesNames = retrieveCategoriesNamesDB(fillCategoriesNames);
+    widget.initDataFromDB(fillCategoriesNames);
     super.initState();
-  }
-
-//===================================================================================
-// Deactivate listeners
-  @override
-  void deactivate() {
-    readCategoriesNames.cancel();
-    super.deactivate();
   }
 
 //===================================================================================

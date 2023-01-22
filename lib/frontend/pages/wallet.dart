@@ -11,7 +11,7 @@ class WalletPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('Wallet', false, context),
+      appBar: MyAppBar('Wallet', false, context, true),
       bottomNavigationBar: MyBottomBar(context, 1),
       drawer: const MyDrawer(),
       body: const CustomScrollView(

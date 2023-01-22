@@ -1,8 +1,5 @@
-import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
-import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
-import '../abstract/card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class CategoryCard extends StatefulWidget {
@@ -11,34 +8,29 @@ class CategoryCard extends StatefulWidget {
   final dynamic function;
   final dynamic moveToEditCatPage;
   final dynamic removeCard;
+  final dynamic initCardFromDB;
+  final dynamic onDelete;
 
   @override
   State<StatefulWidget> createState() => CategoryCardState();
-  const CategoryCard(this.categoryName, this.category, this.function,
-      this.moveToEditCatPage, this.removeCard,
+  const CategoryCard(
+      this.categoryName,
+      this.category,
+      this.function,
+      this.moveToEditCatPage,
+      this.removeCard,
+      this.initCardFromDB,
+      this.onDelete,
       {super.key});
 }
 
-class CategoryCardState extends State<CategoryCard> with MyCard {
+class CategoryCardState extends State<CategoryCard> {
   final hCard = 80.0;
   Widget cardImage = constants.loadingWheel2;
-  @override
-  onExitHover() {
-    setState(() {
-      cardColor = Colors.white;
-    });
-  }
-
-  @override
-  onHover() {
-    setState(() {
-      cardColor = Colors.white30;
-    });
-  }
 
   @override
   void initState() {
-    readImageCategoryStorage(widget.category.path, setCard);
+    widget.initCardFromDB(widget.category.path, setCard);
     super.initState();
   }
 
@@ -53,7 +45,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
       padding: const EdgeInsets.all(1.5),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: cardColor,
+        color: Colors.white,
         boxShadow: const [
           BoxShadow(
             blurRadius: 20,
@@ -64,9 +56,8 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
         borderRadius: BorderRadius.circular(8),
       ),
       child: MouseRegion(
-        onEnter: ((event) => onHover()),
-        onExit: ((event) => onExitHover()),
         child: GestureDetector(
+          key: const Key("tap-widget"),
           onTap: () => widget.function(widget.categoryName, context),
           child: Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 5, 5),
@@ -91,7 +82,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
+                        width: 120,
                         child: Text(
                           widget.categoryName,
                           style: const TextStyle(
@@ -137,7 +128,7 @@ class CategoryCardState extends State<CategoryCard> with MyCard {
                             tooltip: "Remove",
                             color: Colors.redAccent,
                             icon: const Icon(Icons.delete_outline_rounded),
-                            onPressed: () => onDelete(context,
+                            onPressed: () => widget.onDelete(context,
                                 widget.removeCard, widget, "/categories"),
                           ),
                         ]

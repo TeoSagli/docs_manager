@@ -95,6 +95,7 @@ class MyCarouselState extends State<MyCarousel> {
                                               .elementAt(currImgIndex) ==
                                           'pdf'
                                   ? IconButton(
+                                      key: const Key("open-pdf"),
                                       color: constants.mainBackColor,
                                       onPressed: () => widget.moveToOpenFile(
                                           widget.fileName,
@@ -112,6 +113,7 @@ class MyCarouselState extends State<MyCarousel> {
                           ? Align(
                               alignment: Alignment.bottomRight,
                               child: IconButton(
+                                key: const Key("delete-pdf"),
                                 color: Colors.redAccent,
                                 icon: const Icon(Icons.delete_rounded),
                                 onPressed: () => widget.removeImg(item),

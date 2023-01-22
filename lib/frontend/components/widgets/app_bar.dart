@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isVisibleBackButton;
+  final bool isLogged;
   final BuildContext backContext;
 
   ///My custom AppBar:
@@ -15,7 +16,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   ///3-set context to recall with back button
   ///
-  const MyAppBar(this.title, this.isVisibleBackButton, this.backContext,
+  ///4-set if you are logged in that particular page
+  ///
+  const MyAppBar(
+      this.title, this.isVisibleBackButton, this.backContext, this.isLogged,
       {super.key});
 
   @override
@@ -48,7 +52,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () => Navigator.pushNamed(context, "/"),
               icon: Image.asset("assets/images/LogoTransparentBig.png"),
             ),
-      actions: isLogged()
+      actions: isLogged
           ? [
               IconButton(
                 tooltip: "Sign out",
@@ -69,8 +73,4 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
-
-  bool isLogged() {
-    return FirebaseAuth.instance.currentUser != null;
-  }
 }

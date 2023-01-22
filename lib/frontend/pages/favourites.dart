@@ -17,7 +17,7 @@ class FavouriteViewPageState extends State<FavouritesPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: MyBottomBar(context, 3),
-        appBar: MyAppBar("Favourites", false, context),
+        appBar: MyAppBar("Favourites", false, context, true),
         drawer: const MyDrawer(),
         body: const CustomScrollView(
           slivers: [

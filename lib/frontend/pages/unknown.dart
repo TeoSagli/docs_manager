@@ -9,7 +9,7 @@ class UnknownPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('Register', true, context),
+      appBar: MyAppBar('Register', true, context, true),
       drawer: const MyDrawer(),
       body: const CustomScrollView(
         slivers: [

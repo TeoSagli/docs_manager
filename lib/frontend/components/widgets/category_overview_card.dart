@@ -1,48 +1,34 @@
-import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/models/category.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../abstract/card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class CategoryOverviewCard extends StatefulWidget {
   final String categoryName;
   final CategoryModel category;
   final dynamic function;
+  final dynamic initCardFromDB;
 
   @override
   State<StatefulWidget> createState() => CategoryOverviewCardState();
-  const CategoryOverviewCard(this.categoryName, this.category, this.function,
+
+  const CategoryOverviewCard(
+      this.categoryName, this.category, this.function, this.initCardFromDB,
       {super.key});
 }
 
-class CategoryOverviewCardState extends State<CategoryOverviewCard>
-    with MyCard {
+class CategoryOverviewCardState extends State<CategoryOverviewCard> {
   Widget cardImage = constants.loadingWheel2;
-  @override
-  onExitHover() {
-    setState(() {
-      cardColor = Color(widget.category.colorValue);
-    });
-  }
-
-  @override
-  onHover() {
-    setState(() {
-      cardColor = Colors.white30;
-    });
-  }
+  Color cardColor = Colors.white;
 
   @override
   void initState() {
-    cardColor = Color(widget.category.colorValue);
-    readImageCategoryStorage(widget.category.path, setCard);
-    super.initState();
-  }
+    setState(() {
+      cardColor = Color(widget.category.colorValue);
+    });
 
-  @override
-  void didUpdateWidget(covariant CategoryOverviewCard oldWidget) {
-    readImageCategoryStorage(widget.category.path, setCard);
-    super.didUpdateWidget(oldWidget);
+    widget.initCardFromDB(widget.category.path, setCard);
+    super.initState();
   }
 
   @override
@@ -69,9 +55,8 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard>
           borderRadius: BorderRadius.circular(12),
         ),
         child: MouseRegion(
-          onEnter: ((event) => onHover()),
-          onExit: ((event) => onExitHover()),
           child: GestureDetector(
+            key: const Key("tap-widget"),
             onTap: () => widget.function(widget.categoryName, context),
             child: Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
@@ -114,7 +99,7 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard>
     );
   }
 
-  setCard(file) {
+  setCard(Uint8List file) {
     setState(() {
       cardImage = Image.memory(
         file,
