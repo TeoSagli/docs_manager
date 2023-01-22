@@ -1,3 +1,4 @@
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/button_add.dart';
@@ -12,8 +13,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('Homepage', false, context, true),
-      bottomNavigationBar: MyBottomBar(context, 0),
+      appBar: MyAppBar('Homepage', false, context, true, Navigator.pop,
+          Navigator.pushNamed, updateUserLogutStatus),
+      bottomNavigationBar: MyBottomBar(context, 0, Navigator.pushNamed),
       drawer: const MyDrawer(),
       body: const CustomScrollView(
         slivers: [
@@ -24,7 +26,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: ButtonAdd(context, '/files/create',
-          Icons.post_add_rounded, "Create a new file"),
+          Icons.post_add_rounded, "Create a new file", Navigator.pushNamed),
     );
   }
 }

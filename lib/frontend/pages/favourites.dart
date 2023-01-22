@@ -4,6 +4,8 @@ import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
+import '../../backend/update_db.dart';
+
 class FavouritesPage extends StatefulWidget {
   const FavouritesPage({super.key});
 
@@ -16,8 +18,9 @@ class FavouriteViewPageState extends State<FavouritesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        bottomNavigationBar: MyBottomBar(context, 3),
-        appBar: MyAppBar("Favourites", false, context, true),
+        bottomNavigationBar: MyBottomBar(context, 3, Navigator.pushNamed),
+        appBar: MyAppBar("Favourites", false, context, true, Navigator.pop,
+            Navigator.pushNamed, updateUserLogutStatus),
         drawer: const MyDrawer(),
         body: const CustomScrollView(
           slivers: [

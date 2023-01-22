@@ -6,6 +6,7 @@ class ButtonAdd extends StatelessWidget {
   final BuildContext pageContext;
   final IconData icon;
   final String tooltip;
+  final dynamic switchPage;
 
   /// Creates an 'add button' that redirect you to [link] creation page
   ///
@@ -17,7 +18,10 @@ class ButtonAdd extends StatelessWidget {
   ///
   /// 4-tooltip on long press
   ///
-  const ButtonAdd(this.pageContext, this.linkNav, this.icon, this.tooltip,
+  /// 5-switch page
+  ///
+  const ButtonAdd(
+      this.pageContext, this.linkNav, this.icon, this.tooltip, this.switchPage,
       {super.key});
 
   @override
@@ -29,12 +33,10 @@ class ButtonAdd extends StatelessWidget {
         child: FloatingActionButton(
           tooltip: tooltip,
           heroTag: icon.toString(),
-          onPressed: () {
-            Navigator.pushNamed(
-              pageContext,
-              linkNav,
-            );
-          },
+          onPressed: () => switchPage(
+            pageContext,
+            linkNav,
+          ),
           backgroundColor: constants.mainBackColor,
           elevation: 8,
           child: Icon(

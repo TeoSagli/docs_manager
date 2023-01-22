@@ -1,3 +1,4 @@
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_file_create.dart';
 import 'package:docs_manager/frontend/components/widgets/drawer.dart';
@@ -10,7 +11,8 @@ class FileCreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar("File creation", true, context, true),
+        appBar: MyAppBar("File creation", true, context, true, Navigator.pop,
+            Navigator.pushNamed, updateUserLogutStatus),
         drawer: const MyDrawer(),
         body: CustomScrollView(
           slivers: [

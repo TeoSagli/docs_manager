@@ -1,3 +1,4 @@
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_categories.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/drawer.dart';
@@ -17,12 +18,13 @@ class CategoriesPageState extends State<CategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar("Categories", false, context, true),
-      bottomNavigationBar: MyBottomBar(context, 2),
+      appBar: MyAppBar("Categories", false, context, true, Navigator.pop,
+          Navigator.pushNamed, updateUserLogutStatus),
+      bottomNavigationBar: MyBottomBar(context, 2, Navigator.pushNamed),
       drawer: const MyDrawer(),
       body: const ContentCategories(),
       floatingActionButton: ButtonAdd(context, '/categories/create',
-          Icons.add_to_photos, "Create a new category"),
+          Icons.add_to_photos, "Create a new category", Navigator.pushNamed),
     );
   }
 }

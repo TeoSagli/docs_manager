@@ -7,6 +7,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isVisibleBackButton;
   final bool isLogged;
   final BuildContext backContext;
+  final dynamic func1;
+  final dynamic func2;
+  final dynamic func3;
 
   ///My custom AppBar:
   ///
@@ -16,10 +19,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   ///3-set context to recall with back button
   ///
-  ///4-set if you are logged in that particular page
+  ///4-navigate back method
   ///
-  const MyAppBar(
-      this.title, this.isVisibleBackButton, this.backContext, this.isLogged,
+  ///5-navigate to new page method
+  ///
+  ///6-sign out from DB method
+  ///
+  const MyAppBar(this.title, this.isVisibleBackButton, this.backContext,
+      this.isLogged, this.func1, this.func2, this.func3,
       {super.key});
 
   @override
@@ -37,33 +44,27 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 2,
       leading: isVisibleBackButton
           ? IconButton(
+              key: const Key("back"),
               iconSize: 40,
               icon: const Icon(
                 Icons.arrow_back_rounded,
                 color: Colors.white,
                 size: 30,
               ),
-              onPressed: () {
-                Navigator.pop(backContext);
-              },
+              onPressed: () => func1(backContext),
             )
           : IconButton(
+              key: const Key("home"),
               tooltip: "Home",
-              onPressed: () => Navigator.pushNamed(context, "/"),
+              onPressed: () => func2(context, "/"),
               icon: Image.asset("assets/images/LogoTransparentBig.png"),
             ),
       actions: isLogged
           ? [
               IconButton(
+                key: const Key("logout"),
                 tooltip: "Sign out",
-                onPressed: () {
-                  FirebaseAuth.instance.signOut().then(
-                        (value) => Navigator.pushNamed(
-                          context,
-                          "/login",
-                        ),
-                      );
-                },
+                onPressed: () => func3(context),
                 icon: const Icon(Icons.logout_rounded),
               )
             ]

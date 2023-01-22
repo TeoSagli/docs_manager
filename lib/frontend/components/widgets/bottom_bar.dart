@@ -4,6 +4,7 @@ import 'package:docs_manager/others/constants.dart' as constants;
 class MyBottomBar extends StatefulWidget {
   final BuildContext barContext;
   final int activeIndex;
+  final dynamic switchPage;
 
   ///My custom ButtomBar:
   ///
@@ -11,7 +12,10 @@ class MyBottomBar extends StatefulWidget {
   ///
   ///2-set index 0<=x<=3 if in bottom bar or 4 if not present
   ///
-  const MyBottomBar(this.barContext, this.activeIndex, {super.key});
+  ///3-switch pages method
+  ///
+  const MyBottomBar(this.barContext, this.activeIndex, this.switchPage,
+      {super.key});
 
   @override
   State<MyBottomBar> createState() => _MyBottomBarState();
@@ -21,7 +25,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
   final List<String> paths = ['', 'wallet', 'categories', 'favourites'];
   void _onItemTapped(int index) {
     if (index != widget.activeIndex) {
-      Navigator.pushNamed(
+      widget.switchPage(
         widget.barContext,
         '/${paths[index]}',
       );

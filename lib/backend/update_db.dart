@@ -1,6 +1,8 @@
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/backend/read_db.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 
 //===================================================================================
 /// Update order value of category [catName] on Firebase Database
@@ -61,4 +63,13 @@ updateCategoryDB(String catName, CategoryModel cat) async {
       .then((value) => print("Category Updated!"))
       .catchError((error) => print("An error occured!"));
 }
+
 //===================================================================================
+updateUserLogutStatus(context) {
+  FirebaseAuth.instance.signOut().then(
+        (value) => Navigator.pushNamed(
+          context,
+          "/login",
+        ),
+      );
+}
