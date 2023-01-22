@@ -44,7 +44,7 @@ class AlertMessage {
 }
 
 class GoogleManager {
-  GoogleSignInAccount? _currentUser;
+  static GoogleSignInAccount? _currentUser;
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     //clientId: _clientId,
@@ -53,6 +53,56 @@ class GoogleManager {
 
   Future _handleSignIn() async {
     _currentUser = await _googleSignIn.signIn();
+  }
+
+  removeCalendarExpiration(String fileName) async {
+    var headers = await _currentUser?.authHeaders;
+    if (headers == null) {
+      try {
+        await _handleSignIn();
+      } catch (error) {
+        if (kDebugMode) print(error);
+        return AlertMessage(false, "Login error!");
+      }
+      headers = await _currentUser?.authHeaders;
+      if (headers == null) return AlertMessage(false, "Login error!");
+    }
+
+    try {
+      final client = GoogleAuthClient(headers);
+
+      var calendar = CalendarApi(client);
+      String calendarId = "primary";
+
+      Events events = await calendar.events.list(calendarId);
+      List<Event>? eventsList = events.items;
+
+      String eventID = "";
+
+      if (eventsList != null) {
+        for (var i = 0; i < eventsList.length; i++) {
+          if (eventsList[i].summary == "Expiration of $fileName" &&
+              eventsList[i].status != "cancelled") {
+            String? id = eventsList[i].id;
+            if (id != null) {
+              eventID = id;
+            }
+            break;
+          }
+        }
+      }
+
+      if (eventID == "") return AlertMessage(false, "Event not created!");
+
+      calendar.events.delete(calendarId, eventID);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error creating event $e');
+      }
+      return AlertMessage(false, "An error occured!");
+    }
+
+    return AlertMessage(true, "Event removed");
   }
 
   Future<AlertMessage> addCalendarExpiration(
