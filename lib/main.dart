@@ -1,8 +1,19 @@
+import 'package:docs_manager/backend/handlers/handleLogin.dart';
+import 'package:docs_manager/backend/handlers/handleRegistration.dart';
+import 'package:docs_manager/backend/models/user.dart';
+import 'package:docs_manager/backend/update_db.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_register.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_wallet.dart';
+import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:docs_manager/frontend/pages/file_edit.dart';
 import 'package:docs_manager/frontend/pages/login.dart';
 import 'package:docs_manager/frontend/pages/view_pdf.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'frontend/components/contentPages/content_login.dart';
 import 'frontend/pages/categories.dart';
 import 'frontend/pages/categories_edit.dart';
 import 'frontend/pages/category_create.dart';
@@ -36,10 +47,29 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MyAppState();
 
-  // This widget is the root of your application.
+  const MyApp({super.key});
+}
+
+class MyAppState extends State<MyApp> {
+  late HandleLogin handleLogin;
+  late HandleRegistration handleRegister;
+  late final MyDrawer myDrawer;
+  late String pageName = "";
+  @override
+  void initState() {
+    setState(() {
+      handleLogin = HandleLogin(UserCredsModel("", ""));
+      handleRegister = HandleRegistration(UserCredsModel("", ""));
+      myDrawer = const MyDrawer(onAccountStatus, onSettings);
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,7 +80,17 @@ class MyApp extends StatelessWidget {
           if (isLogged()) {
             return MaterialPageRoute(builder: (context) => const HomePage());
           } else {
-            return MaterialPageRoute(builder: (context) => const LoginPage());
+            return MaterialPageRoute(
+                builder: (context) => LoginPage(
+                      ContentLogin(
+                          handleLogin.login,
+                          context,
+                          onErrorGeneric,
+                          onErrorFirebase,
+                          onLoginConfirmed,
+                          Navigator.pushNamed),
+                      getAppBar(2, 'Login', context),
+                    ));
           }
         }
         var uri = Uri.parse(settings.name.toString());
@@ -64,16 +104,32 @@ class MyApp extends StatelessWidget {
                     builder: (context) => const CategoriesPage());
               case 'wallet':
                 return MaterialPageRoute(
-                    builder: (context) => const WalletPage());
+                    builder: (context) => WalletPage(
+                        const ContentWallet(),
+                        getAppBar(0, 'Wallet', context),
+                        getBottomBar(1, context),
+                        myDrawer));
               case 'favourites':
                 return MaterialPageRoute(
                     builder: (context) => const FavouritesPage());
               case 'login':
                 return MaterialPageRoute(
-                    builder: (context) => const LoginPage());
+                    builder: (context) => LoginPage(
+                          ContentLogin(
+                              handleLogin.login,
+                              context,
+                              onErrorGeneric,
+                              onErrorFirebase,
+                              onLoginConfirmed,
+                              Navigator.pushNamed),
+                          getAppBar(2, 'Login', context),
+                        ));
               case 'register':
                 return MaterialPageRoute(
-                    builder: (context) => const RegisterPage());
+                    builder: (context) => RegisterPage(
+                        ContentRegister(handleRegister.register,
+                            handleRegister.setUser, context),
+                        getAppBar(2, "Register", context)));
               default:
                 break;
             }
@@ -166,5 +222,30 @@ class MyApp extends StatelessWidget {
 
   bool isLogged() {
     return FirebaseAuth.instance.currentUser != null;
+  }
+
+  MyAppBar getAppBar(int mode, name, context) {
+    switch (mode) {
+      case 0:
+        return MyAppBar(name, false, context, true, Navigator.pop,
+            Navigator.pushNamed, updateUserLogutStatus);
+      case 1:
+        return MyAppBar(name, true, context, true, Navigator.pop,
+            Navigator.pushNamed, updateUserLogutStatus);
+      case 2:
+        return MyAppBar(name, false, context, false, Navigator.pop,
+            Navigator.pushNamed, updateUserLogutStatus);
+
+      case 3:
+        return MyAppBar(name, true, context, false, Navigator.pop,
+            Navigator.pushNamed, updateUserLogutStatus);
+      default:
+        return MyAppBar(name, false, context, true, Navigator.pop,
+            Navigator.pushNamed, updateUserLogutStatus);
+    }
+  }
+
+  MyBottomBar getBottomBar(int mode, context) {
+    return MyBottomBar(context, mode, Navigator.pushNamed);
   }
 }

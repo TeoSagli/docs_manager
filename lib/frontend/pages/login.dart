@@ -1,12 +1,12 @@
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_login.dart';
-import 'package:docs_manager/frontend/components/widgets/drawer.dart';
-import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  final ContentLogin content;
+  final MyAppBar myAppBar;
+  const LoginPage(this.content, this.myAppBar, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +14,11 @@ class LoginPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: MyAppBar('Login', false, context, false, Navigator.pop,
           Navigator.pushNamed, updateUserLogutStatus),
-      drawer: const MyDrawer(onAccountStatus, onSettings),
-      body: const CustomScrollView(
+      body: CustomScrollView(
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
-            child: ContentLogin(),
+            child: content,
           )
         ],
       ),

@@ -1,14 +1,20 @@
 import 'package:docs_manager/backend/models/user.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
-import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ContentLogin extends StatefulWidget {
-  const ContentLogin({super.key});
+  final dynamic handleLogin;
+  final dynamic onErrorGeneric;
+  final dynamic onErrorFirebase;
+  final dynamic onLoginConfirmed;
+  final dynamic moveToRegisterPage;
+  final dynamic context;
+  const ContentLogin(this.handleLogin, this.context, this.onErrorGeneric,
+      this.onErrorFirebase, this.onLoginConfirmed, this.moveToRegisterPage,
+      {super.key});
 
   @override
   State<ContentLogin> createState() => ContentLoginState();
@@ -77,6 +83,7 @@ class ContentLoginState extends State<ContentLogin> {
                 constraints: BoxConstraints.tight(
                     Size(MediaQuery.of(context).size.width * 0.8, 50)),
                 child: TextFormField(
+                  key: const Key("email"),
                   autofocus: false,
                   decoration: const InputDecoration(
                     hintText: 'Enter your email',
@@ -98,6 +105,7 @@ class ContentLoginState extends State<ContentLogin> {
                   constraints: BoxConstraints.tight(
                       Size(MediaQuery.of(context).size.width * 0.8, 50)),
                   child: TextFormField(
+                    key: const Key("password"),
                     obscureText: true,
                     decoration: const InputDecoration(
                       hintText: 'Enter your password',
@@ -120,7 +128,8 @@ class ContentLoginState extends State<ContentLogin> {
                 child: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 20, 10),
                   child: TextButton(
-                      onPressed: () => moveToRegisterPage(),
+                      onPressed: () =>
+                          widget.moveToRegisterPage(context, "/register"),
                       style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.transparent),
@@ -148,42 +157,18 @@ class ContentLoginState extends State<ContentLogin> {
   }
 
 //========================================================
-  ///Login on button pressed
-  Future<bool> login() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        await signIn(um1.email, um1.password);
-        return true;
-      } on FirebaseAuthException catch (e) {
-        onErrorFirebase(context, e);
-      } catch (e) {
-        onErrorGeneric(context, e);
-      }
-    }
-    return false;
-  }
-
-//========================================================
   ///Login operations
   loginOps() {
-    login().then((value) {
-      if (value) onLoginConfirmed(context, '/');
-    });
-  }
-
-//========================================================
-  ///Sign in with firebase
-  signIn(email, password) {
-    return FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    if (_formKey.currentState!.validate()) {
+      widget
+          .handleLogin(um1, widget.context, widget.onErrorFirebase,
+              widget.onErrorGeneric)
+          .then((value) {
+        if (value) widget.onLoginConfirmed(context, '/');
+      });
+    }
   }
 
   //========================================================
-  ///Login on button pressed
-  moveToRegisterPage() {
-    Navigator.pushNamed(context, "/register");
-  }
-  //========================================================
+
 }

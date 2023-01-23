@@ -1,46 +1,48 @@
-import "dart:convert";
-
-import 'package:docs_manager/backend/models/user.dart';
 import "package:docs_manager/frontend/components/contentPages/content_login.dart";
-import "package:docs_manager/frontend/components/widgets/title_text.dart";
+import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import "package:docs_manager/frontend/pages/login.dart";
-import "package:firebase_auth/firebase_auth.dart";
-import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
-import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:docs_manager/others/constants.dart" as constants;
 import "package:mockito/mockito.dart";
-import "../../../firebaseMock.dart";
+
+class MockBuildContext extends Mock implements BuildContext {}
+
+class MockAppBar extends Mock implements MyAppBar {
+  @override
+  Size get preferredSize => const Size(100, 100);
+  @override
+  String get title => "Login";
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) => "";
+}
 
 void main() {
-  late LoginPage loginPage;
-  late MockUser user1;
-  late MockUser user2;
-  late UserCredsModel um1;
-  late UserCredsModel um2;
+  late ContentLogin sut;
+  late MockBuildContext context;
+  late MockAppBar mockAppBar;
 
-  setupFirebaseAuthMocks();
   setUpAll(() async {
-    await Firebase.initializeApp();
-    final Map<String, dynamic> json1 = {"password": "", "email": ""};
-    final Map<String, dynamic> json2 = {
-      "password": "a@a.it",
-      "email": "123456"
-    };
-    um1 = UserCredsModel.fromJson(json1);
-    um2 = UserCredsModel.fromJson(json2);
-    loginPage = const LoginPage();
-    //when(mock.signIn(authInst)).thenAnswer((_) async => true);
+    context = MockBuildContext();
+    mockAppBar = MockAppBar();
   });
+  Widget createWidgetUnderTest() {
+    return MaterialApp(home: LoginPage(sut, mockAppBar));
+  }
+
+  onErrorGeneric() {}
+  onErrorFirebase() {}
+  moveToRegisterPage(a, b) {}
+  onLoginConfirmed(a, b) {}
+  Future<bool> handleLogin(um1, context, onErrorFirebase, onErrorGeneric) {
+    return Future.value(true);
+  }
 
   testWidgets("Login content structure", (tester) async {
-    /*  Widget buildTestableWidget(Widget widget) {
-      return MediaQuery(
-          data: const MediaQueryData(), child: MaterialApp(home: widget));
-    }
-
-    await tester.pumpWidget(buildTestableWidget(loginPage));
+    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
+        onLoginConfirmed, moveToRegisterPage);
+    await tester.pumpWidget(createWidgetUnderTest());
     final titleFinder = find.text("Login to DocuManager!");
     final subtitleFinder = find.text("The simple documents & cards manager");
     final imageFinder =
@@ -48,39 +50,55 @@ void main() {
     final buttonLoginText = find.text("Login");
     final buttonRegisterText = find.text("Register -->");
 
-    // Use the `findsOneWidget` matcher provided by flutter_test to verify
-    // that the Text widgets appear exactly once in the widget tree.
     expect(titleFinder, findsOneWidget);
     expect(subtitleFinder, findsOneWidget);
     expect(imageFinder, findsOneWidget);
     expect(buttonLoginText, findsWidgets);
-    expect(buttonRegisterText, findsOneWidget);*/
+    expect(buttonRegisterText, findsOneWidget);
   });
-  group("login tests", () {
-    test("login failed", () async {
-      /* final auth = MockFirebaseAuth(mockUser: user1);
-      try {
-        auth
-            .signInWithEmailAndPassword(
-                email: um1.email, password: um1.password)
-            .onError((error, stackTrace) {
-          print("Error is $error");
-          return (um1 as UserCredential);
-        });
-        print("success");
-      } on FirebaseException catch (e) {
-        print("Error is $e");
-      }
-      expect(false, false);*/
-    });
 
-    test("login valid", () async {
-      /*
-      final auth = MockFirebaseAuth(mockUser: user2);
-      sut = HandleSignInMock(auth, um1.email, um1.password);
-      final bool hasLogged = await sut.signIn();
-      expect(hasLogged, true);
-      */
-    });
+  testWidgets("Enter email", (tester) async {
+    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
+        onLoginConfirmed, moveToRegisterPage);
+    await tester.pumpWidget(createWidgetUnderTest());
+    await tester.enterText(find.byKey(const Key("email")), "MyName");
+    await tester.pump();
+    expect(find.text("MyName"), findsOneWidget);
+    await tester.enterText(find.byKey(const Key("email")), "a@a.it");
+    await tester.pump();
+    expect(find.text("a@a.it"), findsOneWidget);
+  });
+  testWidgets("Enter password", (tester) async {
+    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
+        onLoginConfirmed, moveToRegisterPage);
+    await tester.pumpWidget(createWidgetUnderTest());
+    await tester.enterText(find.byKey(const Key("password")), "MyPassword");
+    await tester.pump();
+    expect(find.text("MyPassword"), findsOneWidget);
+    await tester.enterText(find.byKey(const Key("password")), "123456");
+    await tester.pump();
+    expect(find.text("123456"), findsOneWidget);
+  });
+  testWidgets("Tap Login button", (tester) async {
+    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
+        onLoginConfirmed, moveToRegisterPage);
+    await tester.pumpWidget(createWidgetUnderTest());
+    await tester.ensureVisible(find.byType(MyButton));
+    await tester.pump();
+    await tester.enterText(find.byKey(const Key("email")), "a@a.it");
+    await tester.enterText(find.byKey(const Key("password")), "123456");
+    await tester.tap(find.byType(MyButton));
+    await tester.pump();
+    expect(find.byType(MyButton), findsOneWidget);
+  });
+  testWidgets("Tap Register button", (tester) async {
+    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
+        onLoginConfirmed, moveToRegisterPage);
+    await tester.pumpWidget(createWidgetUnderTest());
+    await tester.ensureVisible(find.byType(TextButton));
+    await tester.pump();
+    await tester.tap(find.byType(TextButton));
+    await tester.pump();
+    expect(find.byType(TextButton), findsOneWidget);
   });
 }

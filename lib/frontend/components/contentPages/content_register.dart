@@ -1,14 +1,15 @@
-import 'package:docs_manager/backend/create_db.dart';
-import 'package:docs_manager/backend/handlers/handleRegistration.dart';
 import 'package:docs_manager/backend/models/user.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
-import 'package:docs_manager/others/alerts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ContentRegister extends StatefulWidget {
-  const ContentRegister({super.key});
+  final dynamic handleRegister;
+  final dynamic setUser;
+  final dynamic context;
+
+  const ContentRegister(this.handleRegister, this.setUser, this.context,
+      {super.key});
 
   @override
   State<ContentRegister> createState() => ContentRegisterState();
@@ -17,13 +18,11 @@ class ContentRegister extends StatefulWidget {
 class ContentRegisterState extends State<ContentRegister> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late UserCredsModel um1;
-  late HandleRegistration hr;
 
   @override
   void initState() {
     setState(() {
       um1 = UserCredsModel("", "");
-      hr = HandleRegistration(um1);
     });
     super.initState();
   }
@@ -75,6 +74,7 @@ class ContentRegisterState extends State<ContentRegister> {
                 constraints: BoxConstraints.tight(
                     Size(MediaQuery.of(context).size.width * 0.8, 50)),
                 child: TextFormField(
+                  key: const Key("email"),
                   decoration: const InputDecoration(
                     hintText: 'Enter your email',
                     icon: Icon(Icons.account_circle_rounded),
@@ -95,6 +95,7 @@ class ContentRegisterState extends State<ContentRegister> {
                   constraints: BoxConstraints.tight(
                       Size(MediaQuery.of(context).size.width * 0.8, 50)),
                   child: TextFormField(
+                    key: const Key("password"),
                     obscureText: true,
                     decoration: const InputDecoration(
                       hintText: 'Enter your password',
@@ -111,8 +112,7 @@ class ContentRegisterState extends State<ContentRegister> {
                   ),
                 ),
               ),
-              MyButton("Register",
-                  {if (_formKey.currentState!.validate()) registerOps}),
+              MyButton("Register", registerOps),
             ],
           ),
         ),
@@ -124,9 +124,9 @@ class ContentRegisterState extends State<ContentRegister> {
   ///register operations
   ///
   registerOps() {
-    setState(() {
-      hr = HandleRegistration(um1);
-    });
-    hr.register(context);
+    if (_formKey.currentState!.validate()) {
+      widget.setUser(um1);
+      widget.handleRegister(widget.context);
+    }
   }
 }
