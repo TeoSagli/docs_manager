@@ -7,37 +7,47 @@ class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
   late MockBuildContext context;
-  late final scaffoldKey;
+  late GlobalKey<ScaffoldState> scaffoldKey;
 
   setUp(() {
     context = MockBuildContext();
     scaffoldKey = GlobalKey<ScaffoldState>();
   });
-  Widget createWidgetUnderTest() {
+  Widget createWidgetUnderTest(onAccountStatus, onSettings) {
     return MaterialApp(
       home: Scaffold(
-        resizeToAvoidBottomInset: false,
         key: scaffoldKey,
-        drawer: const MyDrawer(),
+        resizeToAvoidBottomInset: false,
+        drawer: MyDrawer(onAccountStatus, onSettings),
         body: Text("Hello"),
       ),
     );
   }
 
+  onAccountStatus(context) {}
+  onSettings(context) {}
   testWidgets(
-    "drawer displays correctly",
+    "drawer displays correctly and tap account",
     (WidgetTester tester) async {
-      await tester.pumpWidget(createWidgetUnderTest());
-      scaffoldKey.currentState.openDrawer();
-      await tester.pump();
-      await tester.ensureVisible(find.byKey(const Key("account")));
+      await tester
+          .pumpWidget(createWidgetUnderTest(onAccountStatus, onSettings));
+      scaffoldKey.currentState!.openDrawer();
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key("account")));
-      await tester.pump();
-      await tester.ensureVisible(find.text("Back"));
-      await tester.tap(find.text("Back"));
-      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(find.text("Account"), findsOneWidget);
+      expect(find.text("Settings"), findsOneWidget);
+    },
+  );
+  testWidgets(
+    "drawer displays correctly and tap settings",
+    (WidgetTester tester) async {
+      await tester
+          .pumpWidget(createWidgetUnderTest(onAccountStatus, onSettings));
+      scaffoldKey.currentState!.openDrawer();
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key("settings")));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text("Account"), findsOneWidget);
       expect(find.text("Settings"), findsOneWidget);
     },

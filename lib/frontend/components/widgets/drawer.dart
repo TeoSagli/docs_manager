@@ -1,9 +1,10 @@
-import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+  final dynamic onAccountStatus;
+  final dynamic onSettings;
+  const MyDrawer(this.onAccountStatus, this.onSettings, {super.key});
 
   @override
   Widget build(BuildContext context) {

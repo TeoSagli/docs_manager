@@ -14,6 +14,9 @@ class ButtonsFileOperations extends StatefulWidget {
   final dynamic moveToEditFilePage;
   final dynamic removeCard;
   final dynamic dbUpdateFavMethod;
+  final dynamic removeEventCalendar;
+  final dynamic addEventCalendar;
+  final dynamic addDocToDrive;
   final String fileName;
 
   ///My custom Button:
@@ -25,8 +28,15 @@ class ButtonsFileOperations extends StatefulWidget {
   ///3-function to move to next page
   ///
   ///4-function to remove the actual card
-  const ButtonsFileOperations(this.fileName, this.file, this.moveToEditFilePage,
-      this.removeCard, this.dbUpdateFavMethod,
+  const ButtonsFileOperations(
+      this.fileName,
+      this.file,
+      this.moveToEditFilePage,
+      this.removeCard,
+      this.dbUpdateFavMethod,
+      this.addDocToDrive,
+      this.addEventCalendar,
+      this.removeEventCalendar,
       {super.key});
 
   @override
@@ -75,52 +85,28 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
                     widget.moveToEditFilePage(widget.fileName, context),
               ),
               IconButton(
-                  key: const Key("drive"),
-                  color: constants.mainBackColor,
-                  icon: const Icon(Icons.add_to_drive_rounded),
-                  onPressed: () async {
-                    var drive = GoogleManager();
-
-                    AlertMessage alertMessage =
-                        await drive.upload(widget.file, widget.fileName);
-                    if (alertMessage.success) {
-                      onSuccessGeneric(context, alertMessage.message);
-                    } else {
-                      onErrorGeneric(context, alertMessage.message);
-                    }
-                  }),
+                key: const Key("drive"),
+                color: constants.mainBackColor,
+                icon: const Icon(Icons.add_to_drive_rounded),
+                onPressed: () => widget.addDocToDrive(widget.file),
+              ),
               widget.file.expiration != ""
-                  ? IconButton(
-                      color: constants.mainBackColor,
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: () async {
-                        var calendar = GoogleManager();
-
-                        AlertMessage alertMessage =
-                            await calendar.addCalendarExpiration(widget.file,
-                                widget.fileName, widget.file.expiration);
-                        if (alertMessage.success) {
-                          onSuccessGeneric(context, alertMessage.message);
-                        } else {
-                          onErrorGeneric(context, alertMessage.message);
-                        }
-                      })
-                  : constants.emptyBox,
-              widget.file.expiration != ""
-                  ? IconButton(
-                      color: constants.mainBackColor,
-                      icon: const Icon(Icons.edit_calendar),
-                      onPressed: () async {
-                        var calendar = GoogleManager();
-
-                        AlertMessage alertMessage = await calendar
-                            .removeCalendarExpiration(widget.fileName);
-                        if (alertMessage.success) {
-                          onSuccessGeneric(context, alertMessage.message);
-                        } else {
-                          onErrorGeneric(context, alertMessage.message);
-                        }
-                      })
+                  ? Row(
+                      children: [
+                        IconButton(
+                          key: const Key("add-calendar"),
+                          color: constants.mainBackColor,
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: () => widget.addEventCalendar(widget.file),
+                        ),
+                        IconButton(
+                          key: const Key("remove-calendar"),
+                          color: constants.mainBackColor,
+                          icon: const Icon(Icons.edit_calendar),
+                          onPressed: () => widget.removeEventCalendar(),
+                        )
+                      ],
+                    )
                   : constants.emptyBox,
               IconButton(
                   key: const Key("fav"),

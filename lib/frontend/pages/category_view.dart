@@ -1,6 +1,7 @@
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_category_view.dart';
 import 'package:docs_manager/frontend/components/widgets/drawer.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/frontend/components/widgets/button_add.dart';
 import '../components/widgets/app_bar.dart';
@@ -15,7 +16,7 @@ class CategoryViewPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: MyAppBar('View $catName', true, context, true, Navigator.pop,
             Navigator.pushNamed, updateUserLogutStatus),
-        drawer: const MyDrawer(),
+        drawer: const MyDrawer(onAccountStatus, onSettings),
         body: ContentCategoryView(catName),
         floatingActionButton: ButtonAdd(
             context,

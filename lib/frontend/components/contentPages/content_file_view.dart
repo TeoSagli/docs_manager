@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:docs_manager/backend/delete_db.dart';
+import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
@@ -8,6 +9,7 @@ import 'package:docs_manager/frontend/components/widgets/buttons_file_operations
 import 'package:docs_manager/frontend/components/widgets/carousel_slider.dart';
 import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -153,8 +155,15 @@ class ContentFileViewState extends State<ContentFileView> {
         for (var element in f.extension) {
           extList.add(element as String);
         }
-        buttonList = ButtonsFileOperations(widget.fileName, fileData,
-            moveToEditFile, removeCard, updateFavouriteDB);
+        buttonList = ButtonsFileOperations(
+            widget.fileName,
+            fileData,
+            moveToEditFile,
+            removeCard,
+            updateFavouriteDB,
+            addDocToDrive,
+            addEventCalendar,
+            removeEventCalendar);
         listenColor = getColorCategoryDB(setColor, fileData.categoryName);
       });
       for (int i = 0; i < extList.length; i++) {
@@ -206,6 +215,46 @@ class ContentFileViewState extends State<ContentFileView> {
       context,
       '/files/$catName/$fileName/$pdfIndex',
     );
+  }
+
+  //===================================================================================
+  //Doc is uploaded to drive
+  addDocToDrive(file) async {
+    var drive = GoogleManager();
+    await drive.upload(file, widget.fileName).then((alertMessage) {
+      if (alertMessage.success) {
+        onSuccess(context, alertMessage.message);
+      } else {
+        onErrorGeneric(context, alertMessage.message);
+      }
+    });
+  }
+
+  //===================================================================================
+  //Event is added to calendar
+  addEventCalendar(file) async {
+    var calendar = GoogleManager();
+
+    await calendar
+        .addCalendarExpiration(file, widget.fileName, file.expiration)
+        .then(
+      (alertMessage) {
+        if (alertMessage.success) {
+          onSuccess(context, alertMessage.message);
+        } else {
+          onErrorGeneric(context, alertMessage.message);
+        }
+      },
+    );
+  }
+
+  //===================================================================================
+  //Event is removed from calendar
+  removeEventCalendar() {
+    var calendar = GoogleManager();
+
+    calendar.removeCalendarExpiration(widget.fileName);
+    onSuccess(context, "Event removed");
   }
   //===================================================================================
 

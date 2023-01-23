@@ -2,6 +2,7 @@ import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_favourites.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/drawer.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 
 import '../../backend/update_db.dart';
@@ -21,7 +22,7 @@ class FavouriteViewPageState extends State<FavouritesPage> {
         bottomNavigationBar: MyBottomBar(context, 3, Navigator.pushNamed),
         appBar: MyAppBar("Favourites", false, context, true, Navigator.pop,
             Navigator.pushNamed, updateUserLogutStatus),
-        drawer: const MyDrawer(),
+        drawer: const MyDrawer(onAccountStatus, onSettings),
         body: const CustomScrollView(
           slivers: [
             SliverFillRemaining(
