@@ -88,7 +88,7 @@ class ContentFileViewState extends State<ContentFileView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const TitleText(
-                    "Document name:",
+                    "File name:",
                     Colors.black,
                   ),
                   const SizedBox(width: 5),
@@ -167,18 +167,13 @@ class ContentFileViewState extends State<ContentFileView> {
         listenColor = getColorCategoryDB(setColor, fileData.categoryName);
       });
       for (int i = 0; i < extList.length; i++) {
-        Image value = (await readImageFileStorage(
-            i,
-            fileData.categoryName,
-            widget.fileName,
-            extList[i],
-            img,
-            context,
-            true,
-            setImage) as Image);
-        setState(() {
-          previewImgList.add(value);
-        });
+        readImageFileStorage(i, fileData.categoryName, widget.fileName,
+                extList[i], img, context, true, setImage)
+            .then(
+          (value) => setState(() {
+            previewImgList.add(value as Image);
+          }),
+        );
       }
     }
   }

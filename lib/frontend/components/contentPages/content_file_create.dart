@@ -88,8 +88,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                 alignment: const AlignmentDirectional(0, -0.9),
                                 child: Column(
                                   children: [
-                                    const TitleText(
-                                        "Document name:", Colors.black),
+                                    const TitleText("File name:", Colors.black),
                                     InputField(docNameController, true),
                                   ],
                                 ),
@@ -350,7 +349,9 @@ class ContentFileCreateState extends State<ContentFileCreate> {
         createFile(catName, docNameController.text, dateText, listPaths,
             listExt, "allFiles");
         onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
-        onSuccess(context, '/');
+        onLoad(context);
+        Future.delayed(
+            const Duration(seconds: 3), () => onSuccess(context, '/'));
       } catch (e) {
         print("Error: $e");
       }
