@@ -1,22 +1,10 @@
 import 'package:docs_manager/frontend/components/contentPages/content_register.dart';
-import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/pages/register.dart';
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:mockito/mockito.dart";
 
-class MockBuildContext extends Mock implements BuildContext {}
-
-class MockAppBar extends Mock implements MyAppBar {
-  @override
-  Size get preferredSize => const Size(100, 100);
-  @override
-  String get title => "Register";
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) => "";
-}
+import '../../../mock_classes/mocks.dart';
 
 void main() {
   late ContentRegister sut;

@@ -1,29 +1,33 @@
-import 'dart:async';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:flutter/material.dart';
-
-import '../../../backend/delete_db.dart';
-import '../../../backend/read_db.dart';
-import '../../../backend/update_db.dart';
-import '../widgets/file_card.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class ContentHome extends StatefulWidget {
-  const ContentHome({super.key});
+  final dynamic retrieveAllFilesDB;
+  final dynamic retrieveCategoryOverviewDB;
+  final dynamic navigateTo;
+  final dynamic deleteFileDB;
+  final dynamic deleteFileStorage;
+  final dynamic onUpdateNFilesDB;
+  const ContentHome(
+      this.retrieveAllFilesDB,
+      this.retrieveCategoryOverviewDB,
+      this.navigateTo,
+      this.deleteFileDB,
+      this.deleteFileStorage,
+      this.onUpdateNFilesDB,
+      {super.key});
 
   @override
   State<ContentHome> createState() => ContentHomeState();
 }
 
 class ContentHomeState extends State<ContentHome> {
-  late StreamSubscription readFileCards;
   List<Widget> fileCardsGrid = [constants.emptyBox];
   List<Widget> fileCardsList = [constants.emptyBox];
 
-  late StreamSubscription readCategoriesCards;
   List<Container> categoriesCardsList = [];
   List<int> itemsList = [];
   int length = 0;
@@ -32,27 +36,12 @@ class ContentHomeState extends State<ContentHome> {
   @override
   void initState() {
     setState(() {
-      readFileCards = retrieveAllFilesDB(
+      widget.retrieveAllFilesDB(
           fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, false);
 
-      readCategoriesCards =
-          retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
+      widget.retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
     });
     super.initState();
-  }
-
-  @override
-  void deactivate() {
-    readFileCards.cancel();
-    readCategoriesCards.cancel();
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    readFileCards.cancel();
-    readCategoriesCards.cancel();
-    super.dispose();
   }
 
   @override
@@ -67,22 +56,23 @@ class ContentHomeState extends State<ContentHome> {
               width: double.infinity,
               height: 200,
               child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const TitleText2('Categories'),
-                    Expanded(
-                      child: CarouselSlider(
-                        items: categoriesCardsList,
-                        options: CarouselOptions(
-                          viewportFraction: 0.6,
-                          autoPlay: false,
-                          enlargeCenterPage: true,
-                        ),
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const TitleText2('All Categories'),
+                  Expanded(
+                    child: CarouselSlider(
+                      items: categoriesCardsList,
+                      options: CarouselOptions(
+                        viewportFraction: 0.6,
+                        autoPlay: false,
+                        enlargeCenterPage: true,
                       ),
                     ),
-                  ]),
+                  ),
+                ],
+              ),
             ),
           ),
         ]),
@@ -117,6 +107,7 @@ class ContentHomeState extends State<ContentHome> {
                   children: [
                     ViewMode(changeViewMode, currMode),
                     Wrap(
+                      key: const Key("mode-change"),
                       spacing: 8,
                       runSpacing: 3,
                       alignment: WrapAlignment.spaceEvenly,
@@ -157,7 +148,7 @@ class ContentHomeState extends State<ContentHome> {
   //===================================================================================
   /// Move to file page
   moveToFile(fileName, context) {
-    Navigator.pushNamed(
+    widget.navigateTo(
       context,
       '/files/view/$fileName',
     );
@@ -172,7 +163,6 @@ class ContentHomeState extends State<ContentHome> {
     setState(() {
       fileCardsGrid = myCardsGrid;
       fileCardsList = myCardsList;
-      readFileCards.cancel();
     });
   }
 
@@ -185,14 +175,13 @@ class ContentHomeState extends State<ContentHome> {
     setState(() {
       itemsList = myOrders;
       categoriesCardsList = myCards;
-      readCategoriesCards.cancel();
     });
   }
 
 //===================================================================================
   ///Move router to File Edit page
   moveToEditFile(fileName, context) {
-    Navigator.pushNamed(
+    widget.navigateTo(
       context,
       '/files/edit/$fileName',
     );
@@ -201,7 +190,7 @@ class ContentHomeState extends State<ContentHome> {
 //========================================================
   ///Move router to Category View page
   moveToCategory(catName, context) {
-    Navigator.pushNamed(
+    widget.navigateTo(
       context,
       '/categories/view/$catName',
     );
@@ -210,11 +199,11 @@ class ContentHomeState extends State<ContentHome> {
   //========================================================
   ///Remove card from list
   removeFileCard(cardToDelete) {
-    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-    deleteFileStorage(cardToDelete.file.extension,
+    widget.deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    widget.deleteFileStorage(cardToDelete.file.extension,
         cardToDelete.file.categoryName, cardToDelete.fileName);
 
-    onUpdateNFilesDB(cardToDelete.file.categoryName);
+    widget.onUpdateNFilesDB(cardToDelete.file.categoryName);
     switch (currMode) {
       case 0:
         setState(() {

@@ -1,28 +1,30 @@
-import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/button_add.dart';
-import 'package:docs_manager/frontend/components/contentPages/content_page_home.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_home.dart';
 import 'package:docs_manager/frontend/components/widgets/drawer.dart';
-import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final ContentHome content;
+  final MyAppBar myAppBar;
+  final MyBottomBar myBottomBar;
+  final MyDrawer myDrawer;
+  const HomePage(this.content, this.myAppBar, this.myBottomBar, this.myDrawer,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MyAppBar('Homepage', false, context, true, Navigator.pop,
-          Navigator.pushNamed, updateUserLogutStatus),
-      bottomNavigationBar: MyBottomBar(context, 0, Navigator.pushNamed),
-      drawer: const MyDrawer(onAccountStatus, onSettings),
-      body: const CustomScrollView(
+      appBar: myAppBar,
+      bottomNavigationBar: myBottomBar,
+      drawer: myDrawer,
+      body: CustomScrollView(
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
-            child: ContentHome(),
+            child: content,
           ),
         ],
       ),

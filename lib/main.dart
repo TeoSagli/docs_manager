@@ -1,7 +1,11 @@
+import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/handlers/handleLogin.dart';
 import 'package:docs_manager/backend/handlers/handleRegistration.dart';
 import 'package:docs_manager/backend/models/user.dart';
+import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_favourites.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_home.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_register.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_wallet.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
@@ -13,6 +17,7 @@ import 'package:docs_manager/frontend/pages/view_pdf.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'frontend/components/contentPages/content_categories.dart';
 import 'frontend/components/contentPages/content_login.dart';
 import 'frontend/pages/categories.dart';
 import 'frontend/pages/categories_edit.dart';
@@ -78,7 +83,21 @@ class MyAppState extends State<MyApp> {
         // Handle '/'
         if (settings.name == '/') {
           if (isLogged()) {
-            return MaterialPageRoute(builder: (context) => const HomePage());
+            return MaterialPageRoute(
+              builder: (context) => HomePage(
+                const ContentHome(
+                  retrieveAllFilesDB,
+                  retrieveCategoryOverviewDB,
+                  Navigator.pushNamed,
+                  deleteFileDB,
+                  deleteFileStorage,
+                  onUpdateNFilesDB,
+                ),
+                getAppBar(0, 'Homepage', context),
+                getBottomBar(0, context),
+                myDrawer,
+              ),
+            );
           } else {
             return MaterialPageRoute(
                 builder: (context) => LoginPage(
@@ -101,35 +120,47 @@ class MyAppState extends State<MyApp> {
             switch (uri.pathSegments.first) {
               case 'categories':
                 return MaterialPageRoute(
-                    builder: (context) => const CategoriesPage());
+                  builder: (context) => CategoriesPage(
+                    const ContentCategories(),
+                    getAppBar(0, 'Homepage', context),
+                    getBottomBar(1, context),
+                    myDrawer,
+                  ),
+                );
               case 'wallet':
                 return MaterialPageRoute(
-                    builder: (context) => WalletPage(
-                        const ContentWallet(),
-                        getAppBar(0, 'Wallet', context),
-                        getBottomBar(1, context),
-                        myDrawer));
+                  builder: (context) => WalletPage(
+                    const ContentWallet(),
+                    getAppBar(0, 'Wallet', context),
+                    getBottomBar(1, context),
+                    myDrawer,
+                  ),
+                );
               case 'favourites':
                 return MaterialPageRoute(
-                    builder: (context) => const FavouritesPage());
+                  builder: (context) => FavouritesPage(
+                    const ContentFavourites(),
+                    getAppBar(0, 'Favourites', context),
+                    getBottomBar(1, context),
+                    myDrawer,
+                  ),
+                );
               case 'login':
                 return MaterialPageRoute(
-                    builder: (context) => LoginPage(
-                          ContentLogin(
-                              handleLogin.login,
-                              context,
-                              onErrorGeneric,
-                              onErrorFirebase,
-                              onLoginConfirmed,
-                              Navigator.pushNamed),
-                          getAppBar(2, 'Login', context),
-                        ));
+                  builder: (context) => LoginPage(
+                    ContentLogin(handleLogin.login, context, onErrorGeneric,
+                        onErrorFirebase, onLoginConfirmed, Navigator.pushNamed),
+                    getAppBar(2, 'Login', context),
+                  ),
+                );
               case 'register':
                 return MaterialPageRoute(
-                    builder: (context) => RegisterPage(
-                        ContentRegister(handleRegister.register,
-                            handleRegister.setUser, context),
-                        getAppBar(2, "Register", context)));
+                  builder: (context) => RegisterPage(
+                    ContentRegister(handleRegister.register,
+                        handleRegister.setUser, context),
+                    getAppBar(3, "Register", context),
+                  ),
+                );
               default:
                 break;
             }
@@ -226,16 +257,19 @@ class MyAppState extends State<MyApp> {
 
   MyAppBar getAppBar(int mode, name, context) {
     switch (mode) {
+      // type 0 has button home
       case 0:
         return MyAppBar(name, false, context, true, Navigator.pop,
             Navigator.pushNamed, updateUserLogutStatus);
+      // type 1 has button back
       case 1:
         return MyAppBar(name, true, context, true, Navigator.pop,
             Navigator.pushNamed, updateUserLogutStatus);
+      // type 2 has button home while not logged
       case 2:
         return MyAppBar(name, false, context, false, Navigator.pop,
             Navigator.pushNamed, updateUserLogutStatus);
-
+      // type 3 has button back while not logged
       case 3:
         return MyAppBar(name, true, context, false, Navigator.pop,
             Navigator.pushNamed, updateUserLogutStatus);
