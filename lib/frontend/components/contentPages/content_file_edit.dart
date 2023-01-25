@@ -25,7 +25,15 @@ import 'package:pdfx/pdfx.dart';
 
 class ContentFileEdit extends StatefulWidget {
   final String fileName;
-  const ContentFileEdit(this.fileName, {super.key});
+  final Alert a;
+
+  final ReadDB readDB;
+  final UpdateDB updateDB;
+  final DeleteDB deleteDB;
+  final CreateDB createDB;
+  const ContentFileEdit(this.fileName, this.readDB, this.createDB,
+      this.updateDB, this.deleteDB, this.a,
+      {super.key});
 
   @override
   State<ContentFileEdit> createState() => ContentFileEditState();
@@ -54,7 +62,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
   void initState() {
     setState(() {
       docNameController = TextEditingController(text: widget.fileName);
-      s = retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
+      s = widget.readDB
+          .retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     });
     super.initState();
   }
@@ -150,8 +159,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                               )
                                             : MyCarousel(
                                                 previewImgList,
-                                                removeImage,
                                                 true,
+                                                removeImg: removeImage,
                                                 extensions: extList,
                                               ),
                                       ),
@@ -186,8 +195,10 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => openCalendar(context,
-                                          onDateSelected, onDateUnselected),
+                                      onPressed: () => widget.a.openCalendar(
+                                          context,
+                                          onDateSelected,
+                                          onDateUnselected),
                                     ),
                                   )
                                 ],
@@ -220,7 +231,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     setState(() {
       dateText = DateFormat('yyyy-MM-dd').format(value);
     });
-    onDateConfirmed(dateText, context);
+    widget.a.onDateConfirmed(dateText, context);
   }
 
 //===================================================================================
@@ -229,7 +240,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     setState(() {
       dateText = "";
     });
-    onDateUnconfirmed(context);
+    widget.a.onDateUnconfirmed(context);
   }
 
   //===================================================================================
@@ -256,7 +267,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
         },
       );
     } catch (e) {
-      onErrorImage(context);
+      widget.a.onErrorImage(context);
     }
   }
 
@@ -289,10 +300,10 @@ class ContentFileEditState extends State<ContentFileEdit> {
           },
         );
       } catch (e) {
-        onErrorImage(context);
+        widget.a.onErrorImage(context);
       }
     } else {
-      onErrorImage(context);
+      widget.a.onErrorImage(context);
     }
   }
 
@@ -320,7 +331,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
         },
       );
     } catch (e) {
-      onErrorImage(context);
+      widget.a.onErrorImage(context);
     }
   }
 
@@ -332,9 +343,9 @@ class ContentFileEditState extends State<ContentFileEdit> {
     // else if (!await isCategoryNew(docNameController!.text)) {
     // onErrorCategoryExisting();}
     if (docNameController.text == "" || docNameController.text == " ") {
-      onErrorText(context);
+      widget.a.onErrorText(context);
     } else if (doesExist && docNameController.text != widget.fileName) {
-      onErrorElementExisting(context, "File");
+      widget.a.onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {
         for (var element in previewImgList) {
@@ -349,7 +360,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
           listPaths.add(path);
           listExt.add(ext);
           //load file
-          StreamSubscription listenLoading = loadFileToStorage(
+          StreamSubscription listenLoading = widget.createDB.loadFileToStorage(
               path,
               docNameController.text,
               saveName,
@@ -358,29 +369,32 @@ class ContentFileEditState extends State<ContentFileEdit> {
         }
 
         //delet old version
-        deleteFileStorage(
+        widget.deleteDB.deleteFileStorage(
             fileData.extension, fileData.categoryName, widget.fileName);
-        deleteFileDB(fileData.categoryName, widget.fileName);
+        widget.deleteDB.deleteFileDB(fileData.categoryName, widget.fileName);
         //update new version
         String catName = (dropdown as MyDropdown).dropdownValue;
         String fileName = docNameController.text;
         String expDate = dateText;
-        createFile(
+        widget.createDB.createFile(
             catName, fileName, expDate, listPaths, listExt, "files/$catName");
-        createFile(catName, fileName, expDate, listPaths, listExt, "allFiles");
-        onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
+        widget.createDB.createFile(
+            catName, fileName, expDate, listPaths, listExt, "allFiles");
+        widget.updateDB
+            .onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
         s.cancel();
         setState(() {
-          docNameController.removeListener(() => checkElementExistDB);
+          docNameController
+              .removeListener(() => widget.readDB.checkElementExistDB);
         });
-        onLoad(context);
+        widget.a.onLoad(context);
         Future.delayed(
-            const Duration(seconds: 3), () => onSuccess(context, '/'));
+            const Duration(seconds: 3), () => widget.a.onSuccess(context, '/'));
       } catch (e) {
         print("Error: $e");
       }
     } else {
-      onErrorImage(context);
+      widget.a.onErrorImage(context);
     }
   }
 
@@ -420,7 +434,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
         extList.add(element as String);
       }
       dateText = f.expiration;
-      dropdown = MyDropdown(fileData.categoryName, retrieveCategoriesNamesDB);
+      dropdown = MyDropdown(
+          fileData.categoryName, widget.readDB.retrieveCategoriesNamesDB);
       for (var element in f.path) {
         pathImgList.add(element as String);
       }
@@ -428,17 +443,19 @@ class ContentFileEditState extends State<ContentFileEdit> {
         nameImgList.add(element as String);
       }
       docNameController.addListener(() {
-        checkElementExistDB(docNameController.text, "allFiles", setBool);
+        widget.readDB
+            .checkElementExistDB(docNameController.text, "allFiles", setBool);
       });
     });
     for (int i = 0; i < extList.length; i++) {
-      readImageFileStorage(i, fileData.categoryName, widget.fileName,
+      widget.readDB
+          .readImageFileStorage(i, fileData.categoryName, widget.fileName,
               extList[i], img, context, true, setImage)
           .then(
-        (value) => setState(() {
-          previewImgList.add(value as Image);
-        }),
-      );
+            (value) => setState(() {
+              previewImgList.add(value as Image);
+            }),
+          );
     }
   }
 

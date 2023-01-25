@@ -1,11 +1,15 @@
+import 'package:docs_manager/backend/create_db.dart';
 import 'package:docs_manager/backend/delete_db.dart';
+import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/handlers/handleLogin.dart';
 import 'package:docs_manager/backend/handlers/handleRegistration.dart';
 import 'package:docs_manager/backend/models/user.dart';
+import 'package:docs_manager/backend/operationsDB.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_favourites.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_home.dart';
+import 'package:docs_manager/frontend/components/contentPages/content_pdf_show.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_register.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_wallet.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
@@ -18,6 +22,12 @@ import 'package:docs_manager/others/alerts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'frontend/components/contentPages/content_categories.dart';
+import 'frontend/components/contentPages/content_category_create.dart';
+import 'frontend/components/contentPages/content_category_edit.dart';
+import 'frontend/components/contentPages/content_category_view.dart';
+import 'frontend/components/contentPages/content_file_create.dart';
+import 'frontend/components/contentPages/content_file_edit.dart';
+import 'frontend/components/contentPages/content_file_view.dart';
 import 'frontend/components/contentPages/content_login.dart';
 import 'frontend/pages/categories.dart';
 import 'frontend/pages/categories_edit.dart';
@@ -59,17 +69,22 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 }
 
-class MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with OperationsDB {
   late HandleLogin handleLogin;
   late HandleRegistration handleRegister;
   late final MyDrawer myDrawer;
   late String pageName = "";
+  late Alert alertClass;
+
+  late GoogleManager googleManager;
   @override
   void initState() {
     setState(() {
+      alertClass = Alert();
+      googleManager = GoogleManager();
       handleLogin = HandleLogin(UserCredsModel("", ""));
       handleRegister = HandleRegistration(UserCredsModel("", ""));
-      myDrawer = const MyDrawer(onAccountStatus, onSettings);
+      myDrawer = MyDrawer(alertClass);
     });
 
     super.initState();
@@ -85,13 +100,11 @@ class MyAppState extends State<MyApp> {
           if (isLogged()) {
             return MaterialPageRoute(
               builder: (context) => HomePage(
-                const ContentHome(
-                  retrieveAllFilesDB,
-                  retrieveCategoryOverviewDB,
-                  Navigator.pushNamed,
-                  deleteFileDB,
-                  deleteFileStorage,
-                  onUpdateNFilesDB,
+                ContentHome(
+                  readDB,
+                  deleteDB,
+                  updateDB,
+                  alertClass,
                 ),
                 getAppBar(0, 'Homepage', context),
                 getBottomBar(0, context),
@@ -101,12 +114,7 @@ class MyAppState extends State<MyApp> {
           } else {
             return MaterialPageRoute(
                 builder: (context) => LoginPage(
-                      ContentLogin(
-                          handleLogin.login,
-                          context,
-                          onErrorGeneric,
-                          onErrorFirebase,
-                          onLoginConfirmed,
+                      ContentLogin(handleLogin.login, context, alertClass,
                           Navigator.pushNamed),
                       getAppBar(2, 'Login', context),
                     ));
@@ -121,16 +129,23 @@ class MyAppState extends State<MyApp> {
               case 'categories':
                 return MaterialPageRoute(
                   builder: (context) => CategoriesPage(
-                    const ContentCategories(),
-                    getAppBar(0, 'Homepage', context),
-                    getBottomBar(1, context),
+                    ContentCategories(
+                      readDB.retrieveCategoriesDB,
+                      updateDB.updateOrderDB,
+                      deleteDB.deleteCategoryDB,
+                      deleteDB.deleteCategoryStorage,
+                      Navigator.pushNamed,
+                    ),
+                    getAppBar(0, 'Categories', context),
+                    getBottomBar(2, context),
                     myDrawer,
                   ),
                 );
               case 'wallet':
                 return MaterialPageRoute(
                   builder: (context) => WalletPage(
-                    const ContentWallet(),
+                    ContentWallet(readDB.retrieveAllExpirationFilesDB,
+                        Navigator.pushNamed),
                     getAppBar(0, 'Wallet', context),
                     getBottomBar(1, context),
                     myDrawer,
@@ -139,17 +154,22 @@ class MyAppState extends State<MyApp> {
               case 'favourites':
                 return MaterialPageRoute(
                   builder: (context) => FavouritesPage(
-                    const ContentFavourites(),
+                    ContentFavourites(
+                        readDB.retrieveAllFilesDB,
+                        deleteDB.deleteFileDB,
+                        deleteDB.deleteFileStorage,
+                        updateDB.onUpdateNFilesDB,
+                        Navigator.pushNamed),
                     getAppBar(0, 'Favourites', context),
-                    getBottomBar(1, context),
+                    getBottomBar(3, context),
                     myDrawer,
                   ),
                 );
               case 'login':
                 return MaterialPageRoute(
                   builder: (context) => LoginPage(
-                    ContentLogin(handleLogin.login, context, onErrorGeneric,
-                        onErrorFirebase, onLoginConfirmed, Navigator.pushNamed),
+                    ContentLogin(handleLogin.login, context, alertClass,
+                        Navigator.pushNamed),
                     getAppBar(2, 'Login', context),
                   ),
                 );
@@ -172,7 +192,12 @@ class MyAppState extends State<MyApp> {
                 switch (uri.pathSegments[1]) {
                   case 'create':
                     return MaterialPageRoute(
-                        builder: (context) => const CategoryCreatePage());
+                        builder: (context) => CategoryCreatePage(
+                              ContentCategoryCreate(
+                                  alertClass, readDB, createDB),
+                              getAppBar(1, "Category creation", context),
+                              myDrawer,
+                            ));
                   default:
                     break;
                 }
@@ -181,8 +206,18 @@ class MyAppState extends State<MyApp> {
                 switch (uri.pathSegments[1]) {
                   case 'create':
                     return MaterialPageRoute(
-                        builder: (context) => const FileCreatePage(
-                              catSelected: "",
+                        builder: (context) => FileCreatePage(
+                              ContentFileCreate(
+                                  "",
+                                  readDB.checkElementExistDB,
+                                  readDB.retrieveCategoriesNamesDB,
+                                  createDB.createFile,
+                                  createDB.loadFileToStorage,
+                                  updateDB.onUpdateNFilesDB,
+                                  alertClass),
+                              getAppBar(1, "File creation", context),
+                              myDrawer,
+                              "",
                             ));
                   default:
                     break;
@@ -197,13 +232,21 @@ class MyAppState extends State<MyApp> {
                   case 'view':
                     var catName = uri.pathSegments[2];
                     return MaterialPageRoute(
-                        builder: (context) =>
-                            CategoryViewPage(catName: catName));
+                        builder: (context) => CategoryViewPage(
+                            ContentCategoryView(catName, readDB, deleteDB,
+                                updateDB, alertClass),
+                            getAppBar(1, "View category $catName", context),
+                            myDrawer,
+                            catName: catName));
                   case 'edit':
                     var catName = uri.pathSegments[2];
                     return MaterialPageRoute(
-                        builder: (context) =>
-                            CategoryEditPage(catName: catName));
+                        builder: (context) => CategoryEditPage(
+                            ContentCategoryEdit(catName, readDB, createDB,
+                                updateDB, deleteDB, alertClass),
+                            getAppBar(1, "Editing category $catName", context),
+                            myDrawer,
+                            catName: catName));
                   default:
                     break;
                 }
@@ -213,16 +256,38 @@ class MyAppState extends State<MyApp> {
                   case 'view':
                     var fileName = uri.pathSegments[2];
                     return MaterialPageRoute(
-                        builder: (context) => FileViewPage(fileName: fileName));
+                        builder: (context) => FileViewPage(
+                            ContentFileView(fileName, readDB, updateDB,
+                                deleteDB, googleManager, alertClass),
+                            getAppBar(1, "View file $fileName", context),
+                            myDrawer,
+                            fileName: fileName));
                   case 'edit':
                     var fileName = uri.pathSegments[2];
                     return MaterialPageRoute(
-                        builder: (context) => FileEditPage(fileName: fileName));
+                        builder: (context) => FileEditPage(
+                            ContentFileEdit(fileName, readDB, createDB,
+                                updateDB, deleteDB, alertClass),
+                            getAppBar(1, 'Edit file $fileName', context),
+                            myDrawer,
+                            fileName: fileName));
                   case 'create':
                     var catSelected = uri.pathSegments[2];
                     return MaterialPageRoute(
-                        builder: (context) =>
-                            FileCreatePage(catSelected: catSelected));
+                      builder: (context) => FileCreatePage(
+                        ContentFileCreate(
+                            catSelected,
+                            readDB.checkElementExistDB,
+                            readDB.retrieveCategoriesNamesDB,
+                            createDB.createFile,
+                            createDB.loadFileToStorage,
+                            updateDB.onUpdateNFilesDB,
+                            alertClass),
+                        getAppBar(1, "File creation", context),
+                        myDrawer,
+                        catSelected,
+                      ),
+                    );
                   default:
                     break;
                 }
@@ -237,8 +302,12 @@ class MyAppState extends State<MyApp> {
                   var catName = uri.pathSegments[2];
                   var pdfIndex = uri.pathSegments[3];
                   return MaterialPageRoute(
-                      builder: (context) =>
-                          PdfShow(fileName, catName, pdfIndex));
+                    builder: (context) => PdfShow(
+                        ContentPdfShow(fileName, catName, pdfIndex,
+                            readDB.readFileFromNameStorage),
+                        getAppBar(1, 'View pdf N° $pdfIndex', context),
+                        myDrawer),
+                  );
                 }
             }
             break;
@@ -260,22 +329,22 @@ class MyAppState extends State<MyApp> {
       // type 0 has button home
       case 0:
         return MyAppBar(name, false, context, true, Navigator.pop,
-            Navigator.pushNamed, updateUserLogutStatus);
+            Navigator.pushNamed, updateDB.updateUserLogutStatus);
       // type 1 has button back
       case 1:
         return MyAppBar(name, true, context, true, Navigator.pop,
-            Navigator.pushNamed, updateUserLogutStatus);
+            Navigator.pushNamed, updateDB.updateUserLogutStatus);
       // type 2 has button home while not logged
       case 2:
         return MyAppBar(name, false, context, false, Navigator.pop,
-            Navigator.pushNamed, updateUserLogutStatus);
+            Navigator.pushNamed, updateDB.updateUserLogutStatus);
       // type 3 has button back while not logged
       case 3:
         return MyAppBar(name, true, context, false, Navigator.pop,
-            Navigator.pushNamed, updateUserLogutStatus);
+            Navigator.pushNamed, updateDB.updateUserLogutStatus);
       default:
         return MyAppBar(name, false, context, true, Navigator.pop,
-            Navigator.pushNamed, updateUserLogutStatus);
+            Navigator.pushNamed, updateDB.updateUserLogutStatus);
     }
   }
 

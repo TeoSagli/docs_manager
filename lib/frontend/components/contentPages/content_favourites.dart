@@ -1,6 +1,3 @@
-import 'package:docs_manager/backend/delete_db.dart';
-import 'package:docs_manager/backend/read_db.dart';
-import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +5,14 @@ import 'dart:async';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class ContentFavourites extends StatefulWidget {
-  const ContentFavourites({super.key});
+  final dynamic retrieveAllFilesDB;
+  final dynamic deleteFileDB;
+  final dynamic deleteFileStorage;
+  final dynamic onUpdateNFilesDB;
+  final dynamic navigateTo;
+  const ContentFavourites(this.retrieveAllFilesDB, this.deleteFileDB,
+      this.deleteFileStorage, this.onUpdateNFilesDB, this.navigateTo,
+      {super.key});
 
   @override
   State<ContentFavourites> createState() => ContentFavouritesState();
@@ -24,17 +28,17 @@ class ContentFavouritesState extends State<ContentFavourites> {
     if (mounted) {
       setState(() {
         //readCards = retrieveFilesDB();
-        readCards = retrieveAllFilesDB(
+        readCards = widget.retrieveAllFilesDB(
             fulfillCard, moveToFile, moveToEditFile, removeFileCard, true);
       });
+      super.initState();
     }
-    super.initState();
   }
 
   @override
-  void deactivate() {
+  void dispose() {
     readCards.cancel();
-    super.deactivate();
+    super.dispose();
   }
 
   @override
@@ -107,7 +111,7 @@ class ContentFavouritesState extends State<ContentFavourites> {
   //===================================================================================
 // Move to file page
   moveToFile(id, context) {
-    Navigator.pushNamed(
+    widget.navigateTo(
       context,
       '/files/view/$id',
     );
@@ -130,7 +134,7 @@ class ContentFavouritesState extends State<ContentFavourites> {
 //===================================================================================
 //Move router to Category View page
   moveToEditFile(fileName, context) {
-    Navigator.pushNamed(
+    widget.navigateTo(
       context,
       '/files/edit/$fileName',
     );
@@ -139,11 +143,11 @@ class ContentFavouritesState extends State<ContentFavourites> {
 //========================================================
 //Move router to Category View page
   removeFileCard(cardToDelete) {
-    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-    deleteFileStorage(cardToDelete.file.extension,
+    widget.deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    widget.deleteFileStorage(cardToDelete.file.extension,
         cardToDelete.file.categoryName, cardToDelete.fileName);
 
-    onUpdateNFilesDB(cardToDelete.file.categoryName);
+    widget.onUpdateNFilesDB(cardToDelete.file.categoryName);
     switch (currMode) {
       case 0:
         setState(() {

@@ -11,8 +11,9 @@ class MyCarousel extends StatefulWidget {
   final bool showRemove;
   final String? fileName;
   final String? catName;
-  const MyCarousel(this.imgList, this.removeImg, this.showRemove,
-      {this.extensions,
+  const MyCarousel(this.imgList, this.showRemove,
+      {this.removeImg,
+      this.extensions,
       this.moveToOpenFile,
       this.catName,
       this.fileName,

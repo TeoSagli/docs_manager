@@ -105,7 +105,7 @@ class GoogleManager {
     return AlertMessage(true, "Event removed");
   }
 
-  Future<AlertMessage> addCalendarExpiration(
+  dynamic addCalendarExpiration(
       FileModel file, String fileName, String expiration) async {
     var headers = await _currentUser?.authHeaders;
     if (headers == null) {
@@ -175,7 +175,7 @@ class GoogleManager {
     return AlertMessage(true, "Event added in calendar");
   }
 
-  Future<AlertMessage> upload(FileModel file, String fileName) async {
+  dynamic upload(FileModel file, String fileName) async {
     int filesNumber = file.path.length;
 
     var headers = await _currentUser?.authHeaders;
@@ -194,13 +194,17 @@ class GoogleManager {
     final client = GoogleAuthClient(headers);
 
     var drive = ga.DriveApi(client);
+    var readDB = ReadDB();
 
     ga.File response;
 
     for (int i = 0; i < filesNumber; i++) {
       try {
-        File fileToUpload = await readGenericFileFromNameStorage(i.toString(),
-            file.categoryName, file.extension[i].toString(), fileName);
+        File fileToUpload = await readDB.readGenericFileFromNameStorage(
+            i.toString(),
+            file.categoryName,
+            file.extension[i].toString(),
+            fileName);
 
         response = await drive.files.create(ga.File()..name = fileName,
             uploadMedia:

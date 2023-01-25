@@ -14,7 +14,10 @@ import 'package:docs_manager/others/constants.dart' as constants;
 import 'dart:core';
 
 class ContentCategoryCreate extends StatefulWidget {
-  const ContentCategoryCreate({super.key});
+  final Alert a;
+  final ReadDB readDB;
+  final CreateDB createDB;
+  const ContentCategoryCreate(this.a, this.readDB, this.createDB, {super.key});
 
   @override
   State<ContentCategoryCreate> createState() => ContentCategoryCreateState();
@@ -32,7 +35,8 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
     setState(() {
       catNameController = TextEditingController();
       catNameController.addListener(() {
-        checkElementExistDB(catNameController.text, "categories", setBool);
+        widget.readDB
+            .checkElementExistDB(catNameController.text, "categories", setBool);
       });
     });
 
@@ -142,7 +146,7 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
         },
       );
     } catch (e) {
-      onErrorImage(context);
+      widget.a.onErrorImage(context);
     }
   }
 
@@ -150,24 +154,24 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
 // Submit category to db if everything is correct
   onSubmit() {
     if (catNameController.text == "" || catNameController.text == " ") {
-      onErrorText(context);
+      widget.a.onErrorText(context);
     } else if (doesExist) {
-      onErrorElementExisting(context, "Category");
+      widget.a.onErrorElementExisting(context, "Category");
     } else if (imageGallery != null) {
       try {
         String ext = imageGallery!.name.toString().split(".")[1];
         String saveName = "${catNameController.text}.$ext";
-        createCategoryDB(catNameController.text, saveName);
-        StreamSubscription listenLoading = loadFileToStorage(
+        widget.createDB.createCategoryDB(catNameController.text, saveName);
+        StreamSubscription listenLoading = widget.createDB.loadFileToStorage(
             imageGallery!.path, catNameController.text, saveName, 'categories');
-        onSuccess(context, '/categories');
+        widget.a.onSuccess(context, '/categories');
         listenLoading.cancel();
         catNameController.dispose();
       } catch (e) {
         print("Error: $e");
       }
     } else {
-      onErrorImage(context);
+      widget.a.onErrorImage(context);
     }
   }
 

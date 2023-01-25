@@ -1,5 +1,4 @@
 import 'package:docs_manager/backend/models/file.dart';
-import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
@@ -117,8 +116,8 @@ class ListCardState extends State<ListCard> {
                           key: const Key("tap-del"),
                           color: Colors.redAccent,
                           icon: const Icon(Icons.delete_rounded),
-                          onPressed: () =>
-                              onDeleteFile(context, widget.removeCard, widget),
+                          onPressed: () => widget.onDeleteFile(
+                              context, widget.removeCard, widget),
                         ),
                       ],
                     )

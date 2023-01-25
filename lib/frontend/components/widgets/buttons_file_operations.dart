@@ -1,23 +1,20 @@
-import 'dart:typed_data';
-
 import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/models/file.dart';
-import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'dart:io';
 
 class ButtonsFileOperations extends StatefulWidget {
   final FileModel file;
   final dynamic moveToEditFilePage;
   final dynamic removeCard;
-  final dynamic dbUpdateFavMethod;
-  final dynamic removeEventCalendar;
-  final dynamic addEventCalendar;
   final dynamic addDocToDrive;
+  final dynamic addEventCalendar;
+  final dynamic removeEventCalendar;
+  final UpdateDB updateDB;
   final String fileName;
+  final Alert alert;
 
   ///My custom Button:
   ///
@@ -33,10 +30,11 @@ class ButtonsFileOperations extends StatefulWidget {
       this.file,
       this.moveToEditFilePage,
       this.removeCard,
-      this.dbUpdateFavMethod,
+      this.updateDB,
       this.addDocToDrive,
       this.addEventCalendar,
       this.removeEventCalendar,
+      this.alert,
       {super.key});
 
   @override
@@ -118,15 +116,15 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
                     setState(() {
                       isFav = !isFav;
                     });
-                    widget.dbUpdateFavMethod(
+                    widget.updateDB.updateFavouriteDB(
                         widget.file.categoryName, widget.fileName, isFav);
                   }),
               IconButton(
                 key: const Key("del"),
                 color: Colors.redAccent,
                 icon: const Icon(Icons.delete_rounded),
-                onPressed: () =>
-                    onDeleteFile(context, widget.removeCard, widget),
+                onPressed: () => widget.alert
+                    .onDeleteFile(context, widget.removeCard, widget.file),
               ),
             ],
           ),

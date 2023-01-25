@@ -1,4 +1,5 @@
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 import 'dart:async';
@@ -10,14 +11,19 @@ import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 
 class ContentCategoryView extends StatefulWidget {
   final String catName;
-  const ContentCategoryView(this.catName, {super.key});
+  final ReadDB readDB;
+  final UpdateDB updateDB;
+  final DeleteDB deleteDB;
+  final Alert alert;
+  const ContentCategoryView(
+      this.catName, this.readDB, this.deleteDB, this.updateDB, this.alert,
+      {super.key});
 
   @override
   State<StatefulWidget> createState() => ContentCategoryViewState();
 }
 
 class ContentCategoryViewState extends State<ContentCategoryView> {
-  late StreamSubscription readCards;
   List<Widget> fileCardsGrid = [constants.emptyBox];
   List<Widget> fileCardsList = [constants.emptyBox];
   int currMode = 0;
@@ -25,16 +31,10 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   @override
   void initState() {
     setState(() {
-      readCards = retrieveFilesFromCategoryDB(widget.catName, fulfillCard,
-          moveToFile, moveToEditFile, removeFileCard);
+      widget.readDB.retrieveFilesFromCategoryDB(widget.catName, fulfillCard,
+          moveToFile, moveToEditFile, removeFileCard, context);
     });
     super.initState();
-  }
-
-  @override
-  void deactivate() {
-    readCards.cancel();
-    super.deactivate();
   }
 
   @override
@@ -104,9 +104,9 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   //===================================================================================
 // Move to file page
   moveToFile(fileName, context) {
-    Navigator.pushNamed(
-      context,
+    widget.alert.navigateTo(
       '/files/view/$fileName',
+      context,
     );
   }
 
@@ -127,20 +127,21 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
 //===================================================================================
 //Move router to Category View page
   moveToEditFile(fileName, context) {
-    Navigator.pushNamed(
-      context,
+    widget.alert.navigateTo(
       '/files/edit/$fileName',
+      context,
     );
   }
 
   //========================================================
 //Move router to Category View page
-  removeFileCard(FileCard cardToDelete) {
-    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-    deleteFileStorage(cardToDelete.file.extension,
+  removeFileCard(cardToDelete) {
+    widget.deleteDB
+        .deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    widget.deleteDB.deleteFileStorage(cardToDelete.file.extension,
         cardToDelete.file.categoryName, cardToDelete.fileName);
 
-    onUpdateNFilesDB(cardToDelete.file.categoryName);
+    widget.updateDB.onUpdateNFilesDB(cardToDelete.file.categoryName);
     switch (currMode) {
       case 0:
         setState(() {

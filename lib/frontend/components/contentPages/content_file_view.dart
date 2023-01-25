@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/models/file.dart';
@@ -16,7 +14,14 @@ import 'package:docs_manager/others/constants.dart' as constants;
 
 class ContentFileView extends StatefulWidget {
   final String fileName;
-  const ContentFileView(this.fileName, {super.key});
+  final Alert a;
+  final ReadDB readDB;
+  final UpdateDB updateDB;
+  final DeleteDB deleteDB;
+  final GoogleManager google;
+  const ContentFileView(this.fileName, this.readDB, this.updateDB,
+      this.deleteDB, this.google, this.a,
+      {super.key});
 
   @override
   State<ContentFileView> createState() => ContentFileViewState();
@@ -34,18 +39,11 @@ class ContentFileViewState extends State<ContentFileView> {
       extension: [],
       expiration: "");
 
-  late StreamSubscription listenColor;
   Color catColor = Colors.black;
   @override
   void initState() {
-    retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
+    widget.readDB.retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    listenColor.cancel();
-    super.dispose();
   }
 
   @override
@@ -70,11 +68,18 @@ class ContentFileViewState extends State<ContentFileView> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: previewImgList == []
                       ? constants.loadingWheel2
-                      : MyCarousel(previewImgList, removeImage, false,
-                          moveToOpenFile: moveToOpenFile,
-                          extensions: extList,
-                          catName: fileData.categoryName,
-                          fileName: widget.fileName),
+                      : Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: MyCarousel(previewImgList, false,
+                                  moveToOpenFile: moveToOpenFile,
+                                  extensions: extList,
+                                  catName: fileData.categoryName,
+                                  fileName: widget.fileName),
+                            ),
+                          ],
+                        ),
                 ),
               ),
             ],
@@ -138,14 +143,6 @@ class ContentFileViewState extends State<ContentFileView> {
   }
 
   //===================================================================================
-  // remove image preview
-  removeImage(Image w) {
-    setState(() {
-      previewImgList.remove(w);
-    });
-  }
-
-  //===================================================================================
   // set preview list from DB
   setFileData(FileModel f) async {
     Widget img = constants.defaultImg;
@@ -160,20 +157,16 @@ class ContentFileViewState extends State<ContentFileView> {
             fileData,
             moveToEditFile,
             removeCard,
-            updateFavouriteDB,
+            widget.updateDB,
             addDocToDrive,
             addEventCalendar,
-            removeEventCalendar);
-        listenColor = getColorCategoryDB(setColor, fileData.categoryName);
+            removeEventCalendar,
+            widget.a);
+        widget.readDB.getColorCategoryDB(setColor, fileData.categoryName);
       });
       for (int i = 0; i < extList.length; i++) {
-        readImageFileStorage(i, fileData.categoryName, widget.fileName,
-                extList[i], img, context, true, setImage)
-            .then(
-          (value) => setState(() {
-            previewImgList.add(value as Image);
-          }),
-        );
+        widget.readDB.readImageFileStorage(i, fileData.categoryName,
+            widget.fileName, extList[i], img, context, true, setImage);
       }
     }
   }
@@ -183,73 +176,68 @@ class ContentFileViewState extends State<ContentFileView> {
     setState(() {
       catColor = Color(c);
     });
-    listenColor.cancel();
   }
 
   //===================================================================================
 //Move router to Category View page
   moveToEditFile(fileName, context) {
-    Navigator.pushNamed(
-      context,
+    widget.a.navigateTo(
       '/files/edit/$fileName',
+      context,
     );
   }
 
 //========================================================
 //Remove File card
-  removeCard(FileCard cardToDelete) {
-    deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-    deleteFileStorage(cardToDelete.file.extension,
-        cardToDelete.file.categoryName, cardToDelete.fileName);
-    onUpdateNFilesDB(cardToDelete.file.categoryName);
+  removeCard(FileModel cardToDelete) {
+    widget.deleteDB.deleteFileDB(cardToDelete.categoryName, widget.fileName);
+    widget.deleteDB.deleteFileStorage(
+        cardToDelete.extension, cardToDelete.categoryName, widget.fileName);
+    widget.updateDB.onUpdateNFilesDB(cardToDelete.categoryName);
   }
 
   //========================================================
   moveToOpenFile(String fileName, String catName, int pdfIndex) {
-    Navigator.pushNamed(
-      context,
+    widget.a.navigateTo(
       '/files/$catName/$fileName/$pdfIndex',
+      context,
     );
   }
 
   //===================================================================================
   //Doc is uploaded to drive
   addDocToDrive(file) async {
-    var drive = GoogleManager();
-    await drive.upload(file, widget.fileName).then((alertMessage) {
-      if (alertMessage.success) {
-        onSuccess(context, alertMessage.message);
-      } else {
-        onErrorGeneric(context, alertMessage.message);
-      }
-    });
+    var drive = widget.google;
+    var alertMessage = await drive.upload(file, widget.fileName);
+    if (alertMessage.success) {
+      widget.a.onSuccess(context, alertMessage.message);
+    } else {
+      widget.a.onErrorGeneric(context, alertMessage.message);
+    }
   }
 
   //===================================================================================
   //Event is added to calendar
   addEventCalendar(file) async {
-    var calendar = GoogleManager();
+    var calendar = widget.google;
 
-    await calendar
-        .addCalendarExpiration(file, widget.fileName, file.expiration)
-        .then(
-      (alertMessage) {
-        if (alertMessage.success) {
-          onSuccess(context, alertMessage.message);
-        } else {
-          onErrorGeneric(context, alertMessage.message);
-        }
-      },
-    );
+    var alertMessage = await calendar.addCalendarExpiration(
+        file, widget.fileName, file.expiration);
+
+    if (alertMessage.success) {
+      widget.a.onSuccess(context, alertMessage.message);
+    } else {
+      widget.a.onErrorGeneric(context, alertMessage.message);
+    }
   }
 
   //===================================================================================
   //Event is removed from calendar
   removeEventCalendar() {
-    var calendar = GoogleManager();
+    var calendar = widget.google;
 
     calendar.removeCalendarExpiration(widget.fileName);
-    onSuccess(context, "Event removed");
+    widget.a.onSuccess(context, "Event removed");
   }
   //===================================================================================
 

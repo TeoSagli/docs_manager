@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class MyDrawer extends StatelessWidget {
-  final dynamic onAccountStatus;
-  final dynamic onSettings;
-  const MyDrawer(this.onAccountStatus, this.onSettings, {super.key});
+  final dynamic alert;
+
+  const MyDrawer(this.alert, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class MyDrawer extends StatelessWidget {
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0))),
               ),
-              onPressed: () => onAccountStatus(context),
+              onPressed: () => alert.onAccountStatus(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const [
@@ -87,7 +87,7 @@ class MyDrawer extends StatelessWidget {
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0))),
               ),
-              onPressed: () => onSettings(context),
+              onPressed: () => alert.onSettings(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const [

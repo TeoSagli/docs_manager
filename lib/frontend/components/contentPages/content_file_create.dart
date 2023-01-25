@@ -1,10 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cross_file_image/cross_file_image.dart';
-import 'package:docs_manager/backend/create_db.dart';
-import 'package:docs_manager/backend/read_db.dart';
-
-import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_upload_photo_pdf.dart';
 import 'package:docs_manager/frontend/components/widgets/carousel_slider.dart';
@@ -13,7 +9,6 @@ import 'package:docs_manager/frontend/components/widgets/dropdown_menu.dart';
 import 'package:docs_manager/frontend/components/widgets/input_field.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
 
-import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +20,21 @@ import 'package:pdfx/pdfx.dart';
 
 class ContentFileCreate extends StatefulWidget {
   final String catSelected;
-  const ContentFileCreate(this.catSelected, {super.key});
+  final dynamic retrieveCategoriesNamesDB;
+  final dynamic checkElementExistDB;
+  final dynamic loadFileToStorage;
+  final dynamic createFile;
+  final dynamic onUpdateNFilesDB;
+  final dynamic alert;
+  const ContentFileCreate(
+      this.catSelected,
+      this.checkElementExistDB,
+      this.retrieveCategoriesNamesDB,
+      this.createFile,
+      this.loadFileToStorage,
+      this.onUpdateNFilesDB,
+      this.alert,
+      {super.key});
 
   @override
   State<StatefulWidget> createState() => ContentFileCreateState();
@@ -44,9 +53,10 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   void initState() {
     setState(() {
       docNameController.addListener(() {
-        checkElementExistDB(docNameController.text, "allFiles", setBool);
+        widget.checkElementExistDB(docNameController.text, "allFiles", setBool);
       });
-      dropdown = MyDropdown(widget.catSelected, retrieveCategoriesNamesDB);
+      dropdown =
+          MyDropdown(widget.catSelected, widget.retrieveCategoriesNamesDB);
     });
     previewImgList = [];
     super.initState();
@@ -143,8 +153,8 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                                 )
                                               : MyCarousel(
                                                   previewImgList,
-                                                  removeImage,
                                                   true,
+                                                  removeImg: removeImage,
                                                   moveToOpenFile: null,
                                                 )),
                                     ),
@@ -159,6 +169,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 30, 0, 0),
                                     child: OutlinedButton(
+                                      key: const Key("tap-date"),
                                       child: Row(
                                         children: [
                                           const Padding(
@@ -170,6 +181,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                             ),
                                           ),
                                           Text(
+                                            key: const Key("text-date"),
                                             style: const TextStyle(
                                                 color: Colors.black),
                                             dateText == ""
@@ -178,8 +190,9 @@ class ContentFileCreateState extends State<ContentFileCreate> {
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => openCalendar(context,
-                                          onDateSelected, onDateUnselected),
+                                      onPressed: () => widget.alert
+                                          .openCalendar(context, onDateSelected,
+                                              onDateUnselected),
                                     ),
                                   )
                                 ],
@@ -212,7 +225,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     setState(() {
       dateText = DateFormat('yyyy-MM-dd').format(value);
     });
-    onDateConfirmed(dateText, context);
+    widget.alert.onDateConfirmed(dateText, context);
   }
 
 //===================================================================================
@@ -221,7 +234,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     setState(() {
       dateText = "";
     });
-    onDateUnconfirmed(context);
+    widget.alert.onDateUnconfirmed(context);
   }
 
   //===================================================================================
@@ -235,54 +248,53 @@ class ContentFileCreateState extends State<ContentFileCreate> {
       );
       setState(
         () {
-          previewImgList.add(
+          setImage(
             Image(
               image: XFileImage(imageGallery!),
               fit: BoxFit.cover,
               width: 1000.0,
             ),
+            imageGallery.name,
+            imageGallery.path,
           );
-          nameImgList.add(imageGallery.name);
-          pathImgList.add(imageGallery.path);
         },
       );
     } catch (e) {
-      onErrorImage(context);
+      widget.alert.onErrorImage(context);
     }
   }
 
   //===================================================================================
 // Upload photo from file and catch errors
   setPhotoFromFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    await FilePicker.platform
+        .pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
       allowMultiple: false,
-    );
-
-    if (result != null) {
-      File file = File(result.files.first.path!);
-      Uint8List imageFileBytes = await imageFromPdfFile(file);
-      try {
-        setState(
-          () {
-            previewImgList.add(
+    )
+        .then((result) {
+      if (result != null) {
+        File file = File(result.files.first.path!);
+        imageFromPdfFile(file).then((imageFileBytes) {
+          try {
+            setImage(
               Image.memory(
                 imageFileBytes,
                 fit: BoxFit.cover,
                 width: 1000.0,
               ),
+              result.files.first.name,
+              result.files.first.path!,
             );
-            nameImgList.add(result.files.first.name);
-            pathImgList.add(result.files.first.path!);
-          },
-        );
-      } catch (e) {
-        onErrorImage(context);
+          } catch (e) {
+            widget.alert.onErrorImage(context);
+          }
+        });
+      } else {
+        widget.alert.onErrorImage(context);
       }
-    } else {
-      onErrorImage(context);
-    }
+    });
   }
 
 //===================================================================================
@@ -294,35 +306,32 @@ class ContentFileCreateState extends State<ContentFileCreate> {
         source: ImageSource.camera,
         imageQuality: constants.imageQuality,
       );
-      setState(
-        () {
-          previewImgList.add(
-            Image(
-              image: XFileImage(imageCamera!),
-              fit: BoxFit.cover,
-              width: 1000.0,
-            ),
-          );
-          nameImgList.add(imageCamera.name);
-          pathImgList.add(imageCamera.path);
-        },
+
+      setImage(
+        Image(
+          image: XFileImage(imageCamera!),
+          fit: BoxFit.cover,
+          width: 1000.0,
+        ),
+        imageCamera.name,
+        imageCamera.path,
       );
     } catch (e) {
-      onErrorImage(context);
+      widget.alert.onErrorImage(context);
     }
   }
 
 //===================================================================================
 // Submit category to db if everything is correct
   onSubmit() {
-    checkElementExistDB(docNameController.text, "allFiles", setBool);
+    widget.checkElementExistDB(docNameController.text, "allFiles", setBool);
 
     List<String> listPaths = [];
     List<String> listExt = [];
     if (docNameController.text == "" || docNameController.text == " ") {
-      onErrorText(context);
+      widget.alert.onErrorText(context);
     } else if (doesExist) {
-      onErrorElementExisting(context, "File");
+      widget.alert.onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {
         for (var element in previewImgList) {
@@ -335,28 +344,24 @@ class ContentFileCreateState extends State<ContentFileCreate> {
           listPaths.add(path);
           listExt.add(ext);
           //load file
-          StreamSubscription listenLoading = loadFileToStorage(
-              path,
-              docNameController.text,
-              saveName,
+          widget.loadFileToStorage(path, docNameController.text, saveName,
               'files/${(dropdown as MyDropdown).dropdownValue}');
-          listenLoading.cancel();
         }
         //update category
         String catName = (dropdown as MyDropdown).dropdownValue;
-        createFile(catName, docNameController.text, dateText, listPaths,
+        widget.createFile(catName, docNameController.text, dateText, listPaths,
             listExt, "files/$catName");
-        createFile(catName, docNameController.text, dateText, listPaths,
+        widget.createFile(catName, docNameController.text, dateText, listPaths,
             listExt, "allFiles");
-        onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
-        onLoad(context);
-        Future.delayed(
-            const Duration(seconds: 3), () => onSuccess(context, '/'));
+        widget.onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
+        widget.alert.onLoad(context);
+        Future.delayed(const Duration(seconds: 3),
+            () => widget.alert.onSuccess(context, '/'));
       } catch (e) {
         print("Error: $e");
       }
     } else {
-      onErrorImage(context);
+      widget.alert.onErrorImage(context);
     }
   }
 
@@ -365,6 +370,16 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   setBool(bool b) {
     setState(() {
       doesExist = b;
+    });
+  }
+
+  //===================================================================================
+  // set image, name and path
+  setImage(Image img, String name, String path) {
+    setState(() {
+      previewImgList.add(img);
+      nameImgList.add(name);
+      pathImgList.add(path);
     });
   }
 

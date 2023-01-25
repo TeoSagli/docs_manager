@@ -17,7 +17,7 @@ class RegisterPage extends StatelessWidget {
           SliverFillRemaining(
             hasScrollBody: false,
             child: content,
-          )
+          ),
         ],
       ),
     );

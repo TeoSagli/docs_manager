@@ -1,6 +1,4 @@
-import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pdfx/pdfx.dart';
 
@@ -8,7 +6,10 @@ class ContentPdfShow extends StatefulWidget {
   final String fName;
   final String cName;
   final String fIndex;
-  const ContentPdfShow(this.fName, this.cName, this.fIndex, {super.key});
+  final dynamic readFileFromNameStorage;
+  const ContentPdfShow(
+      this.fName, this.cName, this.fIndex, this.readFileFromNameStorage,
+      {super.key});
 
   @override
   State<ContentPdfShow> createState() => StateContentPdfShow();
@@ -19,7 +20,8 @@ class StateContentPdfShow extends State<ContentPdfShow> {
   bool isPdfSet = false;
   @override
   void initState() {
-    readFileFromNameStorage(widget.fIndex, widget.fName, widget.cName, setFile);
+    widget.readFileFromNameStorage(
+        widget.fIndex, widget.fName, widget.cName, openFile);
     super.initState();
   }
 
@@ -37,17 +39,20 @@ class StateContentPdfShow extends State<ContentPdfShow> {
   }
 
   //========================================================
-  openFile(Uint8List pdfFile) {
-    Future<PdfDocument> d = PdfDocument.openData(pdfFile);
+  //open file: if fromBytes is true is loaded from bytes elese it's a pdf already
+  openFile(dynamic doc, bool fromBytes) {
+    if (fromBytes) {
+      setPdf(PdfDocument.openData(doc));
+    } else {
+      setPdf(doc);
+    }
+  }
+
+  //========================================================
+  setPdf(Future<PdfDocument> d) {
     setState(() {
       isPdfSet = true;
       doc = d;
     });
   }
-
-  //========================================================
-  setFile(Uint8List data) {
-    openFile(data);
-  }
-  //========================================================
 }

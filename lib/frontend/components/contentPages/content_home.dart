@@ -5,19 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
 class ContentHome extends StatefulWidget {
-  final dynamic retrieveAllFilesDB;
-  final dynamic retrieveCategoryOverviewDB;
-  final dynamic navigateTo;
-  final dynamic deleteFileDB;
-  final dynamic deleteFileStorage;
-  final dynamic onUpdateNFilesDB;
-  const ContentHome(
-      this.retrieveAllFilesDB,
-      this.retrieveCategoryOverviewDB,
-      this.navigateTo,
-      this.deleteFileDB,
-      this.deleteFileStorage,
-      this.onUpdateNFilesDB,
+  final dynamic readDB;
+  final dynamic deleteDB;
+  final dynamic updateDB;
+  final dynamic alert;
+  const ContentHome(this.readDB, this.deleteDB, this.updateDB, this.alert,
       {super.key});
 
   @override
@@ -36,10 +28,11 @@ class ContentHomeState extends State<ContentHome> {
   @override
   void initState() {
     setState(() {
-      widget.retrieveAllFilesDB(
+      widget.readDB.retrieveAllFilesDB(
           fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, false);
 
-      widget.retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
+      widget.readDB
+          .retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
     });
     super.initState();
   }
@@ -148,7 +141,7 @@ class ContentHomeState extends State<ContentHome> {
   //===================================================================================
   /// Move to file page
   moveToFile(fileName, context) {
-    widget.navigateTo(
+    widget.alert.navigateTo(
       context,
       '/files/view/$fileName',
     );
@@ -181,7 +174,7 @@ class ContentHomeState extends State<ContentHome> {
 //===================================================================================
   ///Move router to File Edit page
   moveToEditFile(fileName, context) {
-    widget.navigateTo(
+    widget.alert.navigateTo(
       context,
       '/files/edit/$fileName',
     );
@@ -190,7 +183,7 @@ class ContentHomeState extends State<ContentHome> {
 //========================================================
   ///Move router to Category View page
   moveToCategory(catName, context) {
-    widget.navigateTo(
+    widget.alert.navigateTo(
       context,
       '/categories/view/$catName',
     );
@@ -199,11 +192,12 @@ class ContentHomeState extends State<ContentHome> {
   //========================================================
   ///Remove card from list
   removeFileCard(cardToDelete) {
-    widget.deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
-    widget.deleteFileStorage(cardToDelete.file.extension,
+    widget.deleteDB
+        .deleteFileDB(cardToDelete.file.categoryName, cardToDelete.fileName);
+    widget.deleteDB.deleteFileStorage(cardToDelete.file.extension,
         cardToDelete.file.categoryName, cardToDelete.fileName);
 
-    widget.onUpdateNFilesDB(cardToDelete.file.categoryName);
+    widget.updateDB.onUpdateNFilesDB(cardToDelete.file.categoryName);
     switch (currMode) {
       case 0:
         setState(() {

@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mock_classes/mocks.dart';
+
 class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
   late MockBuildContext context;
+  late MockAlert alert;
   late GlobalKey<ScaffoldState> scaffoldKey;
 
   setUp(() {
     context = MockBuildContext();
+    alert = MockAlert();
     scaffoldKey = GlobalKey<ScaffoldState>();
   });
   Widget createWidgetUnderTest(onAccountStatus, onSettings) {
@@ -18,8 +22,8 @@ void main() {
       home: Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,
-        drawer: MyDrawer(onAccountStatus, onSettings),
-        body: Text("Hello"),
+        drawer: MyDrawer(alert),
+        body: const Text("Hello"),
       ),
     );
   }

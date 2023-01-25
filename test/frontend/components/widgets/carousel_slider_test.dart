@@ -20,8 +20,8 @@ void main() {
       home: Scaffold(
         body: MyCarousel(
           previewImgList,
-          removeImage,
           showRemove,
+          removeImg: removeImage,
           extensions: exts,
           moveToOpenFile: m,
           catName: catName,

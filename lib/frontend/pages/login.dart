@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
           SliverFillRemaining(
             hasScrollBody: false,
             child: content,
-          )
+          ),
         ],
       ),
     );

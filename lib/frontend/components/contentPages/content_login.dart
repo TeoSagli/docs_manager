@@ -7,13 +7,11 @@ import 'package:docs_manager/others/constants.dart' as constants;
 
 class ContentLogin extends StatefulWidget {
   final dynamic handleLogin;
-  final dynamic onErrorGeneric;
-  final dynamic onErrorFirebase;
-  final dynamic onLoginConfirmed;
+  final dynamic alert;
   final dynamic moveToRegisterPage;
   final dynamic context;
-  const ContentLogin(this.handleLogin, this.context, this.onErrorGeneric,
-      this.onErrorFirebase, this.onLoginConfirmed, this.moveToRegisterPage,
+  const ContentLogin(
+      this.handleLogin, this.context, this.alert, this.moveToRegisterPage,
       {super.key});
 
   @override
@@ -161,10 +159,10 @@ class ContentLoginState extends State<ContentLogin> {
   loginOps() {
     if (_formKey.currentState!.validate()) {
       widget
-          .handleLogin(um1, widget.context, widget.onErrorFirebase,
-              widget.onErrorGeneric)
+          .handleLogin(um1, widget.context, widget.alert.onErrorFirebase,
+              widget.alert.onErrorGeneric)
           .then((value) {
-        if (value) widget.onLoginConfirmed(context, '/');
+        if (value) widget.alert.onLoginConfirmed(context, '/');
       });
     }
   }

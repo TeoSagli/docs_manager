@@ -6,8 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class HandleRegistration {
   UserCredsModel user = UserCredsModel("", "");
   HandleRegistration(this.user);
-
+  Alert a = Alert();
   register(context) {
+    var createDB = CreateDB();
     try {
       FirebaseAuth.instance
           .createUserWithEmailAndPassword(
@@ -15,15 +16,15 @@ class HandleRegistration {
         password: user.password,
       )
           .then((value) {
-        createUserDB(user.email, value.user!.uid);
-        createDefaultCategoriesDB();
-        onLoad(context);
+        createDB.createUserDB(user.email, value.user!.uid);
+        createDB.createDefaultCategoriesDB();
+        a.onLoad(context);
         waitFuture(context);
-      }).onError((error, stackTrace) => onErrorFirebase(context, error));
+      }).onError((error, stackTrace) => a.onErrorFirebase(context, error));
     } on FirebaseAuthException catch (e) {
-      onErrorFirebase(context, e);
+      a.onErrorFirebase(context, e);
     } catch (e) {
-      onErrorGeneric(context, e);
+      a.onErrorGeneric(context, e);
     }
   }
 
@@ -45,7 +46,7 @@ class HandleRegistration {
         const Duration(seconds: 5),
         () => FirebaseAuth.instance
             .signOut()
-            .then((value) => onRegistrationConfirmed(context, '/')));
+            .then((value) => a.onRegistrationConfirmed(context, '/')));
   }
 
   //========================================================

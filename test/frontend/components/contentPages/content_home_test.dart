@@ -3,78 +3,41 @@ import 'package:docs_manager/frontend/components/contentPages/content_home.dart'
 import 'package:docs_manager/frontend/pages/home.dart';
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import 'package:docs_manager/others/constants.dart' as constants;
 import '../../../mock_classes/mocks.dart';
 
 void main() {
   late ContentHome sut;
-  late MockBuildContext context;
   late MockAppBar mockAppBar;
   late MockBottomBar mockBottomBar;
   late MockDrawer mockDrawer;
-  late MockFileCard mockFileCard;
-  late MockListCard mockListCard;
-  late MockCategoryOverviewCard mockCategoryOverviewCard;
+
+  late MockReadDB mockReadDB;
+  late MockReadDB2 mockReadDB2;
+  late MockUpdateDB mockUpdateDB;
+  late MockDeleteDB mockDeleteDB;
+  late MockAlert mockAlert;
 
   setUpAll(() async {
-    context = MockBuildContext();
     mockAppBar = MockAppBar();
     mockBottomBar = MockBottomBar();
     mockDrawer = MockDrawer();
-    mockListCard = MockListCard();
-    mockFileCard = MockFileCard();
-    mockCategoryOverviewCard = MockCategoryOverviewCard();
+    mockReadDB = MockReadDB();
+    mockReadDB2 = MockReadDB2();
+    mockUpdateDB = MockUpdateDB();
+    mockDeleteDB = MockDeleteDB();
+    mockAlert = MockAlert();
   });
   Widget createWidgetUnderTest() {
     return MaterialApp(
         home: HomePage(sut, mockAppBar, mockBottomBar, mockDrawer));
   }
 
-  init1(fulfillFileCards, b, c, d, e) {
-    List<Widget> myCardsGrid = [];
-    List<Widget> myCardsList = [];
-
-    fulfillFileCards(myCardsGrid, myCardsList);
-  }
-
-  init2(fulfillCategoriesCards, moveToCategory) {
-    List<Container> myCards = [];
-    List<int> myOrders = [];
-    fulfillCategoriesCards(myCards, myOrders);
-  }
-
-  retrieveAllFilesDB(
-      fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, e) {
-    List<Widget> myCardsGrid = [mockFileCard];
-    List<Widget> myCardsList = [mockListCard];
-    fulfillFileCards(myCardsGrid, myCardsList);
-    moveToFile("test", context);
-    moveToEditFile("test", context);
-    //TODO
-    //removeFileCard(mockFileCard);
-  }
-
-  retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory) {
-    List<Container> myCards = [];
-    List<int> myOrders = [];
-    myCards.add(Container(child: mockCategoryOverviewCard));
-    myOrders.add(0);
-    moveToCategory("test", context);
-    fulfillCategoriesCards(myCards, myOrders);
-  }
-
-  navigateTo(a, b) {}
-  deleteFileDB(a, b) {}
-  deleteFileStorage(a, b, c) {}
-  onUpdateNFilesDB(a) {}
   testWidgets("home content structure empty", (tester) async {
     sut = ContentHome(
-      init1,
-      init2,
-      navigateTo,
-      deleteFileDB,
-      deleteFileStorage,
-      onUpdateNFilesDB,
+      mockReadDB,
+      mockDeleteDB,
+      mockUpdateDB,
+      mockAlert,
     );
     await tester.pumpWidget(createWidgetUnderTest());
     final titleFinder = find.text("All Categories");
@@ -88,12 +51,10 @@ void main() {
   });
   testWidgets("home content structure with cards", (tester) async {
     sut = ContentHome(
-      retrieveAllFilesDB,
-      retrieveCategoryOverviewDB,
-      navigateTo,
-      deleteFileDB,
-      deleteFileStorage,
-      onUpdateNFilesDB,
+      mockReadDB2,
+      mockDeleteDB,
+      mockUpdateDB,
+      mockAlert,
     );
     await tester.pumpWidget(createWidgetUnderTest());
     final titleFinder = find.text("All Categories");
@@ -113,12 +74,10 @@ void main() {
     "test change mode ",
     (WidgetTester tester) async {
       sut = ContentHome(
-        retrieveAllFilesDB,
-        retrieveCategoryOverviewDB,
-        navigateTo,
-        deleteFileDB,
-        deleteFileStorage,
-        onUpdateNFilesDB,
+        mockReadDB2,
+        mockDeleteDB,
+        mockUpdateDB,
+        mockAlert,
       );
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.tap(find.byTooltip("List"));

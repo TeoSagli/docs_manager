@@ -10,26 +10,24 @@ void main() {
   late ContentLogin sut;
   late MockBuildContext context;
   late MockAppBar mockAppBar;
+  late MockAlert mockAlert;
 
   setUpAll(() async {
     context = MockBuildContext();
     mockAppBar = MockAppBar();
+    mockAlert = MockAlert();
   });
   Widget createWidgetUnderTest() {
     return MaterialApp(home: LoginPage(sut, mockAppBar));
   }
 
-  onErrorGeneric() {}
-  onErrorFirebase() {}
   moveToRegisterPage(a, b) {}
-  onLoginConfirmed(a, b) {}
   Future<bool> handleLogin(um1, context, onErrorFirebase, onErrorGeneric) {
     return Future.value(true);
   }
 
   testWidgets("Login content structure", (tester) async {
-    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
-        onLoginConfirmed, moveToRegisterPage);
+    sut = ContentLogin(handleLogin, context, mockAlert, moveToRegisterPage);
     await tester.pumpWidget(createWidgetUnderTest());
     final titleFinder = find.text("Login to DocuManager!");
     final subtitleFinder = find.text("The simple documents & cards manager");
@@ -46,8 +44,7 @@ void main() {
   });
 
   testWidgets("Enter email", (tester) async {
-    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
-        onLoginConfirmed, moveToRegisterPage);
+    sut = ContentLogin(handleLogin, context, mockAlert, moveToRegisterPage);
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.enterText(find.byKey(const Key("email")), "MyName");
     await tester.pump();
@@ -57,8 +54,7 @@ void main() {
     expect(find.text("a@a.it"), findsOneWidget);
   });
   testWidgets("Enter password", (tester) async {
-    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
-        onLoginConfirmed, moveToRegisterPage);
+    sut = ContentLogin(handleLogin, context, mockAlert, moveToRegisterPage);
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.enterText(find.byKey(const Key("password")), "MyPassword");
     await tester.pump();
@@ -68,8 +64,7 @@ void main() {
     expect(find.text("123456"), findsOneWidget);
   });
   testWidgets("Tap Login button", (tester) async {
-    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
-        onLoginConfirmed, moveToRegisterPage);
+    sut = ContentLogin(handleLogin, context, mockAlert, moveToRegisterPage);
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.ensureVisible(find.byType(MyButton));
     await tester.pump();
@@ -80,8 +75,7 @@ void main() {
     expect(find.byType(MyButton), findsOneWidget);
   });
   testWidgets("Tap Register button", (tester) async {
-    sut = ContentLogin(handleLogin, context, onErrorGeneric, onErrorFirebase,
-        onLoginConfirmed, moveToRegisterPage);
+    sut = ContentLogin(handleLogin, context, mockAlert, moveToRegisterPage);
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.ensureVisible(find.byType(TextButton));
     await tester.pump();
