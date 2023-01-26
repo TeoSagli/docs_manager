@@ -260,8 +260,15 @@ class ReadDB {
               Alert().onDeleteFile),
         );
         listView.add(
-          ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard,
-              UpdateDB().updateFavouriteDB, Alert().onDeleteFile),
+          ListCard(
+              cardName,
+              cardFile,
+              moveToFile,
+              moveToEditFile,
+              removeCard,
+              UpdateDB().updateFavouriteDB,
+              Alert().onDeleteFile,
+              ReadDB().readImageCategoryStorage),
         );
       }
       if (!isFavPage) {
@@ -372,8 +379,15 @@ class ReadDB {
               Alert().onDeleteFile),
         );
         cardsList.add(
-          ListCard(cardName, cardFile, moveToFile, moveToEditFile, removeCard,
-              UpdateDB().updateFavouriteDB, Alert().onDeleteFile),
+          ListCard(
+              cardName,
+              cardFile,
+              moveToFile,
+              moveToEditFile,
+              removeCard,
+              UpdateDB().updateFavouriteDB,
+              Alert().onDeleteFile,
+              ReadDB().readImageCategoryStorage),
         );
       }
       fulfillCard(cardsGrid, cardsList);

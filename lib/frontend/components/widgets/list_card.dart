@@ -1,4 +1,5 @@
 import 'package:docs_manager/backend/models/file.dart';
+import 'package:docs_manager/frontend/components/widgets/loading_wheel.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
@@ -12,6 +13,7 @@ class ListCard extends StatefulWidget {
   final dynamic removeCard;
   final dynamic updateFavouriteDB;
   final dynamic onDeleteFile;
+  final dynamic readImageCategoryStorage;
 
   const ListCard(
       this.fileName,
@@ -21,19 +23,30 @@ class ListCard extends StatefulWidget {
       this.removeCard,
       this.updateFavouriteDB,
       this.onDeleteFile,
+      this.readImageCategoryStorage,
       {super.key});
 }
 
 class ListCardState extends State<ListCard> {
-  Widget cardImage = constants.loadingWheel;
+  Widget cardImage = const SizedBox(
+    width: 60,
+    height: 60,
+    child: MyLoadingWheel(),
+  );
   late bool isFav;
   Color catColor = Colors.grey;
 
   @override
   void initState() {
-    setState(() {
-      isFav = widget.file.isFavourite;
-    });
+    if (mounted) {
+      setState(() {
+        widget.readImageCategoryStorage(
+            "${widget.file.categoryName}.${widget.file.extension.elementAt(0)}",
+            setCard);
+        isFav = widget.file.isFavourite;
+      });
+    }
+
     super.initState();
   }
 
@@ -70,12 +83,8 @@ class ListCardState extends State<ListCard> {
                     Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-                          child: Image.asset(
-                              'assets/images/${widget.file.categoryName}.png',
-                              width: MediaQuery.of(context).size.width * 0.1,
-                              height: MediaQuery.of(context).size.width * 0.1),
-                        ),
+                            padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+                            child: cardImage),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.4,
                           child: Text(
@@ -130,4 +139,18 @@ class ListCardState extends State<ListCard> {
       ),
     );
   }
+
+  //========================================================
+  setCard(d) {
+    if (mounted) {
+      setState(() {
+        cardImage = Image.memory(d!,
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width * 0.1,
+            height: MediaQuery.of(context).size.width * 0.1);
+      });
+    }
+  }
+
+  //========================================================
 }

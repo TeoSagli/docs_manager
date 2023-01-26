@@ -27,13 +27,16 @@ class ContentHomeState extends State<ContentHome> {
 
   @override
   void initState() {
-    setState(() {
-      widget.readDB.retrieveAllFilesDB(
-          fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, false);
+    if (mounted) {
+      setState(() {
+        widget.readDB.retrieveAllFilesDB(fulfillFileCards, moveToFile,
+            moveToEditFile, removeFileCard, false);
 
-      widget.readDB
-          .retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
-    });
+        widget.readDB
+            .retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
+      });
+    }
+
     super.initState();
   }
 
@@ -120,9 +123,11 @@ class ContentHomeState extends State<ContentHome> {
   //===================================================================================
   /// Grid view visualization to [modeToSet]
   changeViewMode(int modeToSet) {
-    setState(() {
-      currMode = modeToSet;
-    });
+    if (mounted) {
+      setState(() {
+        currMode = modeToSet;
+      });
+    }
   }
 
   //===================================================================================
@@ -153,10 +158,12 @@ class ContentHomeState extends State<ContentHome> {
     List<Widget> myCardsGrid,
     List<Widget> myCardsList,
   ) {
-    setState(() {
-      fileCardsGrid = myCardsGrid;
-      fileCardsList = myCardsList;
-    });
+    if (mounted) {
+      setState(() {
+        fileCardsGrid = myCardsGrid;
+        fileCardsList = myCardsList;
+      });
+    }
   }
 
 //===================================================================================
@@ -165,10 +172,12 @@ class ContentHomeState extends State<ContentHome> {
     List<Container> myCards,
     List<int> myOrders,
   ) {
-    setState(() {
-      itemsList = myOrders;
-      categoriesCardsList = myCards;
-    });
+    if (mounted) {
+      setState(() {
+        itemsList = myOrders;
+        categoriesCardsList = myCards;
+      });
+    }
   }
 
 //===================================================================================
@@ -200,16 +209,20 @@ class ContentHomeState extends State<ContentHome> {
     widget.updateDB.onUpdateNFilesDB(cardToDelete.file.categoryName);
     switch (currMode) {
       case 0:
-        setState(() {
-          fileCardsList.removeAt(fileCardsGrid.indexOf(cardToDelete));
-          fileCardsGrid.remove(cardToDelete);
-        });
+        if (mounted) {
+          setState(() {
+            fileCardsList.removeAt(fileCardsGrid.indexOf(cardToDelete));
+            fileCardsGrid.remove(cardToDelete);
+          });
+        }
         break;
       case 1:
-        setState(() {
-          fileCardsGrid.removeAt(fileCardsList.indexOf(cardToDelete));
-          fileCardsList.remove(cardToDelete);
-        });
+        if (mounted) {
+          setState(() {
+            fileCardsGrid.removeAt(fileCardsList.indexOf(cardToDelete));
+            fileCardsList.remove(cardToDelete);
+          });
+        }
         break;
     }
   }

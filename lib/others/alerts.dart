@@ -194,9 +194,12 @@ class Alert {
   onLoad(context) {
     showDialog<String>(
       context: context,
-      builder: (BuildContext context) => const AlertDialog(
-        title: Text('Processing'),
-        content: constants.loadingWheel,
+      builder: (BuildContext context) => const AbsorbPointer(
+        absorbing: true,
+        child: AlertDialog(
+          title: Text('Processing'),
+          content: constants.loadingWheel,
+        ),
       ),
     );
   }

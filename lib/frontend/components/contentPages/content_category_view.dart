@@ -1,13 +1,12 @@
+import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
-import 'dart:async';
 
 import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
-import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 
 class ContentCategoryView extends StatefulWidget {
   final String catName;
@@ -27,13 +26,17 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   List<Widget> fileCardsGrid = [constants.emptyBox];
   List<Widget> fileCardsList = [constants.emptyBox];
   int currMode = 0;
+  Widget cardImage = constants.loadingWheel2;
+  CategoryModel catModel =
+      CategoryModel(path: "", nfiles: 0, colorValue: 0, order: 0);
 
   @override
   void initState() {
-    setState(() {
-      widget.readDB.retrieveFilesFromCategoryDB(widget.catName, fulfillCard,
-          moveToFile, moveToEditFile, removeFileCard, context);
-    });
+    if (mounted) {
+      setState(() {
+        widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
+      });
+    }
     super.initState();
   }
 
@@ -44,22 +47,23 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/images/${widget.catName}.png',
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.width * 0.6),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: const Text(
-                    "No documents yet!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        cardImage,
+                        const Text(
+                          "No documents yet!",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    )),
               ),
             ],
           )
@@ -83,9 +87,11 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   //===================================================================================
   /// Grid view visualization to [modeToSet]
   changeViewMode(int modeToSet) {
-    setState(() {
-      currMode = modeToSet;
-    });
+    if (mounted) {
+      setState(() {
+        currMode = modeToSet;
+      });
+    }
   }
 
   //===================================================================================
@@ -116,10 +122,12 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
     List<Widget> myCards,
     List<Widget> myCardsList,
   ) {
-    setState(() {
-      fileCardsGrid = myCards;
-      fileCardsList = myCardsList;
-    });
+    if (mounted) {
+      setState(() {
+        fileCardsGrid = myCards;
+        fileCardsList = myCardsList;
+      });
+    }
     /*print("Cardlist ${cardsList.toList().toString()} is here");
     print("Orderlist ${itemsList.toList().toString()} is here");*/
   }
@@ -144,19 +152,45 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
     widget.updateDB.onUpdateNFilesDB(cardToDelete.file.categoryName);
     switch (currMode) {
       case 0:
-        setState(() {
-          fileCardsList.removeAt(fileCardsGrid.indexOf(cardToDelete));
-          fileCardsGrid.remove(cardToDelete);
-        });
+        if (mounted) {
+          setState(() {
+            fileCardsList.removeAt(fileCardsGrid.indexOf(cardToDelete));
+            fileCardsGrid.remove(cardToDelete);
+          });
+        }
         break;
       case 1:
-        setState(() {
-          fileCardsGrid.removeAt(fileCardsList.indexOf(cardToDelete));
-          fileCardsList.remove(cardToDelete);
-        });
+        if (mounted) {
+          setState(() {
+            fileCardsGrid.removeAt(fileCardsList.indexOf(cardToDelete));
+            fileCardsList.remove(cardToDelete);
+          });
+        }
         break;
     }
   }
 
+  //========================================================
+  setCard(d) {
+    if (mounted) {
+      setState(() {
+        cardImage = Image.memory(d!,
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.width * 0.6);
+      });
+      widget.readDB.retrieveFilesFromCategoryDB(widget.catName, fulfillCard,
+          moveToFile, moveToEditFile, removeFileCard, context);
+    }
+  }
+
+  //========================================================
+  setCatModel(model) {
+    if (mounted) {
+      setState(() {
+        catModel = model;
+      });
+      widget.readDB.readImageCategoryStorage(catModel.path, setCard);
+    }
+  }
   //========================================================
 }

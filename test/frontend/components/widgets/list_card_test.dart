@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mock_classes/mocks.dart';
+
 class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
@@ -26,11 +28,18 @@ void main() {
   });
 
   Widget createWidgetUnderTest(fileName, file, function, moveToEditFilePage,
-      removeCard, updateFavouriteDB, onDeleteFile) {
+      removeCard, updateFavouriteDB, onDeleteFile, readImageCategoryStorage) {
     return MaterialApp(
         home: Scaffold(
-            body: ListCard(fileName, file, function, moveToEditFilePage,
-                removeCard, updateFavouriteDB, onDeleteFile)));
+            body: ListCard(
+                fileName,
+                file,
+                function,
+                moveToEditFilePage,
+                removeCard,
+                updateFavouriteDB,
+                onDeleteFile,
+                readImageCategoryStorage)));
   }
 
   void method1(fileName, context) {}
@@ -38,6 +47,10 @@ void main() {
   void removeCard(el) {}
   void onDeleteFile(context, removeCard, widget) {}
   void updateFavouriteDB(categoryName, fileName, isFav) {}
+  void readImageCategoryStorage(
+    categoryName,
+    setCard,
+  ) {}
 
   testWidgets(
     "show list card elements and favourite",
@@ -49,7 +62,8 @@ void main() {
           moveToEditFilePage,
           removeCard,
           updateFavouriteDB,
-          onDeleteFile));
+          onDeleteFile,
+          readImageCategoryStorage));
       await tester.tap(find.byKey(const Key("move-to")));
       await tester.pump();
       await tester.tap(find.byKey(const Key("move-to-2")));
@@ -71,7 +85,8 @@ void main() {
           moveToEditFilePage,
           removeCard,
           updateFavouriteDB,
-          onDeleteFile));
+          onDeleteFile,
+          readImageCategoryStorage));
       await tester.tap(find.byKey(const Key("set-fav")));
       await tester.pump();
       expect(find.text("Random stuff"), findsOneWidget);

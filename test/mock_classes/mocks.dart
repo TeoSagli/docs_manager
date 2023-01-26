@@ -106,14 +106,14 @@ class MockListCardState extends State<MockListCard> {
   @override
   Widget build(BuildContext context) {
     return ListCard(
-      "TestFile",
-      fModel,
-      moveToFile,
-      moveToEditFilePage,
-      removeCard,
-      MockUpdateDB().updateFavouriteDB,
-      MockAlert().onDeleteFile,
-    );
+        "TestFile",
+        fModel,
+        moveToFile,
+        moveToEditFilePage,
+        removeCard,
+        MockUpdateDB().updateFavouriteDB,
+        MockAlert().onDeleteFile,
+        ReadDB().readImageCategoryStorage);
     // return constants.emptyBox;
   }
 }

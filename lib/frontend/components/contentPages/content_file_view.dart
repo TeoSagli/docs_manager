@@ -5,7 +5,6 @@ import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_file_operations.dart';
 import 'package:docs_manager/frontend/components/widgets/carousel_slider.dart';
-import 'package:docs_manager/frontend/components/widgets/file_card.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -173,9 +172,11 @@ class ContentFileViewState extends State<ContentFileView> {
 
   //===================================================================================
   setColor(int c) {
-    setState(() {
-      catColor = Color(c);
-    });
+    if (mounted) {
+      setState(() {
+        catColor = Color(c);
+      });
+    }
   }
 
   //===================================================================================
@@ -242,8 +243,10 @@ class ContentFileViewState extends State<ContentFileView> {
   //===================================================================================
 
   setImage(value) {
-    setState(() {
-      previewImgList.add(value as Image);
-    });
+    if (mounted) {
+      setState(() {
+        previewImgList.add(value as Image);
+      });
+    }
   }
 }

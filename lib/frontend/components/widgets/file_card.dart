@@ -46,10 +46,11 @@ class FileCardState extends State<FileCard> {
         context,
         false,
         setImage);
-
-    setState(() {
-      isFav = widget.file.isFavourite;
-    });
+    if (mounted) {
+      setState(() {
+        isFav = widget.file.isFavourite;
+      });
+    }
     super.initState();
   }
 
@@ -173,9 +174,11 @@ class FileCardState extends State<FileCard> {
                                       ? Icons.favorite_rounded
                                       : Icons.favorite_border_rounded),
                                   onPressed: () {
-                                    setState(() {
-                                      isFav = !isFav;
-                                    });
+                                    if (mounted) {
+                                      setState(() {
+                                        isFav = !isFav;
+                                      });
+                                    }
                                     widget.updateFavouriteDB(
                                         widget.file.categoryName,
                                         widget.fileName,
@@ -204,16 +207,18 @@ class FileCardState extends State<FileCard> {
   }
 
   setColor(int c) {
-    setState(() {
-      catColor = Color(c);
-    });
+    if (mounted) {
+      setState(() {
+        catColor = Color(c);
+      });
+    }
   }
 
   setImage(value) {
-    setState(() {
+    if (mounted) {
       setState(() {
         cardImage = value;
       });
-    });
+    }
   }
 }
