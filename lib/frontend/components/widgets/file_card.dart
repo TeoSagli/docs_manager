@@ -1,6 +1,5 @@
 import 'package:docs_manager/backend/models/file.dart';
-import 'package:docs_manager/backend/update_db.dart';
-import 'package:docs_manager/others/alerts.dart';
+
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 

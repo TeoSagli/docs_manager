@@ -142,8 +142,8 @@ class ContentHomeState extends State<ContentHome> {
   /// Move to file page
   moveToFile(fileName, context) {
     widget.alert.navigateTo(
-      context,
       '/files/view/$fileName',
+      context,
     );
   }
 
@@ -175,8 +175,8 @@ class ContentHomeState extends State<ContentHome> {
   ///Move router to File Edit page
   moveToEditFile(fileName, context) {
     widget.alert.navigateTo(
-      context,
       '/files/edit/$fileName',
+      context,
     );
   }
 
@@ -184,8 +184,8 @@ class ContentHomeState extends State<ContentHome> {
   ///Move router to Category View page
   moveToCategory(catName, context) {
     widget.alert.navigateTo(
-      context,
       '/categories/view/$catName',
+      context,
     );
   }
 
