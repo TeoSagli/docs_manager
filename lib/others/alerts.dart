@@ -224,7 +224,7 @@ class Alert {
 //========================================================
   ///Simple navigation psuh
   navigateTo(String path, BuildContext context) {
-    return Navigator.pushNamed(context, path);
+    Navigator.pushNamed(context, path);
   }
 
 //========================================================
