@@ -221,11 +221,14 @@ class ReadDB {
 
 //===================================================================================
   /// Read all files infos from Firebase Database and create files cards
-  void retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
+  retrieveAllFilesDB(dynamic fulfillCard, dynamic moveToFile,
       dynamic moveToEditFile, dynamic removeCard, bool isFavPage) {
     var key = userRefDB();
     var userPath = "users/$key";
-    FirebaseDatabase.instance.ref("$userPath/allFiles").onValue.listen((event) {
+    return FirebaseDatabase.instance
+        .ref("$userPath/allFiles")
+        .onValue
+        .listen((event) {
       int cardListSize = event.snapshot.children.length;
 
       List<FileCard> gridView = List.empty(growable: true);

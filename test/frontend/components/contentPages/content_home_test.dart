@@ -88,4 +88,22 @@ void main() {
       expect(find.byIcon(Icons.view_list_rounded), findsOneWidget);
     },
   );
+  testWidgets(
+    "test removeCard",
+    (WidgetTester tester) async {
+      sut = ContentHome(
+        mockReadDB2,
+        mockDeleteDB,
+        mockUpdateDB,
+        mockAlert,
+      );
+
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.ensureVisible(find.byKey(const Key("tap-del")));
+      await tester.pump();
+      await tester.tap(find.byKey(const Key("tap-del")));
+
+      expect(find.byKey(const Key("tap-del")), findsOneWidget);
+    },
+  );
 }

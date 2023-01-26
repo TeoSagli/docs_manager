@@ -12,26 +12,26 @@ void main() {
   late MockDrawer mockDrawer;
   late MockOperationsDB mockOperationsDB;
   late MockReadDB mockReadDB;
+  late MockReadDB2 mockReadDB2;
   late MockUpdateDB mockUpdateDB;
   late MockDeleteDB mockDeleteDB;
-  late MockGoogle mockGoogle;
   late MockAlert mockAlert;
 
   setUpAll(() async {
     context = MockBuildContext();
     mockAlert = MockAlert();
     mockAppBar = MockAppBar();
+    mockReadDB2 = MockReadDB2();
     mockDrawer = MockDrawer();
     mockOperationsDB = MockOperationsDB();
     mockReadDB = mockOperationsDB.readDB;
     mockUpdateDB = mockOperationsDB.updateDB;
     mockDeleteDB = mockOperationsDB.deleteDB;
-    mockGoogle = MockGoogle();
   });
   Widget createWidgetUnderTest() {
     return MaterialApp(
       home: CategoryViewPage(sut, mockAppBar, mockDrawer,
-          catName: "testCategory"),
+          catName: "Credit Cards"),
     );
   }
 
@@ -39,6 +39,17 @@ void main() {
     //when(()=>mockGoogle.addCalendarExpiration).thenAnswer((_) => AlertMessage(true, "Event added in calendar"))
     sut = ContentCategoryView(
         "Credit Cards", mockReadDB, mockDeleteDB, mockUpdateDB, mockAlert);
+    await tester.pumpWidget(createWidgetUnderTest());
+
+    expect(find.byTooltip("List"), findsNothing);
+    expect(find.byTooltip("Grid"), findsNothing);
+    expect(find.byType(ViewMode), findsNothing);
+    expect(find.image(Image.asset('assets/images/Credit Cards.png').image),
+        findsOneWidget);
+  });
+  testWidgets("Category test functions 2", (tester) async {
+    sut = ContentCategoryView(
+        "Credit Cards", mockReadDB2, mockDeleteDB, mockUpdateDB, mockAlert);
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.tap(find.byTooltip("Grid"));
     await tester.pump();
@@ -51,16 +62,7 @@ void main() {
     expect(find.image(Image.asset('assets/images/Credit Cards.png').image),
         findsNothing);
     expect(find.byType(ViewMode), findsOneWidget);
-    /* await tester.tap(find.byKey(
-      const Key("tap-del"),
-    ));
+    await tester.tap(find.byKey(const Key("tap-del")));
     await tester.pump();
-     expect(find.image(Image.asset('assets/images/Credit Cards.png').image),
-        findsOneWidget);
-     expect(find.byIcon(Icons.mode_edit_outline_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.add_to_drive_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.favorite_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.delete_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.open_in_new_rounded), findsOneWidget);*/
   });
 }

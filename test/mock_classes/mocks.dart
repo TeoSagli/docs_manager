@@ -43,11 +43,17 @@ class MockBuildContext extends Mock implements BuildContext {}
 //======================================================================
 class MockFileCard extends Mock implements FileCard {
   @override
+  FileModel get file => fModel;
+  @override
+  String get fileName => "FileTest";
+  @override
   StatefulElement createElement() => StatefulElement(this);
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) => "";
   @override
   State<StatefulWidget> createState() => MockFileCardState();
+  @override
+  get delFunction => MockAlert().onDeleteFile;
 }
 
 class MockFileCardState extends State<MockFileCard> {
@@ -92,6 +98,8 @@ class MockListCard extends Mock implements ListCard {
   StatefulElement createElement() => StatefulElement(this);
   @override
   State<StatefulWidget> createState() => MockListCardState();
+  @override
+  get onDeleteFile => MockAlert().onDeleteFile;
 }
 
 class MockListCardState extends State<MockListCard> {
@@ -264,10 +272,8 @@ class MockReadDB extends Mock implements ReadDB {
   @override
   retrieveFilesFromCategoryDB(catName, fulfillCard, moveToFile, moveToEditFile,
       removeFileCard, context) {
-    moveToFile("", context);
-    moveToEditFile("", context);
-    List<Widget> myCards = [MockFileCard()];
-    List<Widget> myCardsList = [MockFileCard()];
+    List<Widget> myCards = [];
+    List<Widget> myCardsList = [];
     fulfillCard(myCards, myCardsList);
   }
 
@@ -293,10 +299,12 @@ class MockReadDB extends Mock implements ReadDB {
   }
 
   @override
-  retrieveAllFilesDB(fulfillFileCards, b, c, d, e) {
+  retrieveAllFilesDB(
+      fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, e) {
     List<Widget> myCardsGrid = [];
     List<Widget> myCardsList = [];
-
+    /*  TODO
+  MockAlert().onDeleteFile(MockBuildContext(), removeFileCard, MockFileCard());*/
     fulfillFileCards(myCardsGrid, myCardsList);
   }
 }
@@ -326,8 +334,6 @@ class MockReadDB2 extends Mock implements ReadDB {
     fulfillFileCards(myCardsGrid, myCardsList);
     moveToFile("test", MockBuildContext());
     moveToEditFile("test", MockBuildContext());
-    //TODO
-    //removeFileCard(mockFileCard);
   }
 
   @override
