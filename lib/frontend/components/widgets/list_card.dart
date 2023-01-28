@@ -1,3 +1,4 @@
+import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/frontend/components/widgets/loading_wheel.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class ListCard extends StatefulWidget {
   final dynamic updateFavouriteDB;
   final dynamic onDeleteFile;
   final dynamic readImageCategoryStorage;
+  final dynamic getCatModelFromCatNameDB;
 
   const ListCard(
       this.fileName,
@@ -24,6 +26,7 @@ class ListCard extends StatefulWidget {
       this.updateFavouriteDB,
       this.onDeleteFile,
       this.readImageCategoryStorage,
+      this.getCatModelFromCatNameDB,
       {super.key});
 }
 
@@ -35,15 +38,21 @@ class ListCardState extends State<ListCard> {
   );
   late bool isFav;
   Color catColor = Colors.grey;
+  CategoryModel catMod =
+      CategoryModel(path: "", nfiles: 0, colorValue: 0, order: 0);
 
   @override
   void initState() {
     if (mounted) {
+      String ext = "";
+      if (constants.immutableCats.contains(widget.file.categoryName)) {
+        ext = "png";
+      } else {
+        ext = widget.file.extension.elementAt(0) as String;
+      }
       setState(() {
-        widget.readImageCategoryStorage(
-            "${widget.file.categoryName}.${widget.file.extension.elementAt(0)}",
-            setCard);
         isFav = widget.file.isFavourite;
+        widget.getCatModelFromCatNameDB(setCatMod, widget.file.categoryName);
       });
     }
 
@@ -152,5 +161,15 @@ class ListCardState extends State<ListCard> {
     }
   }
 
+  //========================================================
+  setCatMod(c) {
+    if (mounted) {
+      setState(() {
+        catMod = c;
+      });
+
+      widget.readImageCategoryStorage(catMod.path, setCard);
+    }
+  }
   //========================================================
 }

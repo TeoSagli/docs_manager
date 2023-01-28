@@ -261,14 +261,16 @@ class ReadDB {
         );
         listView.add(
           ListCard(
-              cardName,
-              cardFile,
-              moveToFile,
-              moveToEditFile,
-              removeCard,
-              UpdateDB().updateFavouriteDB,
-              Alert().onDeleteFile,
-              ReadDB().readImageCategoryStorage),
+            cardName,
+            cardFile,
+            moveToFile,
+            moveToEditFile,
+            removeCard,
+            UpdateDB().updateFavouriteDB,
+            Alert().onDeleteFile,
+            ReadDB().readImageCategoryStorage,
+            ReadDB().getCatModelFromCatNameDB,
+          ),
         );
       }
       if (!isFavPage) {
@@ -379,14 +381,16 @@ class ReadDB {
         );
         cardsList.add(
           ListCard(
-              cardName,
-              cardFile,
-              moveToFile,
-              moveToEditFile,
-              removeCard,
-              UpdateDB().updateFavouriteDB,
-              Alert().onDeleteFile,
-              ReadDB().readImageCategoryStorage),
+            cardName,
+            cardFile,
+            moveToFile,
+            moveToEditFile,
+            removeCard,
+            UpdateDB().updateFavouriteDB,
+            Alert().onDeleteFile,
+            ReadDB().readImageCategoryStorage,
+            ReadDB().getCatModelFromCatNameDB,
+          ),
         );
       }
       fulfillCard(cardsGrid, cardsList);

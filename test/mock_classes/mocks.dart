@@ -114,7 +114,8 @@ class MockListCardState extends State<MockListCard> {
         removeCard,
         MockUpdateDB().updateFavouriteDB,
         MockAlert().onDeleteFile,
-        MockReadDB2().readImageCategoryStorage);
+        MockReadDB2().readImageCategoryStorage,
+        MockReadDB2().getCatModelFromCatNameDB);
     // return constants.emptyBox;
   }
 }

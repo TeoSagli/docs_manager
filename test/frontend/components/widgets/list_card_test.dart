@@ -27,19 +27,29 @@ void main() {
         expiration: "");
   });
 
-  Widget createWidgetUnderTest(fileName, file, function, moveToEditFilePage,
-      removeCard, updateFavouriteDB, onDeleteFile, readImageCategoryStorage) {
+  Widget createWidgetUnderTest(
+      fileName,
+      file,
+      function,
+      moveToEditFilePage,
+      removeCard,
+      updateFavouriteDB,
+      onDeleteFile,
+      readImageCategoryStorage,
+      getCatModelFromCatNameDB) {
     return MaterialApp(
         home: Scaffold(
             body: ListCard(
-                fileName,
-                file,
-                function,
-                moveToEditFilePage,
-                removeCard,
-                updateFavouriteDB,
-                onDeleteFile,
-                readImageCategoryStorage)));
+      fileName,
+      file,
+      function,
+      moveToEditFilePage,
+      removeCard,
+      updateFavouriteDB,
+      onDeleteFile,
+      readImageCategoryStorage,
+      getCatModelFromCatNameDB,
+    )));
   }
 
   void method1(fileName, context) {}
@@ -47,6 +57,7 @@ void main() {
   void removeCard(el) {}
   void onDeleteFile(context, removeCard, widget) {}
   void updateFavouriteDB(categoryName, fileName, isFav) {}
+  void getCatModelFromCatNameDB(a, b) {}
   void readImageCategoryStorage(
     categoryName,
     setCard,
@@ -63,7 +74,8 @@ void main() {
           removeCard,
           updateFavouriteDB,
           onDeleteFile,
-          readImageCategoryStorage));
+          readImageCategoryStorage,
+          getCatModelFromCatNameDB));
       await tester.tap(find.byKey(const Key("move-to")));
       await tester.pump();
       await tester.tap(find.byKey(const Key("move-to-2")));
@@ -86,7 +98,8 @@ void main() {
           removeCard,
           updateFavouriteDB,
           onDeleteFile,
-          readImageCategoryStorage));
+          readImageCategoryStorage,
+          getCatModelFromCatNameDB));
       await tester.tap(find.byKey(const Key("set-fav")));
       await tester.pump();
       expect(find.text("Random stuff"), findsOneWidget);
