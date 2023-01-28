@@ -27,15 +27,11 @@ class ContentHomeState extends State<ContentHome> {
 
   @override
   void initState() {
-    if (mounted) {
-      setState(() {
-        widget.readDB.retrieveAllFilesDB(fulfillFileCards, moveToFile,
-            moveToEditFile, removeFileCard, false);
+    widget.readDB.retrieveAllFilesDB(
+        fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, false);
 
-        widget.readDB
-            .retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
-      });
-    }
+    widget.readDB
+        .retrieveCategoryOverviewDB(fulfillCategoriesCards, moveToCategory);
 
     super.initState();
   }

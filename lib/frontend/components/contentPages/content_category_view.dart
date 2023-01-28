@@ -83,7 +83,11 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   //===================================================================================
   /// Grid view visualization to [modeToSet]
   changeViewMode(int modeToSet) {
-    currMode = modeToSet;
+    if (mounted) {
+      setState(() {
+        currMode = modeToSet;
+      });
+    }
   }
 
   //===================================================================================
@@ -114,10 +118,12 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
     List<Widget> myCards,
     List<Widget> myCardsList,
   ) {
-    setState(() {
-      fileCardsGrid = myCards;
-      fileCardsList = myCardsList;
-    });
+    if (mounted) {
+      setState(() {
+        fileCardsGrid = myCards;
+        fileCardsList = myCardsList;
+      });
+    }
   }
 
 //===================================================================================

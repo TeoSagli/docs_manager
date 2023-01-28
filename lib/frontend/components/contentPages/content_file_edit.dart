@@ -13,6 +13,7 @@ import 'package:docs_manager/frontend/components/widgets/carousel_slider.dart';
 import 'package:docs_manager/frontend/components/widgets/dropdown_menu.dart';
 import 'package:docs_manager/frontend/components/widgets/input_field.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
@@ -49,7 +50,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
   List<String> pathImgList = [];
   List<String> extList = [];
   String dateText = "";
-  Widget dropdown = constants.emptyBox;
   FileModel fileData = FileModel(
       path: [],
       categoryName: "",
@@ -199,7 +199,10 @@ class ContentFileEditState extends State<ContentFileEdit> {
                               ),
                             ],
                           ),
-                          dropdown,
+                          Padding(
+                            padding: const EdgeInsetsDirectional.all(10),
+                            child: TitleText2(fileData.categoryName),
+                          ),
                         ],
                       ),
                     ),
@@ -358,7 +361,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
               path,
               docNameController.text,
               saveName,
-              'files/${(dropdown as MyDropdown).dropdownValue}');
+              'files/${fileData.categoryName}');
           listenLoading.cancel();
         }
 
@@ -367,15 +370,13 @@ class ContentFileEditState extends State<ContentFileEdit> {
             fileData.extension, fileData.categoryName, widget.fileName);
         widget.deleteDB.deleteFileDB(fileData.categoryName, widget.fileName);
         //update new version
-        String catName = (dropdown as MyDropdown).dropdownValue;
+        String catName = fileData.categoryName;
         String fileName = docNameController.text;
         String expDate = dateText;
         widget.createDB.createFile(
             catName, fileName, expDate, listPaths, listExt, "files/$catName");
         widget.createDB.createFile(
             catName, fileName, expDate, listPaths, listExt, "allFiles");
-        widget.updateDB
-            .onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
 
         setState(() {
           docNameController
@@ -428,8 +429,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
         extList.add(element as String);
       }
       dateText = f.expiration;
-      dropdown = MyDropdown(
-          fileData.categoryName, widget.readDB.retrieveCategoriesNamesDB);
       for (var element in f.path) {
         pathImgList.add(element as String);
       }
