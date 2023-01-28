@@ -15,6 +15,7 @@ import 'package:docs_manager/frontend/components/widgets/list_card.dart';
 import 'package:docs_manager/frontend/components/widgets/wallet_card.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
 
@@ -113,7 +114,7 @@ class MockListCardState extends State<MockListCard> {
         removeCard,
         MockUpdateDB().updateFavouriteDB,
         MockAlert().onDeleteFile,
-        ReadDB().readImageCategoryStorage);
+        MockReadDB2().readImageCategoryStorage);
     // return constants.emptyBox;
   }
 }
@@ -265,6 +266,22 @@ class MockOperationsDB extends Mock implements OperationsDB {
 //======================================================================
 class MockReadDB extends Mock implements ReadDB {
   @override
+  checkElementExistDB(t1, t2, setBool) {
+    setBool(false);
+  }
+
+  @override
+  retrieveCategoriesDB(
+      fulfillCard, moveToCategory, moveToEditCategory, removeCard) {
+    List<Container> myCards = [];
+    List<int> myOrders = [];
+
+    moveToCategory("test", MockBuildContext());
+    moveToEditCategory("test", MockBuildContext());
+    fulfillCard(myCards, myOrders);
+  }
+
+  @override
   retrieveFileDataFromFileNameDB(String fileName, dynamic setFileData) {
     setFileData(fModel2);
   }
@@ -294,6 +311,14 @@ class MockReadDB extends Mock implements ReadDB {
   }
 
   @override
+  readImageCategoryStorage(String catName, dynamic setCard) async {
+    var bytes = await rootBundle.load(
+      "assets/images/Credit Cards.png",
+    );
+    setCard(bytes.buffer.asUint8List());
+  }
+
+  @override
   getColorCategoryDB(dynamic setColor, String catName) {
     setColor(4282682111);
   }
@@ -303,9 +328,12 @@ class MockReadDB extends Mock implements ReadDB {
       fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, e) {
     List<Widget> myCardsGrid = [];
     List<Widget> myCardsList = [];
-    /*  TODO
-  MockAlert().onDeleteFile(MockBuildContext(), removeFileCard, MockFileCard());*/
     fulfillFileCards(myCardsGrid, myCardsList);
+  }
+
+  @override
+  getCatModelFromCatNameDB(setCatModel, String catName) {
+    setCatModel(cModel);
   }
 }
 
@@ -327,6 +355,14 @@ class MockReadDB2 extends Mock implements ReadDB {
   }
 
   @override
+  readImageCategoryStorage(String catName, dynamic setCard) async {
+    var bytes = await rootBundle.load(
+      "assets/images/Credit Cards.png",
+    );
+    setCard(bytes.buffer.asUint8List());
+  }
+
+  @override
   retrieveAllFilesDB(
       fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, e) {
     List<Widget> myCardsGrid = [MockFileCard()];
@@ -344,6 +380,11 @@ class MockReadDB2 extends Mock implements ReadDB {
     myOrders.add(0);
     moveToCategory("test", MockBuildContext());
     fulfillCategoriesCards(myCards, myOrders);
+  }
+
+  @override
+  getCatModelFromCatNameDB(setCatModel, String catName) {
+    setCatModel(cModel);
   }
 }
 
@@ -407,6 +448,7 @@ onAccountStatus() {}
 onSettings() {}
 navigateTo() {}
 //==================
-moveToCategory() {}
-readImageCategoryStorage() {}
+moveToCategory(a, b) {}
+moveToEditFile(a, b) {}
+removeFileCard(a) {}
 //==================

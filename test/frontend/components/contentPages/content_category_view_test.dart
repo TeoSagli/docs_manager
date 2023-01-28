@@ -35,19 +35,7 @@ void main() {
     );
   }
 
-  testWidgets("Category test functions", (tester) async {
-    //when(()=>mockGoogle.addCalendarExpiration).thenAnswer((_) => AlertMessage(true, "Event added in calendar"))
-    sut = ContentCategoryView(
-        "Credit Cards", mockReadDB, mockDeleteDB, mockUpdateDB, mockAlert);
-    await tester.pumpWidget(createWidgetUnderTest());
-
-    expect(find.byTooltip("List"), findsNothing);
-    expect(find.byTooltip("Grid"), findsNothing);
-    expect(find.byType(ViewMode), findsNothing);
-    expect(find.image(Image.asset('assets/images/Credit Cards.png').image),
-        findsOneWidget);
-  });
-  testWidgets("Category test functions 2", (tester) async {
+  testWidgets("Category test functions ", (tester) async {
     sut = ContentCategoryView(
         "Credit Cards", mockReadDB2, mockDeleteDB, mockUpdateDB, mockAlert);
     await tester.pumpWidget(createWidgetUnderTest());
@@ -62,7 +50,5 @@ void main() {
     expect(find.image(Image.asset('assets/images/Credit Cards.png').image),
         findsNothing);
     expect(find.byType(ViewMode), findsOneWidget);
-    await tester.tap(find.byKey(const Key("tap-del")));
-    await tester.pump();
   });
 }

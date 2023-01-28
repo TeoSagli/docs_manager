@@ -32,11 +32,7 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
 
   @override
   void initState() {
-    if (mounted) {
-      setState(() {
-        widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
-      });
-    }
+    widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
     super.initState();
   }
 
@@ -87,11 +83,7 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   //===================================================================================
   /// Grid view visualization to [modeToSet]
   changeViewMode(int modeToSet) {
-    if (mounted) {
-      setState(() {
-        currMode = modeToSet;
-      });
-    }
+    currMode = modeToSet;
   }
 
   //===================================================================================
@@ -122,14 +114,10 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
     List<Widget> myCards,
     List<Widget> myCardsList,
   ) {
-    if (mounted) {
-      setState(() {
-        fileCardsGrid = myCards;
-        fileCardsList = myCardsList;
-      });
-    }
-    /*print("Cardlist ${cardsList.toList().toString()} is here");
-    print("Orderlist ${itemsList.toList().toString()} is here");*/
+    setState(() {
+      fileCardsGrid = myCards;
+      fileCardsList = myCardsList;
+    });
   }
 
 //===================================================================================

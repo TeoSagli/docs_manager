@@ -134,8 +134,8 @@ class ReadDB {
 
 //===================================================================================
   /// Read all categories infos from Firebase Database and create categories cards
-  StreamSubscription retrieveCategoriesDB(dynamic fulfillCard,
-      dynamic moveToCategory, dynamic moveToEditCategory, dynamic removeCard) {
+  retrieveCategoriesDB(dynamic fulfillCard, dynamic moveToCategory,
+      dynamic moveToEditCategory, dynamic removeCard) {
     var key = userRefDB();
     var userPath = "users/$key";
     return FirebaseDatabase.instance
@@ -293,8 +293,7 @@ class ReadDB {
 
 //===================================================================================
   /// Read all files infos from Firebase Database and create wallet cards
-  StreamSubscription retrieveAllExpirationFilesDB(
-      dynamic fulfillCard, dynamic moveToFile) {
+  retrieveAllExpirationFilesDB(dynamic fulfillCard, dynamic moveToFile) {
     var key = userRefDB();
     var userPath = "users/$key";
     return FirebaseDatabase.instance
@@ -396,7 +395,7 @@ class ReadDB {
 
 //===================================================================================
   /// Read all categories names and fill dropdown menù
-  StreamSubscription retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
+  retrieveCategoriesNamesDB(dynamic fillCategoriesNames) {
     var key = userRefDB();
     var userPath = "users/$key";
     return FirebaseDatabase.instance
@@ -429,8 +428,7 @@ class ReadDB {
 
 //===================================================================================
   /// Read category [catName] data
-  StreamSubscription getCatModelFromCatNameDB(
-      dynamic setCatPath, String catName) {
+  getCatModelFromCatNameDB(dynamic setCatPath, String catName) {
     var key = userRefDB();
     var userPath = "users/$key";
     return FirebaseDatabase.instance

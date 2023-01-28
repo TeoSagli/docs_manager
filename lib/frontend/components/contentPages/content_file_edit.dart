@@ -50,7 +50,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
   List<String> extList = [];
   String dateText = "";
   Widget dropdown = constants.emptyBox;
-  late StreamSubscription s;
   FileModel fileData = FileModel(
       path: [],
       categoryName: "",
@@ -62,17 +61,10 @@ class ContentFileEditState extends State<ContentFileEdit> {
   void initState() {
     setState(() {
       docNameController = TextEditingController(text: widget.fileName);
-      s = widget.readDB
-          .retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     });
-    super.initState();
-  }
+    widget.readDB.retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
 
-  @override
-  void dispose() {
-    docNameController.dispose();
-    s.cancel();
-    super.dispose();
+    super.initState();
   }
 
   @override
@@ -94,7 +86,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
                   children: [
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
+                          const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -137,33 +129,33 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                         5,
                                       ],
                                       child: SizedBox(
-                                        height: 200.0,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
-                                        child: previewImgList.isEmpty
-                                            ? SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.9,
-                                                child: const Center(
-                                                  child: Text(
-                                                    "Images preview",
-                                                    style: TextStyle(
-                                                        color: constants
-                                                            .mainBackColor,
-                                                        fontSize: 16.0),
+                                          height: 200.0,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          child: previewImgList.isEmpty
+                                              ? SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.9,
+                                                  child: const Center(
+                                                    child: Text(
+                                                      "Images preview",
+                                                      style: TextStyle(
+                                                          color: constants
+                                                              .mainBackColor,
+                                                          fontSize: 16.0),
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            : MyCarousel(
-                                                previewImgList,
-                                                true,
-                                                removeImg: removeImage,
-                                                extensions: extList,
-                                              ),
-                                      ),
+                                                )
+                                              : MyCarousel(
+                                                  previewImgList,
+                                                  true,
+                                                  removeImg: removeImage,
+                                                  moveToOpenFile: null,
+                                                )),
                                     ),
                                   ],
                                 ),
@@ -176,6 +168,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 30, 0, 0),
                                     child: OutlinedButton(
+                                      key: const Key("tap-date"),
                                       child: Row(
                                         children: [
                                           const Padding(
@@ -187,6 +180,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
                                             ),
                                           ),
                                           Text(
+                                            key: const Key("text-date"),
                                             style: const TextStyle(
                                                 color: Colors.black),
                                             dateText == ""
@@ -382,7 +376,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
             catName, fileName, expDate, listPaths, listExt, "allFiles");
         widget.updateDB
             .onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
-        s.cancel();
+
         setState(() {
           docNameController
               .removeListener(() => widget.readDB.checkElementExistDB);
@@ -448,14 +442,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
       });
     });
     for (int i = 0; i < extList.length; i++) {
-      widget.readDB
-          .readImageFileStorage(i, fileData.categoryName, widget.fileName,
-              extList[i], img, context, true, setImage)
-          .then(
-            (value) => setState(() {
-              previewImgList.add(value as Image);
-            }),
-          );
+      widget.readDB.readImageFileStorage(i, fileData.categoryName,
+          widget.fileName, extList[i], img, context, true, setImage);
     }
   }
 

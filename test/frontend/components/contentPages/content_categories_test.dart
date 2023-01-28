@@ -14,6 +14,7 @@ void main() {
   late MockBottomBar mockBottomBar;
   late MockDrawer mockDrawer;
   late MockCategoryCard mockCategoryCard;
+  late MockReadDB mockReadDB;
 
   setUpAll(() async {
     context = MockBuildContext();
@@ -21,6 +22,7 @@ void main() {
     mockBottomBar = MockBottomBar();
     mockDrawer = MockDrawer();
     mockCategoryCard = MockCategoryCard();
+    mockReadDB = MockReadDB();
   });
   Widget createWidgetUnderTest() {
     return MaterialApp(
@@ -56,32 +58,15 @@ void main() {
   }
 
   testWidgets("wallet content structure ", (tester) async {
-    sut = ContentCategories(retrieveCategoriesDB, updateOrderDB,
+    sut = ContentCategories(mockReadDB.retrieveCategoriesDB, updateOrderDB,
         deleteCategoryDB, deleteCategoryStorage, navigateTo);
     await tester.pumpWidget(createWidgetUnderTest());
-    // tester.state(find.byType(State<ContentCategories>)).dispose();
-    /* await longPressDrag(tester, tester.getCenter(find.byKey(const Key('0'))),
-        tester.getCenter(find.byKey(const Key('1'))));
-    await tester.pump();*/
     final textFinder = find.text("Group here your documents");
 
     expectLater(
       textFinder,
       findsOneWidget,
     );
+    tester.state(find.byType(State<ContentCategories>)).dispose();
   });
-  /* testWidgets(
-    "test change mode ",
-    (WidgetTester tester) async {
-    sut = ContentWallet(retrieveAllExpirationFilesDB, deleteFileDB,
-        deleteFileStorage, onUpdateNFilesDB);
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.tap(find.byTooltip("List"));
-      await tester.pump();
-      await tester.tap(find.byTooltip("Grid"));
-      await tester.pump();
-      expect(find.byIcon(Icons.grid_view_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.view_list_rounded), findsOneWidget);
-    },
-  );*/
 }

@@ -37,7 +37,6 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
   bool isAlreadyUpdated = true;
   bool doesExist = false;
   XFile? imageGallery;
-  late StreamSubscription listenPath;
   late TextEditingController catNameController;
   Widget widgetChanging = constants.defaultImg;
   CategoryModel catModel =
@@ -47,18 +46,10 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
     setState(() {
       imageGallery = null;
       catNameController = TextEditingController();
-      listenPath =
-          widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
+      widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
     });
 
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    listenPath.cancel();
-    catNameController.dispose();
-    super.dispose();
   }
 
   @override
@@ -222,8 +213,10 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
   //===================================================================================
   // set if category exists
   setBool(bool b) {
-    setState(() {
-      doesExist = b;
+    catNameController.addListener(() {
+      setState(() {
+        doesExist = b;
+      });
     });
   }
 
@@ -254,11 +247,9 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
       catModel = c;
     });
     widget.readDB.readImageCategoryStorage(catModel.path, setCard);
-    listenPath.cancel();
-    catNameController.addListener(() {
-      widget.readDB
-          .checkElementExistDB(catNameController.text, "categories", setBool);
-    });
+
+    widget.readDB
+        .checkElementExistDB(catNameController.text, "categories", setBool);
   }
   //===================================================================================
 }

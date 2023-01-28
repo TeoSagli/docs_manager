@@ -28,17 +28,12 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
   bool hasUploaded = false;
   bool doesExist = false;
   XFile? imageGallery;
-  late TextEditingController catNameController;
+  TextEditingController catNameController = TextEditingController();
   Widget widgetChanging = constants.defaultImg;
   @override
   void initState() {
-    setState(() {
-      catNameController = TextEditingController();
-      catNameController.addListener(() {
-        widget.readDB
-            .checkElementExistDB(catNameController.text, "categories", setBool);
-      });
-    });
+    widget.readDB
+        .checkElementExistDB(catNameController.text, "categories", setBool);
 
     super.initState();
   }
@@ -164,7 +159,9 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
         widget.createDB.createCategoryDB(catNameController.text, saveName);
         StreamSubscription listenLoading = widget.createDB.loadFileToStorage(
             imageGallery!.path, catNameController.text, saveName, 'categories');
-        widget.a.onSuccess(context, '/categories');
+        widget.a.onLoad(context);
+        Future.delayed(const Duration(seconds: 3),
+            () => widget.a.onSuccess(context, '/categories'));
         listenLoading.cancel();
         catNameController.dispose();
       } catch (e) {
@@ -178,8 +175,10 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
   //===================================================================================
   // set if category exists
   setBool(bool b) {
-    setState(() {
-      doesExist = b;
+    catNameController.addListener(() {
+      setState(() {
+        doesExist = b;
+      });
     });
   }
 
