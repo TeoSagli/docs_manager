@@ -323,12 +323,14 @@ class ContentFileCreateState extends State<ContentFileCreate> {
 
 //===================================================================================
 // Submit category to db if everything is correct
-  onSubmit() {
+  onSubmit() async {
     widget.checkElementExistDB(docNameController.text, "allFiles", setBool);
-
+    String catName = (dropdown as MyDropdown).dropdownValue;
     List<String> listPaths = [];
     List<String> listExt = [];
-    if (docNameController.text == "" || docNameController.text == " ") {
+    if (docNameController.text == "" ||
+        docNameController.text == " " ||
+        docNameController.text.contains(".")) {
       widget.alert.onErrorText(context);
     } else if (doesExist) {
       widget.alert.onErrorElementExisting(context, "File");
@@ -344,18 +346,19 @@ class ContentFileCreateState extends State<ContentFileCreate> {
           listPaths.add(path);
           listExt.add(ext);
           //load file
-          widget.loadFileToStorage(path, docNameController.text, saveName,
-              'files/${(dropdown as MyDropdown).dropdownValue}');
+          StreamSubscription listenLoading = widget.loadFileToStorage(
+              path, docNameController.text, saveName, 'files/$catName');
+          listenLoading.cancel();
         }
         //update category
-        String catName = (dropdown as MyDropdown).dropdownValue;
+
         widget.createFile(catName, docNameController.text, dateText, listPaths,
             listExt, "files/$catName");
         widget.createFile(catName, docNameController.text, dateText, listPaths,
             listExt, "allFiles");
-        widget.onUpdateNFilesDB((dropdown as MyDropdown).dropdownValue);
+        widget.onUpdateNFilesDB(catName);
         widget.alert.onLoad(context);
-        Future.delayed(const Duration(seconds: 3),
+        Future.delayed(const Duration(seconds: 5),
             () => widget.alert.onSuccess(context, '/'));
       } catch (e) {
         print("Error: $e");

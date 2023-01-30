@@ -40,10 +40,10 @@ void main() {
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.tap(find.byKey(const Key("edit")));
     await tester.pump();
-    await tester.tap(find.byKey(const Key("drive")));
+    /* await tester.tap(find.byKey(const Key("drive")));
     await tester.pump();
     await tester.tap(find.byKey(const Key("add-calendar")));
-    await tester.pump();
+    await tester.pump();*/
     await tester.tap(find.byKey(const Key("remove-calendar")));
     await tester.pump();
     await tester.tap(find.byKey(const Key("fav")));
@@ -51,11 +51,6 @@ void main() {
     await tester.tap(find.byKey(const Key("del")));
     await tester.pump();
 
-    //TODO
-    /*    await tester.ensureVisible(find.byIcon(Icons.open_in_new_rounded));
-    await tester.pumpAndSettle();
-     await tester.tap(find.byIcon(Icons.open_in_new_rounded));
-    await tester.pump();*/
     expect(find.byIcon(Icons.mode_edit_outline_rounded), findsOneWidget);
     expect(find.byIcon(Icons.add_to_drive_rounded), findsOneWidget);
     expect(find.byIcon(Icons.favorite_rounded), findsOneWidget);

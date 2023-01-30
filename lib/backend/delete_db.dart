@@ -40,7 +40,7 @@ class DeleteDB {
 
 //===================================================================================
   /// Delete a file [fileName] on Firebase Storage
-  deleteFileStorage(List<Object?> ext, String catName, String fileName) async {
+  deleteFileStorage(ext, String catName, String fileName) async {
     var key = ReadDB().userRefDB();
     var userPath = "users/$key";
     var refInstance = FirebaseStorage.instance.ref("$userPath/files/$catName/");

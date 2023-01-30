@@ -415,7 +415,7 @@ class MockDeleteDB extends Mock implements DeleteDB {
   @override
   deleteFileDB(String catName, String fileName) {}
   @override
-  deleteFileStorage(List<Object?> ext, String catName, String fileName) {}
+  deleteFileStorage(ext, String catName, String fileName) {}
 }
 
 //======================================================================

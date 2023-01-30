@@ -207,29 +207,34 @@ class ContentFileViewState extends State<ContentFileView> {
 
   //===================================================================================
   //Doc is uploaded to drive
-  addDocToDrive(file) async {
+  addDocToDrive(file) {
     var drive = widget.google;
-    var alertMessage = await drive.upload(file, widget.fileName);
-    if (alertMessage.success) {
-      widget.a.onSuccess(context, alertMessage.message);
-    } else {
-      widget.a.onErrorGeneric(context, alertMessage.message);
-    }
+    widget.a.onLoad(context);
+    Future.delayed(const Duration(seconds: 5), () async {
+      return await drive.upload(file, widget.fileName);
+    }).then((value) {
+      if ((value as AlertMessage).success) {
+        widget.a.onSuccessDrive(context, '/files/view/${widget.fileName}');
+      } else {
+        widget.a.onErrorGeneric(context, value.message);
+      }
+    });
   }
 
   //===================================================================================
   //Event is added to calendar
   addEventCalendar(file) async {
     var calendar = widget.google;
-
-    var alertMessage = await calendar.addCalendarExpiration(
-        file, widget.fileName, file.expiration);
-
-    if (alertMessage.success) {
-      widget.a.onSuccess(context, alertMessage.message);
-    } else {
-      widget.a.onErrorGeneric(context, alertMessage.message);
-    }
+    Future.delayed(const Duration(seconds: 1), () async {
+      return await calendar.addCalendarExpiration(
+          file, widget.fileName, file.expiration);
+    }).then((value) {
+      if ((value as AlertMessage).success) {
+        widget.a.onSuccessCalendar(context, '/files/view/${widget.fileName}');
+      } else {
+        widget.a.onErrorGeneric(context, value.message);
+      }
+    });
   }
 
   //===================================================================================
@@ -238,7 +243,7 @@ class ContentFileViewState extends State<ContentFileView> {
     var calendar = widget.google;
 
     calendar.removeCalendarExpiration(widget.fileName);
-    widget.a.onSuccess(context, "Event removed");
+    widget.a.onSuccessRemoveCalendar(context, '/files/view/${widget.fileName}');
   }
   //===================================================================================
 

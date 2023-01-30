@@ -23,9 +23,11 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard> {
 
   @override
   void initState() {
-    setState(() {
-      cardColor = Color(widget.category.colorValue);
-    });
+    if (mounted) {
+      setState(() {
+        cardColor = Color(widget.category.colorValue);
+      });
+    }
 
     widget.initCardFromDB(widget.category.path, setCard);
     super.initState();
@@ -100,13 +102,15 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard> {
   }
 
   setCard(Uint8List file) {
-    setState(() {
-      cardImage = Image.memory(
-        file,
-        width: double.infinity,
-        height: 100,
-        fit: BoxFit.cover,
-      );
-    });
+    if (mounted) {
+      setState(() {
+        cardImage = Image.memory(
+          file,
+          width: double.infinity,
+          height: 100,
+          fit: BoxFit.cover,
+        );
+      });
+    }
   }
 }

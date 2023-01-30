@@ -72,7 +72,7 @@ class UpdateDB {
     FirebaseAuth.instance.signOut().then(
           (value) => Navigator.pushNamed(
             context,
-            "/login",
+            "/",
           ),
         );
   }

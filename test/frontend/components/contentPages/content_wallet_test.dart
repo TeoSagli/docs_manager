@@ -60,18 +60,4 @@ void main() {
 
     expect(titleFinder, findsOneWidget);
   });
-  /* testWidgets(
-    "test change mode ",
-    (WidgetTester tester) async {
-    sut = ContentWallet(retrieveAllExpirationFilesDB, deleteFileDB,
-        deleteFileStorage, onUpdateNFilesDB);
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.tap(find.byTooltip("List"));
-      await tester.pump();
-      await tester.tap(find.byTooltip("Grid"));
-      await tester.pump();
-      expect(find.byIcon(Icons.grid_view_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.view_list_rounded), findsOneWidget);
-    },
-  );*/
 }

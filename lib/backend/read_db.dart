@@ -225,10 +225,7 @@ class ReadDB {
       dynamic moveToEditFile, dynamic removeCard, bool isFavPage) {
     var key = userRefDB();
     var userPath = "users/$key";
-    return FirebaseDatabase.instance
-        .ref("$userPath/allFiles")
-        .onValue
-        .listen((event) {
+    FirebaseDatabase.instance.ref("$userPath/allFiles").onValue.listen((event) {
       int cardListSize = event.snapshot.children.length;
 
       List<FileCard> gridView = List.empty(growable: true);

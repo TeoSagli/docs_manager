@@ -335,13 +335,16 @@ class ContentFileEditState extends State<ContentFileEdit> {
 //===================================================================================
 // Submit category to db if everything is correct
   onEdit() {
+    String catName = fileData.categoryName;
+    String fileName = docNameController.text;
+    String expDate = dateText;
     List<String> listPaths = [];
     List<String> listExt = [];
     // else if (!await isCategoryNew(docNameController!.text)) {
     // onErrorCategoryExisting();}
-    if (docNameController.text == "" || docNameController.text == " ") {
+    if (fileName == "" || fileName == " " || fileName.contains(".")) {
       widget.a.onErrorText(context);
-    } else if (doesExist && docNameController.text != widget.fileName) {
+    } else if (doesExist && fileName != widget.fileName) {
       widget.a.onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {
@@ -353,15 +356,12 @@ class ContentFileEditState extends State<ContentFileEdit> {
               ? nameImgList[index]
               : nameImgList[index].split(".")[1];
           //create save name
-          String saveName = "${docNameController.text}$index.$ext";
+          String saveName = "$fileName$index.$ext";
           listPaths.add(path);
           listExt.add(ext);
           //load file
-          StreamSubscription listenLoading = widget.createDB.loadFileToStorage(
-              path,
-              docNameController.text,
-              saveName,
-              'files/${fileData.categoryName}');
+          StreamSubscription listenLoading = widget.createDB
+              .loadFileToStorage(path, catName, saveName, 'files/$catName');
           listenLoading.cancel();
         }
 
@@ -370,9 +370,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
             fileData.extension, fileData.categoryName, widget.fileName);
         widget.deleteDB.deleteFileDB(fileData.categoryName, widget.fileName);
         //update new version
-        String catName = fileData.categoryName;
-        String fileName = docNameController.text;
-        String expDate = dateText;
+
         widget.createDB.createFile(
             catName, fileName, expDate, listPaths, listExt, "files/$catName");
         widget.createDB.createFile(

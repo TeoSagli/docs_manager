@@ -22,7 +22,7 @@ const Widget loadingWheel2 = SizedBox(
 
 const emptyBox = SizedBox.shrink();
 
-const imageQuality = 25;
+const imageQuality = 5;
 
 const borderBottom = 15.0;
 

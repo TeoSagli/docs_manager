@@ -37,7 +37,8 @@ class Alert {
 //========================================================
   ///Alert error during text fill
   onErrorText(context) {
-    myAlertPop(context, "Something went wrong: text cannot be empty!");
+    myAlertPop(
+        context, "Something went wrong: text cannot contain '.' or be empty !");
   }
 
 //========================================================
@@ -56,6 +57,24 @@ class Alert {
   ///Alert success submit
   onSuccess(context, path) {
     myAlertPushNamed(context, path, 'Operation confirmed!');
+  }
+
+//========================================================
+  ///Alert success submit
+  onSuccessCalendar(context, path) {
+    myAlertPushNamed(context, path, 'Event added to Google Calendar!');
+  }
+
+  //========================================================
+  ///Alert success submit
+  onSuccessDrive(context, path) {
+    myAlertPushNamed(context, path, 'Event added to Google Drive!');
+  }
+
+  //========================================================
+  ///Alert success submit
+  onSuccessRemoveCalendar(context, path) {
+    myAlertPushNamed(context, path, 'Event removed from Google Calendar!');
   }
 
 //========================================================
@@ -115,6 +134,7 @@ class Alert {
             height: MediaQuery.of(context).size.width * 0.9,
             width: MediaQuery.of(context).size.width * 0.6,
             child: SfDateRangePicker(
+              minDate: DateTime.now(),
               view: DateRangePickerView.decade,
               selectionMode: DateRangePickerSelectionMode.single,
               showActionButtons: true,
@@ -171,13 +191,15 @@ class Alert {
             'You are permanently deleting this file. Do you confirm?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               deleteFile(card);
-              Navigator.pop(context);
+              Navigator.pushNamed(context, "/");
             },
             child: const Text(
               'Yes, delete this file',

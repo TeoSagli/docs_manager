@@ -148,7 +148,9 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
 //===================================================================================
 // Submit category to db if everything is correct
   onSubmit() {
-    if (catNameController.text == "" || catNameController.text == " ") {
+    if (catNameController.text == "" ||
+        catNameController.text == " " ||
+        catNameController.text.contains(".")) {
       widget.a.onErrorText(context);
     } else if (doesExist) {
       widget.a.onErrorElementExisting(context, "Category");

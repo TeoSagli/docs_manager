@@ -1,12 +1,8 @@
-import 'package:docs_manager/backend/create_db.dart';
-import 'package:docs_manager/backend/delete_db.dart';
 import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/handlers/handleLogin.dart';
 import 'package:docs_manager/backend/handlers/handleRegistration.dart';
 import 'package:docs_manager/backend/models/user.dart';
 import 'package:docs_manager/backend/operationsDB.dart';
-import 'package:docs_manager/backend/read_db.dart';
-import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_favourites.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_home.dart';
 import 'package:docs_manager/frontend/components/contentPages/content_pdf_show.dart';

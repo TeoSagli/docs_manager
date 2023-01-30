@@ -19,26 +19,18 @@ class ContentFavourites extends StatefulWidget {
 }
 
 class ContentFavouritesState extends State<ContentFavourites> {
-  late StreamSubscription readCards;
   List<Widget> fileCardsGrid = [constants.emptyBox];
   List<Widget> fileCardsList = [constants.emptyBox];
   int currMode = 0;
   @override
   void initState() {
     if (mounted) {
-      setState(() {
-        //readCards = retrieveFilesDB();
-        readCards = widget.retrieveAllFilesDB(
-            fulfillCard, moveToFile, moveToEditFile, removeFileCard, true);
-      });
+      //readCards = retrieveFilesDB();
+      widget.retrieveAllFilesDB(
+          fulfillCard, moveToFile, moveToEditFile, removeFileCard, true);
+
       super.initState();
     }
-  }
-
-  @override
-  void dispose() {
-    readCards.cancel();
-    super.dispose();
   }
 
   @override

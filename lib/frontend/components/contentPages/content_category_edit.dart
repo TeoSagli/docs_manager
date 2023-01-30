@@ -161,7 +161,9 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
     widget.readDB
         .checkElementExistDB(catNameController.text, "category", setBool);
 
-    if (catNameController.text == "" || catNameController.text == " ") {
+    if (catNameController.text == "" ||
+        catNameController.text == " " ||
+        catNameController.text.contains(".")) {
       widget.a.onErrorText(context);
     } else if (doesExist && catNameController.text != widget.catName) {
       widget.a.onErrorElementExisting(context, "Category");
