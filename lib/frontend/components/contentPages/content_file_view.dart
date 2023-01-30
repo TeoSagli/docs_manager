@@ -41,6 +41,9 @@ class ContentFileViewState extends State<ContentFileView> {
   Color catColor = Colors.black;
   @override
   void initState() {
+    imageCache.clear();
+    imageCache.clearLiveImages();
+
     widget.readDB.retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
     super.initState();
   }

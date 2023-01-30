@@ -60,6 +60,9 @@ class ContentFileEditState extends State<ContentFileEdit> {
   @override
   void initState() {
     setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+
       docNameController = TextEditingController(text: widget.fileName);
     });
     widget.readDB.retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
@@ -247,7 +250,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     try {
       imageGallery = await picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: constants.imageQuality * 2,
+        imageQuality: constants.imageQuality,
       );
       setState(
         () {
@@ -281,14 +284,15 @@ class ContentFileEditState extends State<ContentFileEdit> {
       try {
         File file = File(result.files.first.path!);
         Uint8List imageFileBytes = await imageFromPdfFile(file);
-
         setState(
           () {
             previewImgList.add(
               Image.memory(
                 imageFileBytes,
                 fit: BoxFit.cover,
-                width: 1000.0,
+                width: 500,
+                height: MediaQuery.of(context).size.aspectRatio * 500,
+                cacheHeight: 500,
               ),
             );
             nameImgList.add(result.files.first.name);

@@ -1,6 +1,7 @@
 import 'package:docs_manager/backend/models/user.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
@@ -25,6 +26,9 @@ class ContentLoginState extends State<ContentLogin> {
   @override
   void initState() {
     setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+
       um1 = UserCredsModel("", "");
     });
     super.initState();

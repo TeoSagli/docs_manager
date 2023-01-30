@@ -20,6 +20,9 @@ class StateContentPdfShow extends State<ContentPdfShow> {
   bool isPdfSet = false;
   @override
   void initState() {
+    imageCache.clear();
+    imageCache.clearLiveImages();
+
     widget.readFileFromNameStorage(
         widget.fIndex, widget.fName, widget.cName, openFile);
     super.initState();

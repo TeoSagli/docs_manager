@@ -27,6 +27,9 @@ class ContentCategoriesState extends State<ContentCategories> {
   @override
   void initState() {
     setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+
       readCats = widget.retrieveCategoriesDB(
           fulfillCard, moveToCategory, moveToEditCategory, removeCard);
     });

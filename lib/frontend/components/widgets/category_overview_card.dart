@@ -103,14 +103,15 @@ class CategoryOverviewCardState extends State<CategoryOverviewCard> {
 
   setCard(Uint8List file) {
     if (mounted) {
-      setState(() {
-        cardImage = Image.memory(
-          file,
-          width: double.infinity,
-          height: 100,
-          fit: BoxFit.cover,
-        );
-      });
+    setState(() {
+      cardImage = Image.memory(
+        file,
+        width: double.infinity,
+        height: 100,
+        cacheHeight: 500,
+        fit: BoxFit.cover,
+      );
+    });
     }
   }
 }

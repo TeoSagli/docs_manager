@@ -25,11 +25,15 @@ class ContentFavouritesState extends State<ContentFavourites> {
   @override
   void initState() {
     if (mounted) {
-      //readCards = retrieveFilesDB();
-      widget.retrieveAllFilesDB(
-          fulfillCard, moveToFile, moveToEditFile, removeFileCard, true);
+      setState(() {
+        imageCache.clear();
+        imageCache.clearLiveImages();
 
-      super.initState();
+        widget.retrieveAllFilesDB(
+            fulfillCard, moveToFile, moveToEditFile, removeFileCard, true);
+
+        super.initState();
+      });
     }
   }
 

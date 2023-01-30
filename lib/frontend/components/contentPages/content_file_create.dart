@@ -52,6 +52,9 @@ class ContentFileCreateState extends State<ContentFileCreate> {
   @override
   void initState() {
     setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+
       docNameController.addListener(() {
         widget.checkElementExistDB(docNameController.text, "allFiles", setBool);
       });
@@ -244,7 +247,7 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     try {
       imageGallery = await picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: constants.imageQuality * 2,
+        imageQuality: constants.imageQuality,
       );
       setState(
         () {
@@ -276,13 +279,18 @@ class ContentFileCreateState extends State<ContentFileCreate> {
         .then((result) {
       if (result != null) {
         File file = File(result.files.first.path!);
+        double widthValue = 500;
+        double heightValue = MediaQuery.of(context).size.aspectRatio * 500;
+
         imageFromPdfFile(file).then((imageFileBytes) {
           try {
             setImage(
               Image.memory(
                 imageFileBytes,
                 fit: BoxFit.cover,
-                width: 1000.0,
+                width: widthValue,
+                height: heightValue,
+                cacheHeight: 500,
               ),
               result.files.first.name,
               result.files.first.path!,

@@ -148,6 +148,7 @@ class CategoryCardState extends State<CategoryCard> {
         file,
         width: double.infinity,
         height: hCard,
+        cacheHeight: 500,
         fit: BoxFit.scaleDown,
       );
     });

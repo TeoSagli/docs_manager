@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_view_mode.dart';
 import 'package:docs_manager/others/alerts.dart';
@@ -32,6 +34,9 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
 
   @override
   void initState() {
+    imageCache.clear();
+    imageCache.clearLiveImages();
+
     widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
     super.initState();
   }
@@ -169,8 +174,9 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
     if (mounted) {
       setState(() {
         cardImage = Image.memory(d!,
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.width * 0.6);
+            cacheHeight: 800,
+            filterQuality: FilterQuality.low,
+            width: min(500, MediaQuery.of(context).size.width * 0.6));
       });
       widget.readDB.retrieveFilesFromCategoryDB(widget.catName, fulfillCard,
           moveToFile, moveToEditFile, removeFileCard, context);

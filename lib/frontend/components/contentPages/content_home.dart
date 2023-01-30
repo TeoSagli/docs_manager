@@ -27,6 +27,9 @@ class ContentHomeState extends State<ContentHome> {
 
   @override
   void initState() {
+    imageCache.clear();
+    imageCache.clearLiveImages();
+
     widget.readDB.retrieveAllFilesDB(
         fulfillFileCards, moveToFile, moveToEditFile, removeFileCard, false);
 

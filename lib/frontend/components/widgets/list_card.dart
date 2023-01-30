@@ -156,6 +156,7 @@ class ListCardState extends State<ListCard> {
         cardImage = Image.memory(d!,
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width * 0.1,
+            cacheHeight: 100,
             height: MediaQuery.of(context).size.width * 0.1);
       });
     }

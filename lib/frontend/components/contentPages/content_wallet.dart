@@ -18,6 +18,9 @@ class ContentWalletState extends State<ContentWallet> {
   @override
   void initState() {
     setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+
       widget.retrieveAllExpirationFilesDB(fulfillCard, moveToFile);
     });
     super.initState();

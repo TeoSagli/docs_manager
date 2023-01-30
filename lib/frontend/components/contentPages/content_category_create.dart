@@ -32,6 +32,9 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
   Widget widgetChanging = constants.defaultImg;
   @override
   void initState() {
+    imageCache.clear();
+    imageCache.clearLiveImages();
+
     widget.readDB
         .checkElementExistDB(catNameController.text, "categories", setBool);
 
@@ -129,8 +132,7 @@ class ContentCategoryCreateState extends State<ContentCategoryCreate> {
   setPhotoFromGallery() async {
     try {
       imageGallery = await picker.pickImage(
-          source: ImageSource.gallery,
-          imageQuality: constants.imageQuality * 2);
+          source: ImageSource.gallery, imageQuality: constants.imageQuality);
       setState(
         () {
           widgetChanging = Image(

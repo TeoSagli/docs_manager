@@ -1,5 +1,6 @@
 import 'package:docs_manager/backend/models/category.dart';
 import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/frontend/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -69,11 +70,7 @@ class UpdateDB {
 
 //===================================================================================
   updateUserLogutStatus(context) {
-    FirebaseAuth.instance.signOut().then(
-          (value) => Navigator.pushNamed(
-            context,
-            "/",
-          ),
-        );
+    FirebaseAuth.instance.signOut().then((value) =>
+        Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false));
   }
 }

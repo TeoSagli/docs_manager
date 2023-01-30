@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:docs_manager/backend/create_db.dart';
 import 'package:docs_manager/backend/delete_db.dart';
@@ -44,6 +45,9 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
   @override
   void initState() {
     setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+
       imageGallery = null;
       catNameController = TextEditingController();
       widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
@@ -238,7 +242,9 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
       widgetChanging = Image.memory(
         file,
         width: MediaQuery.of(context).size.width * 0.9,
+        filterQuality: FilterQuality.low,
         fit: BoxFit.fill,
+        cacheHeight: 800,
       );
     });
   }

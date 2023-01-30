@@ -22,6 +22,9 @@ class ContentRegisterState extends State<ContentRegister> {
   @override
   void initState() {
     setState(() {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+
       um1 = UserCredsModel("", "");
     });
     super.initState();

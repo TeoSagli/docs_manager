@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/category_card.dart';
@@ -57,18 +58,26 @@ class ReadDB {
     final fileRef = storageRef.child("$fileName$i.$ext");
     try {
       fileRef.getData().then((value) async {
+        double widthValue =
+            isFullHeigth ? min(MediaQuery.of(context).size.width, 500) : 160;
+        double heightValue =
+            MediaQuery.of(context).size.aspectRatio * widthValue;
         if (ext != 'pdf') {
           cardImage = Image.memory(
             value!,
-            width: isFullHeigth ? MediaQuery.of(context).size.width : 160,
-            height: isFullHeigth ? null : 100,
+            width: widthValue,
+            height: heightValue,
+            cacheHeight: 800,
+            filterQuality: FilterQuality.low,
             fit: BoxFit.cover,
           );
         } else {
           cardImage = Image.memory(
             await imageFromPdfFile(value!),
-            width: isFullHeigth ? MediaQuery.of(context).size.width : 160,
-            height: isFullHeigth ? null : 100,
+            width: widthValue,
+            height: heightValue,
+            cacheHeight: 800,
+            filterQuality: FilterQuality.low,
             fit: BoxFit.cover,
           );
         }
