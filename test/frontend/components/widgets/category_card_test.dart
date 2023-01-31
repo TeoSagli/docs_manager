@@ -26,7 +26,7 @@ void main() {
                 moveToEditCatPage, removeCard, initCardFromDB, onDelete)));
   }
 
-  void method1() {}
+  void method1(a, b) {}
   void moveToEditCatPage(categoryName, context) {}
   void removeCard(el) {}
   void onDelete(context, removeCard, widget, a) {}

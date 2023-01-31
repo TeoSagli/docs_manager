@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:docs_manager/backend/google_integration.dart';
+import 'package:docs_manager/backend/handlers/handleDownload.dart';
 import 'package:docs_manager/backend/models/file.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/others/alerts.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:docs_manager/others/constants.dart' as constants;
+import 'package:permission_handler/permission_handler.dart';
 
 class ButtonsFileOperations extends StatefulWidget {
   final FileModel file;
@@ -118,6 +122,20 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
                     });
                     widget.updateDB.updateFavouriteDB(
                         widget.file.categoryName, widget.fileName, isFav);
+                  }),
+              IconButton(
+                  key: const Key("download"),
+                  color: constants.mainBackColor,
+                  icon: const Icon(Icons.download),
+                  onPressed: () async {
+                    for (var element in widget.file.path) {
+                      int i = widget.file.path.indexOf(element);
+                      getUrlAndDownload(
+                          i,
+                          widget.file.categoryName,
+                          widget.fileName,
+                          widget.file.extension.elementAt(i) as String);
+                    }
                   }),
               IconButton(
                 key: const Key("del"),

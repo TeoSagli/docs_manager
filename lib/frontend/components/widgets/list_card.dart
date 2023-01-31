@@ -153,11 +153,15 @@ class ListCardState extends State<ListCard> {
   setCard(d) {
     if (mounted) {
       setState(() {
-        cardImage = Image.memory(d!,
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width * 0.1,
-            cacheHeight: 100,
-            height: MediaQuery.of(context).size.width * 0.1);
+        cardImage = Image.memory(
+          d!,
+          fit: BoxFit.cover,
+          width: 30,
+          height: 30,
+          //width: MediaQuery.of(context).size.width * 0.1,
+          cacheHeight: 100,
+          //  height: MediaQuery.of(context).size.width * 0.1,
+        );
       });
     }
   }

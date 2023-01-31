@@ -91,6 +91,26 @@ class ReadDB {
       setImage(constants.defaultImg);
     }
   }
+
+  //===================================================================================
+  /// Read file image at index i of file [fileName] from Firebase Storage
+  Future<String> readDownloadUrlFileStorage(
+    int i,
+    String catName,
+    String fileName,
+    String ext,
+  ) async {
+    var key = userRefDB();
+    var userPath = "users/$key";
+    final storageRef = FirebaseStorage.instance.ref("$userPath/files/$catName");
+    final fileRef = storageRef.child("$fileName$i.$ext");
+    try {
+      return await fileRef.getDownloadURL();
+    } catch (e) {
+      print("Error $e!");
+      return "error";
+    }
+  }
 //===================================================================================
   /// Read file PDF from Firebase Storage
 

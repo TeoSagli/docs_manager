@@ -173,10 +173,12 @@ class ContentCategoryViewState extends State<ContentCategoryView> {
   setCard(d) {
     if (mounted) {
       setState(() {
-        cardImage = Image.memory(d!,
-            cacheHeight: 800,
-            filterQuality: FilterQuality.low,
-            width: min(500, MediaQuery.of(context).size.width * 0.6));
+        cardImage = Image.memory(
+          d!,
+          cacheHeight: 800,
+          filterQuality: FilterQuality.low,
+          //  width: min(500, MediaQuery.of(context).size.width * 0.6),
+        );
       });
       widget.readDB.retrieveFilesFromCategoryDB(widget.catName, fulfillCard,
           moveToFile, moveToEditFile, removeFileCard, context);

@@ -8,6 +8,7 @@ import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/app_bar.dart';
 import 'package:docs_manager/frontend/components/widgets/bottom_bar.dart';
+import 'package:docs_manager/frontend/components/widgets/category_card.dart';
 import 'package:docs_manager/frontend/components/widgets/category_overview_card.dart';
 import 'package:docs_manager/frontend/components/widgets/drawer.dart';
 import 'package:docs_manager/frontend/components/widgets/file_card.dart';
@@ -76,7 +77,7 @@ class MockFileCardState extends State<MockFileCard> {
 }
 
 //======================================================================
-class MockCategoryCard extends Mock implements FileCard {
+class MockCategoryCard extends Mock implements CategoryCard {
   @override
   StatefulElement createElement() => StatefulElement(this);
   @override
