@@ -68,7 +68,7 @@ class Alert {
   //========================================================
   ///Alert success submit
   onSuccessDrive(context, path) {
-    myAlertPushNamed(context, path, 'Event added to Google Drive!');
+    myAlertPushNamed(context, path, 'File uploaded to Google Drive!');
   }
 
   //========================================================

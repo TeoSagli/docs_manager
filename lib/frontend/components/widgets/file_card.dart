@@ -63,7 +63,7 @@ class FileCardState extends State<FileCard> {
           key: const Key("tap-card"),
           onTap: () => widget.function(widget.fileName, context),
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.45,
+            width: 180,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: const [
@@ -79,8 +79,8 @@ class FileCardState extends State<FileCard> {
               padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
@@ -93,7 +93,7 @@ class FileCardState extends State<FileCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
                             children: [
@@ -114,14 +114,13 @@ class FileCardState extends State<FileCard> {
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     4, 4, 0, 0),
                                 child: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
+                                  width: 150,
                                   child: Center(
                                     child: Text(
                                       widget.fileName,

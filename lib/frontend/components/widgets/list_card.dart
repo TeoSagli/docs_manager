@@ -32,8 +32,8 @@ class ListCard extends StatefulWidget {
 
 class ListCardState extends State<ListCard> {
   Widget cardImage = const SizedBox(
-    width: 60,
-    height: 60,
+    width: 30,
+    height: 30,
     child: MyLoadingWheel(),
   );
   late bool isFav;
@@ -68,7 +68,7 @@ class ListCardState extends State<ListCard> {
           key: const Key("move-to"),
           onTap: () => widget.function(widget.fileName, context),
           child: Container(
-            width: MediaQuery.of(context).size.width,
+            height: 50,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: const [
@@ -92,12 +92,16 @@ class ListCardState extends State<ListCard> {
                     Row(
                       children: [
                         Padding(
-                            padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+                            padding: MediaQuery.of(context).orientation ==
+                                    Orientation.portrait
+                                ? const EdgeInsets.fromLTRB(10, 0, 0, 0)
+                                : const EdgeInsets.fromLTRB(50, 0, 0, 0),
                             child: cardImage),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          width: 100,
                           child: Text(
                             widget.fileName,
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontFamily: 'Outfit',
                               color: Colors.black,
@@ -109,6 +113,8 @@ class ListCardState extends State<ListCard> {
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
                           key: const Key("move-to-2"),
@@ -153,15 +159,8 @@ class ListCardState extends State<ListCard> {
   setCard(d) {
     if (mounted) {
       setState(() {
-        cardImage = Image.memory(
-          d!,
-          fit: BoxFit.cover,
-          width: 30,
-          height: 30,
-          //width: MediaQuery.of(context).size.width * 0.1,
-          cacheHeight: 100,
-          //  height: MediaQuery.of(context).size.width * 0.1,
-        );
+        cardImage =
+            Image.memory(d!, fit: BoxFit.cover, cacheHeight: 100, height: 30);
       });
     }
   }

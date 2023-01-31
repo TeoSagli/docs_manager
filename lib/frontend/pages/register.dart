@@ -10,15 +10,10 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: myAppBar,
-      body: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: content,
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(children: [content]),
       ),
     );
   }

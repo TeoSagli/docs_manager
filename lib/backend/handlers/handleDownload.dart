@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../../others/alerts.dart';
 
 downloadFile(String fileUrl, String fileName) async {
   Map<Permission, PermissionStatus> statuses = await [
@@ -10,7 +14,7 @@ downloadFile(String fileUrl, String fileName) async {
   ].request();
 
   if (statuses[Permission.storage]!.isGranted) {
-    var dir = await DownloadsPathProvider.downloadsDirectory;
+    var dir = await getApplicationDocumentsDirectory();
     if (dir != null) {
       String savePath = "${dir.path}/$fileName";
       print(savePath);

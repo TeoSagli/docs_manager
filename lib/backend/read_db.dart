@@ -60,13 +60,10 @@ class ReadDB {
       fileRef.getData().then((value) async {
         double widthValue =
             isFullHeigth ? min(MediaQuery.of(context).size.width, 500) : 160;
-        double heightValue =
-            MediaQuery.of(context).size.aspectRatio * widthValue;
         if (ext != 'pdf') {
           cardImage = Image.memory(
             value!,
             width: widthValue,
-            height: heightValue,
             cacheHeight: 800,
             filterQuality: FilterQuality.low,
             fit: BoxFit.cover,
@@ -75,7 +72,6 @@ class ReadDB {
           cardImage = Image.memory(
             await imageFromPdfFile(value!),
             width: widthValue,
-            height: heightValue,
             cacheHeight: 800,
             filterQuality: FilterQuality.low,
             fit: BoxFit.cover,
