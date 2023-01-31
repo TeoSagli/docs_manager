@@ -9,6 +9,7 @@ import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/components/widgets/input_field.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
+import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
 import 'package:docs_manager/frontend/components/widgets/widget_preview.dart';
 import 'package:docs_manager/others/alerts.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,6 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
   bool isAlreadyUpdated = true;
   bool doesExist = false;
   XFile? imageGallery;
-  late TextEditingController catNameController;
   Widget widgetChanging = constants.defaultImg;
   CategoryModel catModel =
       CategoryModel(path: "", nfiles: 0, colorValue: 0, order: 0);
@@ -49,7 +49,6 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
       imageCache.clearLiveImages();
 
       imageGallery = null;
-      catNameController = TextEditingController();
       widget.readDB.getCatModelFromCatNameDB(setCatModel, widget.catName);
     });
 
@@ -78,7 +77,7 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
                       //title 1
                       const TitleText('Category name:', Colors.black),
                       //input 1
-                      InputField(catNameController, true),
+                      TitleText2(widget.catName),
                     ],
                   ),
                 ),
@@ -162,51 +161,17 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
 //===================================================================================
 // Edit category to db if everything is correct
   onEdit() {
-    widget.readDB
-        .checkElementExistDB(catNameController.text, "category", setBool);
-
-    if (catNameController.text == "" ||
-        catNameController.text == " " ||
-        catNameController.text.contains(".")) {
-      widget.a.onErrorText(context);
-    } else if (doesExist && catNameController.text != widget.catName) {
-      widget.a.onErrorElementExisting(context, "Category");
-    } else if (imageGallery != null && !isAlreadyUpdated) {
+    if (imageGallery != null && !isAlreadyUpdated) {
       try {
         //delete old file version
-        if (catNameController.text != widget.catName) {
-          widget.deleteDB.deleteCategoryDB(widget.catName);
-        }
 
         widget.deleteDB.deleteCategoryStorage(catModel.path, widget.catName);
         widget.updateDB.updateOrderDB(catModel.order, widget.catName);
         String ext = imageGallery!.name.toString().split(".")[1];
-        String saveName = "${catNameController.text}.$ext";
+        String saveName = "${widget.catName}.$ext";
 
         widget.createDB.loadFileToStorage(
-            imageGallery!.path, catNameController.text, saveName, 'categories');
-        setState(() {
-          catModel.path = saveName;
-        });
-        widget.updateDB.updateCategoryDB(catNameController.text, catModel);
-        setState(() {
-          catNameController
-              .removeListener(() => widget.readDB.checkElementExistDB);
-        });
-        widget.a.onSuccess(context, '/categories');
-      } catch (e) {
-        print("Error: $e");
-      }
-    } else if (isAlreadyUpdated) {
-      try {
-        if (catNameController.text != widget.catName) {
-          widget.deleteDB.deleteCategoryDB(widget.catName);
-          widget.updateDB.updateCategoryDB(catNameController.text, catModel);
-        }
-        setState(() {
-          catNameController
-              .removeListener(() => widget.readDB.checkElementExistDB);
-        });
+            imageGallery!.path, widget.catName, saveName, 'categories');
         widget.a.onSuccess(context, '/categories');
       } catch (e) {
         print("Error: $e");
@@ -214,16 +179,6 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
     } else {
       widget.a.onErrorImage(context);
     }
-  }
-
-  //===================================================================================
-  // set if category exists
-  setBool(bool b) {
-    catNameController.addListener(() {
-      setState(() {
-        doesExist = b;
-      });
-    });
   }
 
   //===================================================================================
@@ -255,9 +210,6 @@ class ContentCategoryEditState extends State<ContentCategoryEdit> {
       catModel = c;
     });
     widget.readDB.readImageCategoryStorage(catModel.path, setCard);
-
-    widget.readDB
-        .checkElementExistDB(catNameController.text, "categories", setBool);
   }
   //===================================================================================
 }
