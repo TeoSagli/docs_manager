@@ -71,7 +71,7 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
+          /*   ListTile(
             title: TextButton(
               key: const Key("settings"),
               style: ButtonStyle(
@@ -99,7 +99,7 @@ class MyDrawer extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );
