@@ -352,7 +352,7 @@ class ContentFileEditState extends State<ContentFileEdit> {
     // onErrorCategoryExisting();}
     if (fileName == "" || fileName == " " || fileName.contains(".")) {
       widget.a.onErrorText(context);
-    } else if (doesExist) {
+    } else if (doesExist && fileName != widget.fileName) {
       widget.a.onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {

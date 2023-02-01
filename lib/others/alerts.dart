@@ -61,6 +61,12 @@ class Alert {
 
 //========================================================
   ///Alert success submit
+  onSuccessDownload(context) {
+    mySnackbarTemplate(context, 'File downloaded in "Download" folder!');
+  }
+
+//========================================================
+  ///Alert success submit
   onSuccessCalendar(context, path) {
     myAlertPushNamed(context, path, 'Event added to Google Calendar!');
   }

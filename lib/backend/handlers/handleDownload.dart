@@ -1,12 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/read_db.dart';
 import 'package:docs_manager/others/alerts.dart';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '../../others/alerts.dart';
 
 downloadFile(String fileUrl, String fileName, context) async {
   Map<Permission, PermissionStatus> statuses = await [
@@ -16,23 +12,21 @@ downloadFile(String fileUrl, String fileName, context) async {
 
   if (statuses[Permission.storage]!.isGranted) {
     var dir = await getApplicationDocumentsDirectory();
-    if (dir != null) {
-      String savePath = "${dir.path}/$fileName";
-      print(savePath);
-      //output:  /storage/emulated/0/Download/banner.png
+    String savePath = "${dir.path}/$fileName";
+    print(savePath);
+    //output:  /storage/emulated/0/Download/banner.png
 
-      try {
-        await Dio().download(fileUrl, savePath,
-            onReceiveProgress: (received, total) {
-          if (total != -1) {
-            print("${(received / total * 100).toStringAsFixed(0)}%");
-            //you can build progressbar feature too
-          }
-        });
-        Alert().onSuccessDownload(context);
-      } on DioError catch (e) {
-        print(e.message);
-      }
+    try {
+      await Dio().download(fileUrl, savePath,
+          onReceiveProgress: (received, total) {
+        if (total != -1) {
+          print("${(received / total * 100).toStringAsFixed(0)}%");
+          //you can build progressbar feature too
+        }
+      });
+      Alert().onSuccessDownload(context);
+    } on DioError catch (e) {
+      print(e.message);
     }
   } else {
     print("No permission to read and write.");
