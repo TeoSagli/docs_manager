@@ -64,6 +64,7 @@ class ReadDB {
           cardImage = Image.memory(
             value!,
             width: widthValue,
+            height: 150,
             cacheHeight: 800,
             filterQuality: FilterQuality.low,
             fit: BoxFit.cover,
