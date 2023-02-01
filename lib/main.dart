@@ -245,7 +245,7 @@ class MyAppState extends State<MyApp> with OperationsDB {
                         builder: (context) => FileViewPage(
                             ContentFileView(fileName, readDB, updateDB,
                                 deleteDB, googleManager, alertClass),
-                            getAppBar(1, "View file $fileName", context),
+                            getAppBar(0, "View file $fileName", context),
                             myDrawer,
                             fileName: fileName));
                   case 'edit':
