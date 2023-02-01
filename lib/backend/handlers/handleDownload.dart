@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:docs_manager/backend/google_integration.dart';
 import 'package:docs_manager/backend/read_db.dart';
+import 'package:docs_manager/others/alerts.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../others/alerts.dart';
 
-downloadFile(String fileUrl, String fileName) async {
+downloadFile(String fileUrl, String fileName, context) async {
   Map<Permission, PermissionStatus> statuses = await [
     Permission.storage,
     //add more permission to request here.
@@ -28,7 +29,7 @@ downloadFile(String fileUrl, String fileName) async {
             //you can build progressbar feature too
           }
         });
-        print("File is saved to download folder.");
+        Alert().onSuccessDownload(context);
       } on DioError catch (e) {
         print(e.message);
       }
@@ -38,8 +39,9 @@ downloadFile(String fileUrl, String fileName) async {
   }
 }
 
-getUrlAndDownload(int i, String catName, String fileName, String ext) async {
+getUrlAndDownload(
+    int i, String catName, String fileName, String ext, context) async {
   var url =
       await ReadDB().readDownloadUrlFileStorage(i, catName, fileName, ext);
-  downloadFile(url, "$fileName$i.$ext");
+  downloadFile(url, "$fileName$i.$ext", context);
 }

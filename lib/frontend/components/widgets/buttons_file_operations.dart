@@ -130,7 +130,8 @@ class ButtonsFileOperationsState extends State<ButtonsFileOperations> {
                                 i,
                                 widget.file.categoryName,
                                 widget.fileName,
-                                widget.file.extension.elementAt(i) as String);
+                                widget.file.extension.elementAt(i) as String,
+                                context);
                           }
                         }),
                     widget.file.expiration != ""

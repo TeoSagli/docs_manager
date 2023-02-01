@@ -44,46 +44,44 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDdp4lX-zahbjMZWkIUrqTFcTP3icnjSxs',
-    appId: '1:952808555359:web:c0c52fb6d20a242abeecea',
-    messagingSenderId: '952808555359',
-    projectId: 'documanager-d37b5',
-    authDomain: 'documanager-d37b5.firebaseapp.com',
-    databaseURL: 'https://documanager-d37b5-default-rtdb.firebaseio.com',
-    storageBucket: 'documanager-d37b5.appspot.com',
-    measurementId: 'G-CTLCEMLQ9T',
+    apiKey: 'AIzaSyBmqrN614AwDqzZQtIU4BHu39V4ZOhppt0',
+    appId: '1:206883213986:web:5f9583d7a3a2de7e2cbdfb',
+    messagingSenderId: '206883213986',
+    projectId: 'docsmanager-d4666',
+    authDomain: 'docsmanager-d4666.firebaseapp.com',
+    databaseURL: 'https://docsmanager-d4666-default-rtdb.firebaseio.com',
+    storageBucket: 'docsmanager-d4666.appspot.com',
+    measurementId: 'G-QH5KN39F07',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCC_NUX0KyAKJYQB5gkHW3i30xgEMOc2dA',
-    appId: '1:952808555359:android:fcec15ea765746f6beecea',
-    messagingSenderId: '952808555359',
-    projectId: 'documanager-d37b5',
-    databaseURL: 'https://documanager-d37b5-default-rtdb.firebaseio.com',
-    storageBucket: 'documanager-d37b5.appspot.com',
+    apiKey: 'AIzaSyCsfGwahckxHoFgo23vmdxSDE4CrGuHbdc',
+    appId: '1:206883213986:android:6796adeace6e01302cbdfb',
+    messagingSenderId: '206883213986',
+    projectId: 'docsmanager-d4666',
+    databaseURL: 'https://docsmanager-d4666-default-rtdb.firebaseio.com',
+    storageBucket: 'docsmanager-d4666.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAGJbrZLR0Q06p3TwXOFKV6BbBmGV5FEBU',
-    appId: '1:952808555359:ios:b0550c7ca07ab767beecea',
-    messagingSenderId: '952808555359',
-    projectId: 'documanager-d37b5',
-    databaseURL: 'https://documanager-d37b5-default-rtdb.firebaseio.com',
-    storageBucket: 'documanager-d37b5.appspot.com',
-    androidClientId: '952808555359-8gvdvgjjid1mlgh0q2aksf8ag49rl14f.apps.googleusercontent.com',
-    iosClientId: '952808555359-1hup1nv0gesk5cnbmckvur9tm7la1ab3.apps.googleusercontent.com',
-    iosBundleId: 'com.DIMA.docsManager',
+    apiKey: 'AIzaSyCziZOi3J4H6xSbII-HOwUH3Pujw9SQ8Hs',
+    appId: '1:206883213986:ios:287b4fd1976587932cbdfb',
+    messagingSenderId: '206883213986',
+    projectId: 'docsmanager-d4666',
+    databaseURL: 'https://docsmanager-d4666-default-rtdb.firebaseio.com',
+    storageBucket: 'docsmanager-d4666.appspot.com',
+    iosClientId: '206883213986-a0hdjdalip157odl4ti6ar7g2rgf0qod.apps.googleusercontent.com',
+    iosBundleId: 'com.DIMA.dox',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAGJbrZLR0Q06p3TwXOFKV6BbBmGV5FEBU',
-    appId: '1:952808555359:ios:83d7d01594923c4fbeecea',
-    messagingSenderId: '952808555359',
-    projectId: 'documanager-d37b5',
-    databaseURL: 'https://documanager-d37b5-default-rtdb.firebaseio.com',
-    storageBucket: 'documanager-d37b5.appspot.com',
-    androidClientId: '952808555359-8gvdvgjjid1mlgh0q2aksf8ag49rl14f.apps.googleusercontent.com',
-    iosClientId: '952808555359-ah9pk297aharknm8bv5f435tlltpa0v4.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCziZOi3J4H6xSbII-HOwUH3Pujw9SQ8Hs',
+    appId: '1:206883213986:ios:3811e1ab1e4fe0562cbdfb',
+    messagingSenderId: '206883213986',
+    projectId: 'docsmanager-d4666',
+    databaseURL: 'https://docsmanager-d4666-default-rtdb.firebaseio.com',
+    storageBucket: 'docsmanager-d4666.appspot.com',
+    iosClientId: '206883213986-d5007sr3o1328e560goi1msufb37lcgm.apps.googleusercontent.com',
     iosBundleId: 'com.example.docsManager',
   );
 }

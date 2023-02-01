@@ -61,7 +61,6 @@ class ContentFileCreateState extends State<ContentFileCreate> {
       dropdown =
           MyDropdown(widget.catSelected, widget.retrieveCategoriesNamesDB);
     });
-    previewImgList = [];
     super.initState();
   }
 
@@ -332,13 +331,12 @@ class ContentFileCreateState extends State<ContentFileCreate> {
 //===================================================================================
 // Submit category to db if everything is correct
   onSubmit() async {
-    widget.checkElementExistDB(docNameController.text, "allFiles", setBool);
+    late StreamSubscription listenLoading;
     String catName = (dropdown as MyDropdown).dropdownValue;
+    String fileName = docNameController.text;
     List<String> listPaths = [];
     List<String> listExt = [];
-    if (docNameController.text == "" ||
-        docNameController.text == " " ||
-        docNameController.text.contains(".")) {
+    if (fileName == "" || fileName == " " || fileName.contains(".")) {
       widget.alert.onErrorText(context);
     } else if (doesExist) {
       widget.alert.onErrorElementExisting(context, "File");
@@ -350,20 +348,20 @@ class ContentFileCreateState extends State<ContentFileCreate> {
           String path = pathImgList[index];
           String ext = nameImgList[index].split(".")[1];
           //create save name
-          String saveName = "${docNameController.text}$index.$ext";
+          String saveName = "$fileName$index.$ext";
           listPaths.add(path);
           listExt.add(ext);
           //load file
-          StreamSubscription listenLoading = widget.loadFileToStorage(
-              path, docNameController.text, saveName, 'files/$catName');
-          listenLoading.cancel();
+          listenLoading = widget.loadFileToStorage(
+              path, fileName, saveName, 'files/$catName');
         }
+        listenLoading.cancel();
         //update category
 
-        widget.createFile(catName, docNameController.text, dateText, listPaths,
-            listExt, "files/$catName");
-        widget.createFile(catName, docNameController.text, dateText, listPaths,
-            listExt, "allFiles");
+        widget.createFile(
+            catName, fileName, dateText, listPaths, listExt, "files/$catName");
+        widget.createFile(
+            catName, fileName, dateText, listPaths, listExt, "allFiles");
         widget.onUpdateNFilesDB(catName);
         widget.alert.onLoad(context);
         Future.delayed(const Duration(seconds: 5),
@@ -390,7 +388,10 @@ class ContentFileCreateState extends State<ContentFileCreate> {
     setState(() {
       previewImgList.add(img);
       nameImgList.add(name);
+      print("This is the name:$name");
+
       pathImgList.add(path);
+      print("This is the path:$path");
     });
   }
 

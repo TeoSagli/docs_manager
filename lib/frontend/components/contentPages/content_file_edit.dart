@@ -10,7 +10,6 @@ import 'package:docs_manager/backend/update_db.dart';
 import 'package:docs_manager/frontend/components/widgets/button_function.dart';
 import 'package:docs_manager/frontend/components/widgets/buttons_upload_photo_pdf.dart';
 import 'package:docs_manager/frontend/components/widgets/carousel_slider.dart';
-import 'package:docs_manager/frontend/components/widgets/dropdown_menu.dart';
 import 'package:docs_manager/frontend/components/widgets/input_field.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text.dart';
 import 'package:docs_manager/frontend/components/widgets/title_text_v2.dart';
@@ -62,12 +61,21 @@ class ContentFileEditState extends State<ContentFileEdit> {
     setState(() {
       imageCache.clear();
       imageCache.clearLiveImages();
-
       docNameController = TextEditingController(text: widget.fileName);
+      docNameController.addListener(() {
+        widget.readDB
+            .checkElementExistDB(docNameController.text, "allFiles", setBool);
+      });
     });
     widget.readDB.retrieveFileDataFromFileNameDB(widget.fileName, setFileData);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    docNameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -254,16 +262,15 @@ class ContentFileEditState extends State<ContentFileEdit> {
       );
       setState(
         () {
-          previewImgList.add(
+          setImageVect(
             Image(
               image: XFileImage(imageGallery!),
               fit: BoxFit.cover,
               width: 1000.0,
             ),
+            imageGallery.name,
+            imageGallery.path,
           );
-          nameImgList.add(imageGallery.name);
-          pathImgList.add(imageGallery.path);
-          extList.add(imageGallery.name.split(".")[1]);
         },
       );
     } catch (e) {
@@ -274,38 +281,39 @@ class ContentFileEditState extends State<ContentFileEdit> {
   //===================================================================================
 // Upload photo from file and catch errors
   setPhotoFromFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    await FilePicker.platform
+        .pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
       allowMultiple: false,
-    );
-
-    if (result != null) {
-      try {
+    )
+        .then((result) {
+      if (result != null) {
         File file = File(result.files.first.path!);
-        Uint8List imageFileBytes = await imageFromPdfFile(file);
-        setState(
-          () {
-            previewImgList.add(
+        double widthValue = 500;
+        double heightValue = MediaQuery.of(context).size.aspectRatio * 500;
+
+        imageFromPdfFile(file).then((imageFileBytes) {
+          try {
+            setImageVect(
               Image.memory(
                 imageFileBytes,
                 fit: BoxFit.cover,
-                width: 500,
-                height: MediaQuery.of(context).size.aspectRatio * 500,
+                width: widthValue,
+                height: heightValue,
                 cacheHeight: 500,
               ),
+              result.files.first.name,
+              result.files.first.path!,
             );
-            nameImgList.add(result.files.first.name);
-            pathImgList.add(result.files.first.path!);
-            extList.add("pdf");
-          },
-        );
-      } catch (e) {
+          } catch (e) {
+            widget.a.onErrorImage(context);
+          }
+        });
+      } else {
         widget.a.onErrorImage(context);
       }
-    } else {
-      widget.a.onErrorImage(context);
-    }
+    });
   }
 
 //===================================================================================
@@ -317,19 +325,15 @@ class ContentFileEditState extends State<ContentFileEdit> {
         source: ImageSource.camera,
         imageQuality: constants.imageQuality,
       );
-      setState(
-        () {
-          previewImgList.add(
-            Image(
-              image: XFileImage(imageCamera!),
-              fit: BoxFit.cover,
-              width: 1000.0,
-            ),
-          );
-          nameImgList.add(imageCamera.name);
-          pathImgList.add(imageCamera.path);
-          extList.add(imageCamera.name.split(".")[1]);
-        },
+
+      setImageVect(
+        Image(
+          image: XFileImage(imageCamera!),
+          fit: BoxFit.cover,
+          width: 1000.0,
+        ),
+        imageCamera.name,
+        imageCamera.path,
       );
     } catch (e) {
       widget.a.onErrorImage(context);
@@ -338,61 +342,65 @@ class ContentFileEditState extends State<ContentFileEdit> {
 
 //===================================================================================
 // Submit category to db if everything is correct
-  onEdit() {
+  onEdit() async {
+    late StreamSubscription listenLoading;
     String catName = fileData.categoryName;
     String fileName = docNameController.text;
-    String expDate = dateText;
     List<String> listPaths = [];
     List<String> listExt = [];
     // else if (!await isCategoryNew(docNameController!.text)) {
     // onErrorCategoryExisting();}
     if (fileName == "" || fileName == " " || fileName.contains(".")) {
       widget.a.onErrorText(context);
-    } else if (doesExist && fileName != widget.fileName) {
+    } else if (doesExist) {
       widget.a.onErrorElementExisting(context, "File");
     } else if (previewImgList.isNotEmpty) {
       try {
+        widget.deleteDB.deleteFileStorage(
+            fileData.extension, fileData.categoryName, widget.fileName);
         for (var element in previewImgList) {
           int index = previewImgList.indexOf(element);
           //prepare image and extension
           String path = pathImgList[index];
-          String ext = nameImgList[index].split(".").length == 1
-              ? nameImgList[index]
-              : nameImgList[index].split(".")[1];
+          String ext = nameImgList[index].split(".")[1];
           //create save name
           String saveName = "$fileName$index.$ext";
           listPaths.add(path);
           listExt.add(ext);
           //load file
-          StreamSubscription listenLoading = widget.createDB
-              .loadFileToStorage(path, catName, saveName, 'files/$catName');
-          listenLoading.cancel();
+          listenLoading = widget.createDB
+              .loadFileToStorage(path, fileName, saveName, 'files/$catName');
         }
-
+        listenLoading.cancel();
         //delet old version
-        widget.deleteDB.deleteFileStorage(
-            fileData.extension, fileData.categoryName, widget.fileName);
+
         widget.deleteDB.deleteFileDB(fileData.categoryName, widget.fileName);
-        //update new version
+        //update category
 
         widget.createDB.createFile(
-            catName, fileName, expDate, listPaths, listExt, "files/$catName");
+            catName, fileName, dateText, listPaths, listExt, "files/$catName");
         widget.createDB.createFile(
-            catName, fileName, expDate, listPaths, listExt, "allFiles");
-
-        setState(() {
-          docNameController
-              .removeListener(() => widget.readDB.checkElementExistDB);
-        });
+            catName, fileName, dateText, listPaths, listExt, "allFiles");
+        widget.updateDB.onUpdateNFilesDB(catName);
         widget.a.onLoad(context);
         Future.delayed(
-            const Duration(seconds: 3), () => widget.a.onSuccess(context, '/'));
+            const Duration(seconds: 5), () => widget.a.onSuccess(context, '/'));
       } catch (e) {
         print("Error: $e");
       }
     } else {
       widget.a.onErrorImage(context);
     }
+  }
+
+  //===================================================================================
+  // set image, name and path
+  setImageVect(Image img, String name, String path) {
+    setState(() {
+      previewImgList.add(img);
+      nameImgList.add(name);
+      pathImgList.add(path);
+    });
   }
 
   //===================================================================================
@@ -433,9 +441,12 @@ class ContentFileEditState extends State<ContentFileEdit> {
       dateText = f.expiration;
       for (var element in f.path) {
         pathImgList.add(element as String);
+        print("This is path:$element");
       }
       for (var element in f.extension) {
-        nameImgList.add(element as String);
+        int i = f.extension.indexOf(element);
+        nameImgList.add("${widget.fileName}.$element");
+        print("This is name:${widget.fileName}$i.$element");
       }
       docNameController.addListener(() {
         widget.readDB
@@ -445,6 +456,8 @@ class ContentFileEditState extends State<ContentFileEdit> {
     for (int i = 0; i < extList.length; i++) {
       widget.readDB.readImageFileStorage(i, fileData.categoryName,
           widget.fileName, extList[i], img, context, true, setImage);
+      /*   nameImgList.add("${widget.fileName}.${extList[i]}");
+      pathImgList.add(pa);*/
     }
   }
 

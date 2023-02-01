@@ -1,50 +1,35 @@
 {
   "project_info": {
-    "project_number": "952808555359",
-    "firebase_url": "https://documanager-d37b5-default-rtdb.firebaseio.com",
-    "project_id": "documanager-d37b5",
-    "storage_bucket": "documanager-d37b5.appspot.com"
+    "project_number": "206883213986",
+    "firebase_url": "https://docsmanager-d4666-default-rtdb.firebaseio.com",
+    "project_id": "docsmanager-d4666",
+    "storage_bucket": "docsmanager-d4666.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:952808555359:android:fcec15ea765746f6beecea",
+        "mobilesdk_app_id": "1:206883213986:android:6796adeace6e01302cbdfb",
         "android_client_info": {
           "package_name": "com.example.docs_manager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "952808555359-8gvdvgjjid1mlgh0q2aksf8ag49rl14f.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.docs_manager",
-            "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
-          }
-        },
-        {
-          "client_id": "952808555359-g3fdg8tfclave8mdq5mcoiiolh2p44tc.apps.googleusercontent.com",
+          "client_id": "206883213986-k0udghc0jvc8gqnbg0ha90dq2goqjhuh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCC_NUX0KyAKJYQB5gkHW3i30xgEMOc2dA"
+          "current_key": "AIzaSyCsfGwahckxHoFgo23vmdxSDE4CrGuHbdc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "952808555359-g3fdg8tfclave8mdq5mcoiiolh2p44tc.apps.googleusercontent.com",
+              "client_id": "206883213986-k0udghc0jvc8gqnbg0ha90dq2goqjhuh.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "952808555359-ah9pk297aharknm8bv5f435tlltpa0v4.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.docsManager"
-              }
             }
           ]
         }
