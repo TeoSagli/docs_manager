@@ -3,36 +3,34 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>952808555359-1hup1nv0gesk5cnbmckvur9tm7la1ab3.apps.googleusercontent.com</string>
+	<string>206883213986-a0hdjdalip157odl4ti6ar7g2rgf0qod.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.952808555359-1hup1nv0gesk5cnbmckvur9tm7la1ab3</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>952808555359-r9hli91be8rt92d0mtbodc6dvi4iqe0a.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.206883213986-a0hdjdalip157odl4ti6ar7g2rgf0qod</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAGJbrZLR0Q06p3TwXOFKV6BbBmGV5FEBU</string>
+	<string>AIzaSyCziZOi3J4H6xSbII-HOwUH3Pujw9SQ8Hs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>952808555359</string>
+	<string>206883213986</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.DIMA.docs</string>
+	<string>com.DIMA.dox</string>
 	<key>PROJECT_ID</key>
-	<string>documanager-d37b5</string>
+	<string>docsmanager-d4666</string>
 	<key>STORAGE_BUCKET</key>
-	<string>documanager-d37b5.appspot.com</string>
+	<string>docsmanager-d4666.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:952808555359:ios:b0550c7ca07ab767beecea</string>
+	<string>1:206883213986:ios:287b4fd1976587932cbdfb</string>
 	<key>DATABASE_URL</key>
-	<string>https://documanager-d37b5-default-rtdb.firebaseio.com</string>
+	<string>https://docsmanager-d4666-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>
