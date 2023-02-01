@@ -350,14 +350,44 @@ class ContentFileEditState extends State<ContentFileEdit> {
     List<String> listExt = [];
     // else if (!await isCategoryNew(docNameController!.text)) {
     // onErrorCategoryExisting();}
+    print("The name is :${widget.fileName}");
     if (fileName == "" || fileName == " " || fileName.contains(".")) {
       widget.a.onErrorText(context);
     } else if (doesExist && fileName != widget.fileName) {
       widget.a.onErrorElementExisting(context, "File");
+    } else if (fileName == widget.fileName) {
+      widget.deleteDB.deleteFileStorage(
+          fileData.extension, fileData.categoryName, widget.fileName);
+
+      for (var element in previewImgList) {
+        int index = previewImgList.indexOf(element);
+        //prepare image and extension
+        String path = pathImgList[index];
+        String ext = nameImgList[index].split(".")[1];
+        //create save name
+        String saveName = "$fileName$index.$ext";
+        listPaths.add(path);
+        listExt.add(ext);
+        //load file
+        listenLoading = widget.createDB
+            .loadFileToStorage(path, fileName, saveName, 'files/$catName');
+      }
+      listenLoading.cancel();
+      //update category
+
+      widget.createDB.createFile(
+          catName, fileName, dateText, listPaths, listExt, "files/$catName");
+      widget.createDB.createFile(
+          catName, fileName, dateText, listPaths, listExt, "allFiles");
+      widget.updateDB.onUpdateNFilesDB(catName);
+      widget.a.onLoad(context);
+      Future.delayed(
+          const Duration(seconds: 5), () => widget.a.onSuccess(context, '/'));
     } else if (previewImgList.isNotEmpty) {
       try {
         widget.deleteDB.deleteFileStorage(
             fileData.extension, fileData.categoryName, widget.fileName);
+        widget.deleteDB.deleteFileDB(fileData.categoryName, widget.fileName);
         for (var element in previewImgList) {
           int index = previewImgList.indexOf(element);
           //prepare image and extension
@@ -374,7 +404,6 @@ class ContentFileEditState extends State<ContentFileEdit> {
         listenLoading.cancel();
         //delet old version
 
-        widget.deleteDB.deleteFileDB(fileData.categoryName, widget.fileName);
         //update category
 
         widget.createDB.createFile(
